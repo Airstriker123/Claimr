@@ -2,12 +2,8 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
 
-interface HeroProps
-{
-    onNavigateToResources?: () => void;
-}
 
-export default function Hero({ onNavigateToResources }: HeroProps)
+export default function Hero()
 {
     /*
     component for the hero section of the homepage
@@ -24,6 +20,36 @@ export default function Hero({ onNavigateToResources }: HeroProps)
     const glowRef1 = useRef<HTMLDivElement>(null);
     const glowRef2 = useRef<HTMLDivElement>(null);
     const glowRef3 = useRef<HTMLDivElement>(null);
+
+
+    // Button hover + click
+    const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) => {
+        gsap.to(e.currentTarget, {
+            scale: 1.05,
+            boxShadow: '0 10px 30px rgba(0, 243, 255, 0.467)',
+            duration: 0.3,
+            ease: 'power2.out',
+        });
+    };
+
+    const handleButtonLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+        gsap.to(e.currentTarget, {
+            scale: 1,
+            boxShadow: '0 0 0px rgba(144,0,255,0)',
+            duration: 0.3,
+            ease: 'power2.out',
+        });
+    };
+
+    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        gsap.to(e.currentTarget, {
+            scale: 0.95,
+            duration: 0.1,
+            yoyo: true,
+            repeat: 1,
+            ease: 'power2.inOut',
+        });
+    };
 
     //animations for the hero section
     useEffect(() =>
@@ -91,6 +117,12 @@ export default function Hero({ onNavigateToResources }: HeroProps)
         return ():void => ctx.revert();
     }, []);
 
+    const title = "tk-nasalization\n" +
+        "  bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]\n" +
+        "  [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]\n" +
+        "  font-bold text-transparent text-[200px] tracking-[0] leading-[normal] [-webkit-text-stroke:1px_#FFFFFF]\n" +
+        "                text-9xl md:text-8xl  mb-8 uppercase"
+
     return (
         <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-hero-gradient">
 
@@ -106,37 +138,35 @@ export default function Hero({ onNavigateToResources }: HeroProps)
             <div ref={glowRef3} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-400/20 rounded-full blur-3xl"></div>
 
             <div className="relative z-10 text-center px-6">
-                <h1 ref={titleRef} className="
-                  tk-nasalization
-  bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]
-  [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
-  font-bold text-transparent text-[77px] tracking-[0] leading-[normal] [-webkit-text-stroke:1px_#FFFFFF]
-                text-9xl md:text-8xl  mb-8">
-                    <br />
-                    <span className="whitespace-nowrap uppercase text-cyan-400 tk-nasalization">Claimr</span>
+                <h1 ref={titleRef} className="">
+                    <b>
+                        <span className={title + "drop-shadow-cyan-300"}>Welcome to<br /></span>
+                   <span className={title}>Claimr</span></b>
                 </h1>
 
                 <div ref={buttonRef}>
                     <button
-                        className="mr-2 px-6 py-3 rounded-lg font-semibold text-base
-                bg-[linear-gradient(89deg,rgba(0,255,255,1)_0%,rgba(0,200,255,1)_48%,rgba(255,255,255,1)_100%)]
-                [-webkit-background-clip:text] bg-clip-text
-                [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
+                        className="mr-2 px-6 py-3 rounded-lg  text-base
+                 bg-linear-to-r from-cyan-200 via-cyan-400 to-cyan-800
                 border-2 border-cyan-500 hover:border-cyan-400 hover:text-cyan-100
-                transition duration-300 transform-gpu"
+                transition duration-300 text-white font-bold transform-gpu"
+                        onClick={handleButtonClick}
+                        onMouseEnter={handleButtonHover}
+                        onMouseLeave={handleButtonLeave}
                     >
-                        Login
+                        Login to Claimr
                     </button>
 
                     <button
-                        className="px-8 py-3 rounded-lg font-semibold text-base
-                bg-[linear-gradient(89deg,rgba(0,255,255,1)_0%,rgba(0,200,255,1)_48%,rgba(255,255,255,1)_100%)]
-                [-webkit-background-clip:text] bg-clip-text
-                [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
+                        className="px-8 py-3 rounded-lg  text-base
+                 bg-linear-to-r from-cyan-200 via-cyan-400 to-cyan-800
                 border-2 border-cyan-500 hover:border-cyan-400 hover:text-cyan-100
-                transition duration-300 transform-gpu"
+                transition duration-300 transform-gpu text-white font-bold"
+                        onClick={handleButtonClick}
+                        onMouseEnter={handleButtonHover}
+                        onMouseLeave={handleButtonLeave}
                     >
-                        Signup
+                        Create an account
                     </button>
                 </div>
             </div>

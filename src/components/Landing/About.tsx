@@ -6,13 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 
-export interface LandingNavigtion {
-    onNavigateToExperience?: () => void;
-}
-
-export default function AnimatedAbout({
-                                          onNavigateToExperience,
-                                      }: LandingNavigtion) {
+export default function AnimatedAbout() {
     const containerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLDivElement>(null);
     const paragraphRef = useRef<HTMLParagraphElement>(null);
@@ -130,11 +124,12 @@ export default function AnimatedAbout({
         return () => ctx.revert();
     }, []);
 
-    // --- Button hover/click ---
+
+    // Button hover + click
     const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) => {
         gsap.to(e.currentTarget, {
             scale: 1.05,
-            boxShadow: '0 10px 30px rgba(83, 38, 229, 0.5)',
+            boxShadow: '0 10px 30px rgba(0, 243, 255, 0.467)',
             duration: 0.3,
             ease: 'power2.out',
         });
@@ -143,7 +138,7 @@ export default function AnimatedAbout({
     const handleButtonLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
         gsap.to(e.currentTarget, {
             scale: 1,
-            boxShadow: '0 0 0px rgba(83, 38, 229, 0)',
+            boxShadow: '0 0 0px rgba(144,0,255,0)',
             duration: 0.3,
             ease: 'power2.out',
         });
@@ -156,11 +151,9 @@ export default function AnimatedAbout({
             yoyo: true,
             repeat: 1,
             ease: 'power2.inOut',
-            onComplete: () => {
-                if (onNavigateToExperience) onNavigateToExperience();
-            },
         });
     };
+
 
     return (
         <div
@@ -174,7 +167,7 @@ export default function AnimatedAbout({
                         ref={titleRef}
                         className="relative flex items-center justify-center self-stretch mt-[-1px] font-bold text-4xl tracking-[-0.72px] leading-[43.2px]"
                     >
-                        About SPACE ATLAS
+                        About Claimr
                     </div>
                 </div>
 
@@ -182,9 +175,7 @@ export default function AnimatedAbout({
                     ref={paragraphRef}
                     className="relative flex items-center justify-center self-stretch font-medium text-white text-lg tracking-[-0.09px] leading-[26.1px]"
                 >
-                    SPACE ATLAS is an interactive 3D web experience that simulates an immersive journey through space.
-                    You can explore different celestial environments, interact with 3D objects such as planets, satellites, and asteroids.
-                    The project combines 3D modelling, animation, and interactive coding to create an engaging multimedia experience.
+                    text text text text text text text text text text text text text text text text text text text text
                 </p>
 
                 <button
@@ -192,10 +183,12 @@ export default function AnimatedAbout({
                     onClick={handleButtonClick}
                     onMouseEnter={handleButtonHover}
                     onMouseLeave={handleButtonLeave}
-                    className="all-[unset] box-border inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[linear-gradient(90deg,rgba(83,38,229,1)_0%,rgba(150,15,162,1)_100%)] cursor-pointer transform-gpu"
+                    className="all-[unset] box-border inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl
+                    bg-linear-to-r from-cyan-200 via-cyan-400 to-cyan-800
+                    "
                 >
                     <div className="relative flex items-center justify-center w-fit mt-[-1px] font-medium text-white text-lg text-center tracking-[-0.09px] leading-[26.1px] whitespace-nowrap">
-                        go to experience
+                        Get in Contact with us!
                     </div>
                 </button>
             </div>

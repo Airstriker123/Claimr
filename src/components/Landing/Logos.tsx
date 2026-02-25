@@ -113,7 +113,7 @@ export default function Logos(): JSX.Element {
 
             {/* Marquee container */}
             <div className="relative self-stretch overflow-hidden
-        bg-linear-to-r from-violet-700/80 to-fuchsia-600/80">
+        bg-linear-to-r from-blue-600/20 to-cyan-400/80">
 
                 {/* Moving track */}
                 <div

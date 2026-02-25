@@ -53,21 +53,21 @@
 
 ::-webkit-scrollbar-thumb
 {
-  background-color: #3700ff;
+  background-color: #00ffeb;
   border-radius: 10px; /* rounded corners */
   border: 2px solid #0f172a; /* space around the thumb */
 }
 
 ::-webkit-scrollbar-thumb:hover
 {
-  background-color: #3700ff; /*  on hover */
+  background-color: #00eaff; /*  on hover */
 }
 
 /* Firefox settings */
 *
 {
   scrollbar-width: thin;
-  scrollbar-color: #3700ff #0f172a;
+  scrollbar-color: #00ffda #0f172a;
 }
 /*--------------</custom css here>-------------- */
 
