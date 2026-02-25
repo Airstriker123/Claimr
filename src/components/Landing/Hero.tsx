@@ -124,12 +124,12 @@ export default function Hero()
         "                text-9xl md:text-8xl  mb-8 uppercase"
 
     return (
-        <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-hero-gradient">
+        <section ref={sectionRef} className="bg-[url('/background.png')] bg-cover bg-center bg-no-repeat relative min-h-screen flex items-center justify-center overflow-hidden bg-hero-gradient">
 
             {/* Cyan/Aqua Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black via-cyan-900/40 to-black">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-black via-cyan-900/40 to-black">
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/40"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-cyan-400/10 to-transparent"></div>
             </div>
 
             {/* Cyan Glow Effects */}

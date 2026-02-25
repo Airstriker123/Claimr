@@ -21,13 +21,14 @@
 
 .tk-nasalization { font-family: "nasalization",sans-serif; }
 
-
-:root
+body
 {
-  overscroll-behavior: none;
-  background-color: black;
+  /* image and scroll behaviour to main html content */
   scroll-behavior: smooth;
+  background-image: url("/background.png");
+  overscroll-behavior: none;
 }
+
 
 /* -- logos */
 @keyframes marqueeRight
