@@ -1,0 +1,212 @@
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+
+gsap.registerPlugin(ScrollTrigger);
+
+
+export interface LandingNavigtion {
+    onNavigateToExperience?: () => void;
+}
+
+export default function AnimatedAbout({
+                                          onNavigateToExperience,
+                                      }: LandingNavigtion) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const titleRef = useRef<HTMLDivElement>(null);
+    const paragraphRef = useRef<HTMLParagraphElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const imageRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            // --- Split title letters for gradient + animation ---
+            if (titleRef.current) {
+                const titleText = titleRef.current.textContent || '';
+                titleRef.current.innerHTML = titleText
+                    .split('')
+                    .map(
+                        (char) =>
+                            `<span class="inline-block 
+                          will-change-transform will-change-opacity
+                          bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]
+  [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
+  text-transparent  tracking-[0] leading-[normal]
+                          "
+              >${char === ' ' ? '&nbsp;' : char}</span>`
+                    )
+                    .join('');
+
+                // Scroll reveal
+                gsap.from(titleRef.current.children, {
+                    scrollTrigger: {
+                        trigger: containerRef.current,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse',
+                    },
+                    opacity: 0,
+                    y: 20,
+                    rotationX: -90,
+                    stagger: 0.03,
+                    duration: 0.8,
+                    ease: 'back.out(1.7)',
+                });
+
+                // Floating + glow effect
+                gsap.to(titleRef.current.children, {
+                    y: '+=5',
+                    textShadow: '0 0 10px rgba(0,123,255,1)',
+                    duration: 2,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'sine.inOut',
+                    stagger: 0.03,
+                });
+            }
+
+            // Paragraph fade/slide
+            if (paragraphRef.current) {
+                gsap.from(paragraphRef.current, {
+                    scrollTrigger: {
+                        trigger: containerRef.current,
+                        start: 'top 75%',
+                        toggleActions: 'play none none reverse',
+                    },
+                    opacity: 0,
+                    y: 30,
+                    duration: 1,
+                    ease: 'power3.out',
+                });
+            }
+
+            // Button animation
+            if (buttonRef.current) {
+                gsap.from(buttonRef.current, {
+                    scrollTrigger: {
+                        trigger: containerRef.current,
+                        start: 'top 75%',
+                        toggleActions: 'play none none reverse',
+                    },
+                    opacity: 0,
+                    y: 20,
+                    scale: 0.9,
+                    duration: 0.8,
+                    ease: 'back.out(1.4)',
+                });
+            }
+
+            // Image fade + parallax
+            if (imageRef.current) {
+                gsap.fromTo(
+                    imageRef.current,
+                    { opacity: 0, scale: 0.9, y: 0 },
+                    {
+                        opacity: 1,
+                        scale: 1,
+                        duration: 1.2,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: containerRef.current,
+                            start: 'top 80%',
+                            end: 'top 50%',
+                            scrub: true,
+                        },
+                    }
+                );
+
+                gsap.to(imageRef.current, {
+                    scrollTrigger: {
+                        trigger: containerRef.current,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 1,
+                    },
+                    y: -40,
+                });
+            }
+        }, containerRef);
+
+        return () => ctx.revert();
+    }, []);
+
+    // --- Button hover/click ---
+    const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) => {
+        gsap.to(e.currentTarget, {
+            scale: 1.05,
+            boxShadow: '0 10px 30px rgba(83, 38, 229, 0.5)',
+            duration: 0.3,
+            ease: 'power2.out',
+        });
+    };
+
+    const handleButtonLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+        gsap.to(e.currentTarget, {
+            scale: 1,
+            boxShadow: '0 0 0px rgba(83, 38, 229, 0)',
+            duration: 0.3,
+            ease: 'power2.out',
+        });
+    };
+
+    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        gsap.to(e.currentTarget, {
+            scale: 0.95,
+            duration: 0.1,
+            yoyo: true,
+            repeat: 1,
+            ease: 'power2.inOut',
+            onComplete: () => {
+                if (onNavigateToExperience) onNavigateToExperience();
+            },
+        });
+    };
+
+    return (
+        <div
+            ref={containerRef}
+            className="pt-20 pb-10 px-16 flex items-center justify-center gap-16 w-full"
+        >
+            {/* Left content */}
+            <div className="flex flex-col items-start justify-center gap-12 flex-1 grow">
+                <div className="flex flex-col gap-6 w-full">
+                    <div
+                        ref={titleRef}
+                        className="relative flex items-center justify-center self-stretch mt-[-1px] font-bold text-4xl tracking-[-0.72px] leading-[43.2px]"
+                    >
+                        About SPACE ATLAS
+                    </div>
+                </div>
+
+                <p
+                    ref={paragraphRef}
+                    className="relative flex items-center justify-center self-stretch font-medium text-white text-lg tracking-[-0.09px] leading-[26.1px]"
+                >
+                    SPACE ATLAS is an interactive 3D web experience that simulates an immersive journey through space.
+                    You can explore different celestial environments, interact with 3D objects such as planets, satellites, and asteroids.
+                    The project combines 3D modelling, animation, and interactive coding to create an engaging multimedia experience.
+                </p>
+
+                <button
+                    ref={buttonRef}
+                    onClick={handleButtonClick}
+                    onMouseEnter={handleButtonHover}
+                    onMouseLeave={handleButtonLeave}
+                    className="all-[unset] box-border inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[linear-gradient(90deg,rgba(83,38,229,1)_0%,rgba(150,15,162,1)_100%)] cursor-pointer transform-gpu"
+                >
+                    <div className="relative flex items-center justify-center w-fit mt-[-1px] font-medium text-white text-lg text-center tracking-[-0.09px] leading-[26.1px] whitespace-nowrap">
+                        go to experience
+                    </div>
+                </button>
+            </div>
+
+            {/* Right image */}
+            <div
+                ref={imageRef}
+                className="flex flex-col h-[432px] flex-1 grow border-[3px] border-solid border-transparent [border-image:linear-gradient(180deg,rgba(119,0,255,1)_0%,rgba(197,6,255,1)_100%)_1] bg-[url(/about.jpg)] bg-cover bg-center rounded-2xl transform-gpu"
+            >
+                <div className="w-full h-full rounded-2xl" />
+            </div>
+        </div>
+    );
+}
