@@ -58,12 +58,12 @@ def client_setup(choice):
         # This requires: npm install -g gh-pages
         print("Pushing build folder to GitHub...")
         os.system("npx gh-pages -d build --add")
-        print("\nSuccess! Check your site at: https://Airstriker123.github.io/Claimr/")
+        print("\nSuccess! Check site at: https://Airstriker123.github.io/Claimr/")
 
 if __name__ == "__main__":
     try:
         os.system("color 6")
-        print("SPACE ATLAS DEPLOYMENT TOOL")
+        print("Claimr DEPLOYMENT TOOL")
         print("---------------------------")
         print("[1] Run Development (Real-time editing)")
         print("[2] Run Production (Build and test locally)")

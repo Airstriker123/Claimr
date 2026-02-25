@@ -152,7 +152,10 @@ export default function ProjectKeyFeatures(): JSX.Element
             {/* Image */}
             <div
                 ref={imageRef}
-                className="flex flex-col h-[432px] flex-1 grow border-[3px] border-solid border-transparent [border-image:linear-gradient(180deg,rgba(119,0,255,1)_0%,rgba(197,6,255,1)_100%)_1] bg-[url(/3d.webp)] bg-cover bg-center rounded-2xl transform-gpu"
+                className="flex flex-col h-[432px] flex-1 grow border-[3px] border-solid border-transparent
+[border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1] bg-[url(/3d.webp)] bg-cover bg-center rounded-2xl transform-gpu
+
+"
             >
                 <div className="w-full h-full rounded-2xl" />
             </div>

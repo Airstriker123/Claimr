@@ -173,7 +173,8 @@ export default function AnimatedAbout() {
 
                 <p
                     ref={paragraphRef}
-                    className="relative flex items-center justify-center self-stretch font-medium text-white text-lg tracking-[-0.09px] leading-[26.1px]"
+                    className="relative flex items-center justify-center self-stretch font-medium
+                     text-white text-lg tracking-[-0.09px] leading-[26.1px]"
                 >
                     text text text text text text text text text text text text text text text text text text text text
                 </p>
@@ -183,7 +184,8 @@ export default function AnimatedAbout() {
                     onClick={handleButtonClick}
                     onMouseEnter={handleButtonHover}
                     onMouseLeave={handleButtonLeave}
-                    className="all-[unset] box-border inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl
+                    className="all-[unset] box-border inline-flex items-center
+                    justify-center gap-2 px-4 py-3 rounded-xl
                     bg-linear-to-r from-cyan-200 via-cyan-400 to-cyan-800
                     "
                 >
@@ -196,7 +198,11 @@ export default function AnimatedAbout() {
             {/* Right image */}
             <div
                 ref={imageRef}
-                className="flex flex-col h-[432px] flex-1 grow border-[3px] border-solid border-transparent [border-image:linear-gradient(180deg,rgba(119,0,255,1)_0%,rgba(197,6,255,1)_100%)_1] bg-[url(/about.jpg)] bg-cover bg-center rounded-2xl transform-gpu"
+                className="
+                flex flex-col h-[432px] flex-1 grow border-[3px] border-solid border-transparent
+                [border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1]
+                bg-[url(/3d.webp)] bg-cover bg-center rounded-2xl transform-gpu
+                "
             >
                 <div className="w-full h-full rounded-2xl" />
             </div>
