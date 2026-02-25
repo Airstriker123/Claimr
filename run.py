@@ -58,7 +58,7 @@ def client_setup(choice):
         # This requires: npm install -g gh-pages
         print("Pushing build folder to GitHub...")
         os.system("npx gh-pages -d build --add")
-        print("\nSuccess! Check your site at: https://Airstriker123.github.io/Space-Atlas/")
+        print("\nSuccess! Check your site at: https://Airstriker123.github.io/Claimr/")
 
 if __name__ == "__main__":
     try:
