@@ -44,8 +44,8 @@ export default function Footer(): JSX.Element {
                         title: 'Social',
                         links: [
                             { label: 'GitHub', href: 'https://github.com/airstriker123' },
-                            { label: 'Discord', href: 'https://discord.gg/yourserver' },
-                            { label: 'Email', href: 'mailto:youremail@example.com' },
+                            { label: 'LinkedIn', href: 'null' },
+                            { label: 'Email', href: 'https://mail.google.com/mail/u/2/#inbox?compose=CllgCJqVNpcrBNrVZlrNdXBCkRPfnSFBlPPQmcwsqbrVknbglnRsbfbfdjdfddxpCtRhZjmMzvB' },
                         ],
                     },
                     {
