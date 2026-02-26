@@ -34,20 +34,35 @@ export default function Footer(): JSX.Element {
     }, []);
 
     return (
-        <footer ref={footerRef} className="overflow-hidden flex flex-col items-start gap-12 px-6 md:px-16 py-16 w-full">
+        <footer
+            ref={footerRef}
+            className="overflow-hidden flex flex-col items-start gap-12 px-6 md:px-16 py-16 w-full"
+        >
             <div className="flex flex-col md:flex-row gap-12 w-full">
                 {[
                     {
-                        title: 'Inspiration',
-                        text: 'Inspired by Apple’s interactive product displays and other 3d web experiences, this project explores the intersection of 3D design and web performance.',
+                        title: 'Social',
+                        links: [
+                            { label: 'GitHub', href: 'https://github.com/airstriker123' },
+                            { label: 'Discord', href: 'https://discord.gg/yourserver' },
+                            { label: 'Email', href: 'mailto:youremail@example.com' },
+                        ],
                     },
                     {
-                        title: 'Learning experience',
-                        text: 'This project served as a catalyst for advancing my front-end expertise. By integrating multimedia libraries like Three.js and GSAP, I transitioned from static web design to creating high-performance, motion-driven user experiences.',
+                        title: 'Support',
+                        links: [
+                            { label: 'Report an Issue', href: 'https://github.com/airstriker123/Claimr/issues' },
+                            { label: 'Documentation', href: '/docs' },
+                            { label: 'FAQ', href: '/faq' },
+                        ],
                     },
                     {
-                        title: 'Time Usage',
-                        text: 'This project took me about 1 month to create. I spent most of my school holidays working on it.',
+                        title: 'Claimr',
+                        links: [
+                            { label: 'Open Source', href: 'https://github.com/airstriker123/Claimr' },
+                            { label: 'Privacy', href: '/privacy' },
+                            { label: 'Terms', href: '/terms' },
+                        ],
                     },
                 ].map((col, idx) => (
                     <div
@@ -57,13 +72,28 @@ export default function Footer(): JSX.Element {
                         }}
                         className="flex flex-col gap-4 pt-6 border-t border-white w-full"
                     >
-                        <h3 className="font-bold text-white text-2xl ransition-colors duration-300">
+                        <h3 className="font-bold text-white text-2xl transition-colors duration-300">
                             {col.title}
                         </h3>
-                        <p className="text-white text-base">{col.text}</p>
+
+                        <ul className="flex flex-col gap-2">
+                            {col.links.map((link, i) => (
+                                <li key={i}>
+                                    <a
+                                        href={link.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-white text-base hover:underline"
+                                    >
+                                        {link.label}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 ))}
             </div>
         </footer>
+
     );
 }

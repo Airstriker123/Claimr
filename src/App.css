@@ -26,10 +26,13 @@ body
   /* image and scroll behaviour to main html content */
   scroll-behavior: smooth;
   background-image: url("/background.png");
-  overscroll-behavior: none;
 }
 
-
+:root
+{
+    /* prevent overscroll on app */
+    overscroll-behavior: none;
+}
 /* -- logos */
 @keyframes marqueeRight
 {

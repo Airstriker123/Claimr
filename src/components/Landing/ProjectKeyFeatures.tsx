@@ -167,7 +167,7 @@ export default function ProjectKeyFeatures(): JSX.Element
                         ref={titleRef}
                         className="relative flex items-center justify-center self-stretch mt-[-1px] font-bold text-4xl tracking-[-0.72px] leading-[43.2px]"
                     >
-                        Project key features
+                        Claimr is 100% open source!
                     </div>
                 </div>
 
@@ -175,8 +175,8 @@ export default function ProjectKeyFeatures(): JSX.Element
                     ref={listRef}
                     className="list-none text-white text-lg font-normal tracking-[-0.09px] leading-[26.1px] space-y-3"
                 >
-                    <li className="font-medium ">
-                        3D Interactivity: Users can navigate and interact with 3D space objects using mouse and touch input.
+                    <li className="font-medium">
+                        100% Open Source: Claimr’s tax return tracker is fully transparent, allowing users to inspect the code, verify how data is handled, and trust that no hidden processes occur.
                     </li>
                     <li className="font-medium">
                         Dynamic Animations: GSAP was used to animate elements such as transitions, text, and movement between sections.
@@ -185,12 +185,10 @@ export default function ProjectKeyFeatures(): JSX.Element
                         Responsive Interface: Styled using TailwindCSS for a futuristic, game-like aesthetic that adapts across devices.
                     </li>
                     <li className="font-medium">
-                        Modular Sections: Multiple space environments (e.g., planets, galaxy) each with unique interactive features.
-                    </li>
-                    <li className="font-medium">
-                        Educational: Provides textual information about space objects for an educational experience.
+                        Secure: We took multiple measures to ensure the security of this app and your data.
                     </li>
                 </ul>
+
 
                 <button
                     ref={buttonRef}

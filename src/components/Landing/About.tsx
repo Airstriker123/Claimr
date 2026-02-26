@@ -176,7 +176,11 @@ export default function AnimatedAbout() {
                     className="relative flex items-center justify-center self-stretch font-medium
                      text-white text-lg tracking-[-0.09px] leading-[26.1px]"
                 >
-                    text text text text text text text text text text text text text text text text text text text text
+                    Claimr is a 100% open‑source tax return tracker built for
+                    transparency and trust. It helps Australians organise income, deductions, and receipts
+                    in one simple interface, with clear summaries that make tax time easier. Because the entire
+                    codebase is public, users can verify exactly how their data is handled and rely on a tool
+                    that’s secure, transparent, and community‑driven.
                 </p>
 
                 <button
