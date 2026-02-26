@@ -23,7 +23,8 @@ export default function Hero()
 
 
     // Button hover + click
-    const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) =>
+    {
         gsap.to(e.currentTarget, {
             scale: 1.05,
             boxShadow: '0 10px 30px rgba(0, 243, 255, 0.467)',
@@ -32,7 +33,8 @@ export default function Hero()
         });
     };
 
-    const handleButtonLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleButtonLeave = (e: React.MouseEvent<HTMLButtonElement>) =>
+    {
         gsap.to(e.currentTarget, {
             scale: 1,
             boxShadow: '0 0 0px rgba(144,0,255,0)',
@@ -41,7 +43,8 @@ export default function Hero()
         });
     };
 
-    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) =>
+    {
         gsap.to(e.currentTarget, {
             scale: 0.95,
             duration: 0.1,
@@ -67,7 +70,7 @@ export default function Hero()
             tl.to([glowRef1.current, glowRef2.current, glowRef3.current], {
                 scale: 1,
                 opacity: 1,
-                duration: 1.5,
+                duration: 1,
                 stagger: 0.2,
                 ease: "power2.out"
             })
@@ -75,7 +78,7 @@ export default function Hero()
                 .to(titleRef.current, {
                     opacity: 1,
                     y: 0,
-                    duration: 1.2,
+                    duration: 1,
                     ease: "power3.out"
                 }, "-=0.8")
                 // Finally animate button
@@ -98,7 +101,7 @@ export default function Hero()
             gsap.to(glowRef2.current, {
                 y: "-=15",
                 x: "+=10",
-                duration: 4,
+                duration: 3,
                 repeat: -1,
                 yoyo: true,
                 ease: "sine.inOut"
@@ -106,7 +109,7 @@ export default function Hero()
 
             gsap.to(glowRef3.current, {
                 scale: 1.1,
-                duration: 5,
+                duration: 3,
                 repeat: -1,
                 yoyo: true,
                 ease: "sine.inOut"
@@ -127,7 +130,7 @@ export default function Hero()
         <section ref={sectionRef} className="bg-[url('/background.png')] bg-cover bg-center bg-no-repeat relative min-h-screen flex items-center justify-center overflow-hidden bg-hero-gradient">
 
             {/* Cyan/Aqua Gradient Background */}
-            <div className="absolute inset-0 bg-linear-to-br from-black via-cyan-900/40 to-black">
+            <div className="bg-cover bg-center bg-no-repeat  absolute inset-0 bg-linear-to-br from-black via-cyan-900/10 to-black">
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/40"></div>
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-cyan-400/10 to-transparent"></div>
             </div>

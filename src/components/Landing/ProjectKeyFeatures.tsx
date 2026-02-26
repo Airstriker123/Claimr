@@ -187,6 +187,9 @@ export default function ProjectKeyFeatures(): JSX.Element
                     <li className="font-medium">
                         Secure: We took multiple measures to ensure the security of this app and your data.
                     </li>
+                    <li className="font-medium">
+                        Progressive Web App: Downloadable on mobile and other devices with access to a web browser.
+                    </li>
                 </ul>
 
 
