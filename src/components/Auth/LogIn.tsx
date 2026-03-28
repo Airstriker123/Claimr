@@ -125,12 +125,12 @@ export default function LoginForm({ setUser, onNavigateToSignUp }: LoginFormProp
                                 <div className="drop-shadow-[black_1px_1px_1px] absolute inset-0 m-auto max-w-sm p-6 flex items-center justify-center">
                                     <div>
                                         <h1 className="text-white text-4xl font-semibold">
-                                            <b>Sign in</b>
+                                            <b>Login to your account</b>
                                         </h1>
                                         <p className="text-white
 
 text-[15px] font-medium mt-6 leading-relaxed">
-                                            <b>Sign in to your account to proceed</b>
+                                            <b>Login to your account to proceed</b>
                                             <br />
                                             <br />
                                             Claimr is a tax return tracker built for

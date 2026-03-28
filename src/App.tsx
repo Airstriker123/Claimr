@@ -60,7 +60,7 @@ export default function App(): JSX.Element
                 />
             case "landing":
                 return <Landing
-                    onNavigateToLogin={handleNavigateToSignUp}
+                    onNavigateToLogin={handleNavigateToLogin}
                     onNavigateToSignUp={handleNavigateToSignUp}
                 />
             default:

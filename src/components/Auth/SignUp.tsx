@@ -47,7 +47,7 @@ export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProp
     return (
         <>
             {/* sign up form background look */}
-            <div className="bg-gradient-to-br from-black/67 to-cyan-400/24 lg:h-screen flex items-center justify-center p-4">
+            <div className="bg-linear-to-br from-black/67 to-cyan-400/24 lg:h-screen flex items-center justify-center p-4">
                 <div className="border-cyan-400 border-[3px] max-w-6xl bg-white/8 shadow-xl p-6 rounded-md">
                     <div className="grid md:grid-cols-2 items-center gap-y-8">
                         {/* sign up form */}
@@ -120,7 +120,7 @@ export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProp
                                 <div className="drop-shadow-[black_1px_1px_1px] absolute inset-0 m-auto max-w-sm p-6 flex items-center justify-center">
                                     <div>
                                         {/* image overlay text */}
-                                        <h1 className="text-white text-4xl font-semibold"><b>Sign Up</b></h1>
+                                        <h1 className="text-white text-4xl font-semibold"><b>Register Here</b></h1>
                                         <p className=" text-white text-[15px] font-medium mt-6 leading-relaxed">
                                             <b>Create your account to proceed</b> <br /><br />
                                             Claimr is a tax return tracker built for
