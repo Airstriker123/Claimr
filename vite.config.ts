@@ -2,30 +2,13 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path';
-import { VitePWA } from 'vite-plugin-pwa';
-import manifest from './manifest.json';
+//import { VitePWA } from 'vite-plugin-pwa';
+//import manifest from './manifest.json';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/Claimr/',
+  base: '/',
   plugins: [
-      VitePWA({
-          //pwa config
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //@ts-expect-error
-          manifest,
-          includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
-          // switch to "true" to enable sw on development
-          devOptions: { enabled: false }, //allow pwa features on development server
-          registerType: 'autoUpdate',
-          workbox: {
-              // Remove images and models from globPatterns so they aren't prefetched all at once
-              globPatterns: ['**/*.{js,css,html,svg,png}'],
-              // This prevents the PWA from trying to "pre-download" the 1,400+ files
-              maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-          },
-
-      }),
       react(),
       tailwindcss(),
   ],

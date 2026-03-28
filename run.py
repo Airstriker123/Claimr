@@ -58,7 +58,7 @@ def client_setup(choice):
         # This requires: npm install -g gh-pages
         print("Pushing build folder to GitHub...")
         os.system("npx gh-pages -d build --add")
-        print("\nSuccess! Check site at: https://Airstriker123.github.io/Claimr/")
+        print("\nSuccess! Check site at: http://claimr.dev/")
 
 if __name__ == "__main__":
     try:

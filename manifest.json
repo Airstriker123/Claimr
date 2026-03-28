@@ -2,7 +2,7 @@
   "name": "SPACE ATLAS",
   "short_name": "SPACE ATLAS",
   "description": "A 3D interactive web experience showing space.",
-  "start_url": "/Space-Atlas/",
+  "start_url": "/Claimr/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#8a2be2",
