@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path';
 //import { VitePWA } from 'vite-plugin-pwa';
-//import manifest from './manifest.json';
+//import manifest from './manifest.json';;
+
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -28,7 +29,9 @@ export default defineConfig({
                 'embla-carousel-react@8.6.0': 'embla-carousel-react',
                 'cmdk@1.1.1': 'cmdk',
                 'class-variance-authority@0.7.1': 'class-variance-authority',
-                '@': path.resolve(__dirname, './src'),
+                "@": path.resolve(__dirname, "./src"),
+                "@ui": path.resolve(__dirname, "./src/components/ui"),
+                "@style": path.resolve(__dirname, "./src/components/style"),
             },
         },
     build: {

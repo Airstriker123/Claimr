@@ -11,9 +11,14 @@ import ScrollSmoother from "gsap/ScrollSmoother";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
+export interface LandingProps {
+    onNavigateToSignUp: () => void;
+    onNavigateToLogin: () => void;
+}
 
 
-export default function Landing(): JSX.Element
+
+export default function Landing({onNavigateToSignUp, onNavigateToLogin}: LandingProps): JSX.Element
 {
     return (
                 <div
@@ -22,7 +27,8 @@ export default function Landing(): JSX.Element
                     >
                     {/* Render content */}
                     <main className="bg-cover bg-center bg-no-repeat">
-                        <Hero/>
+                        <Hero OnNavigateToLogin={onNavigateToLogin}
+                        OnNavigateToSignUp={onNavigateToSignUp}/>
                     </main>
                     <Logos />
                     <About/>

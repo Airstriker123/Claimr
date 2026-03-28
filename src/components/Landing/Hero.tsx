@@ -1,9 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
+export interface HeroProps {
+    OnNavigateToLogin?: () => void;
+    OnNavigateToSignUp?: () => void;
+}
 
 
-export default function Hero()
+export default function Hero({ OnNavigateToLogin, OnNavigateToSignUp }: HeroProps): JSX.Element
 {
     /*
     component for the hero section of the homepage
@@ -43,16 +47,6 @@ export default function Hero()
         });
     };
 
-    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) =>
-    {
-        gsap.to(e.currentTarget, {
-            scale: 0.95,
-            duration: 0.1,
-            yoyo: true,
-            repeat: 1,
-            ease: 'power2.inOut',
-        });
-    };
 
     //animations for the hero section
     useEffect(() =>
@@ -153,7 +147,7 @@ export default function Hero()
                  bg-linear-to-r from-cyan-200 via-cyan-400 to-cyan-800
                 border-2 border-cyan-500 hover:border-cyan-400 hover:text-cyan-100
                 transition duration-300 text-white font-bold transform-gpu"
-                        onClick={handleButtonClick}
+                        onClick={OnNavigateToLogin}
                         onMouseEnter={handleButtonHover}
                         onMouseLeave={handleButtonLeave}
                     >
@@ -165,7 +159,7 @@ export default function Hero()
                  bg-linear-to-r from-cyan-200 via-cyan-400 to-cyan-800
                 border-2 border-cyan-500 hover:border-cyan-400 hover:text-cyan-100
                 transition duration-300 transform-gpu text-white font-bold"
-                        onClick={handleButtonClick}
+                        onClick={OnNavigateToSignUp}
                         onMouseEnter={handleButtonHover}
                         onMouseLeave={handleButtonLeave}
                     >
