@@ -139,7 +139,7 @@ export default function AnimatedAbout() {
     return (
         <div
             ref={containerRef}
-            className="bg-background/0 pt-20 pb-10 px-16 flex items-center justify-center gap-16 w-full"
+            className="pt-20 pb-10 px-16 flex items-center justify-center gap-16 w-full"
         >
             {/* Left content */}
             <div className="flex flex-col items-start justify-center gap-12 flex-1 grow">

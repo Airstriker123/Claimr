@@ -1,8 +1,10 @@
-@import "./theme.css";
+@charset "UTF-8";
 @import 'tailwindcss' source(none);
 @import 'tw-animate-css';
-
+@import "./theme.css";
 @source '../**/*.{js,ts,jsx,tsx}';
+
+
 
 
 

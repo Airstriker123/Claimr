@@ -1,7 +1,6 @@
-
 :root
 {
-  !important background-image: url("./background.png");
+  background-image: url("/background.png") !important;
   overscroll-behavior: none;
 }
 
@@ -9,7 +8,7 @@ body
 {
   /* image and scroll behaviour to main html content */
   scroll-behavior: smooth;
-  !important background-image: url("./background.png");
+  background-image: url("/background.png") !important;
 }
 
 /* -- logos */

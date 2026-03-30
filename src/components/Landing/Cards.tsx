@@ -30,7 +30,7 @@ export default function Cards()
     return (
         <div
             ref={containerRef}
-            className="bg-background/0 grid md:grid-cols-3 gap-10 mb-16 justify-items-center max-w-8/12xl mx-auto px-6"
+            className="grid md:grid-cols-3 gap-10 mb-16 justify-items-center max-w-8/12xl mx-auto px-6"
         >
             {/* Card 1 */}
             <div className="bg-slate-800/50 p-6 rounded-xl shadow-sm border border-cyan-400 dark:border-cyan-400">

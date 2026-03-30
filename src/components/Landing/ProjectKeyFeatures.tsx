@@ -165,7 +165,7 @@ export default function ProjectKeyFeatures(): JSX.Element
     return (
         <div
             ref={containerRef}
-            className="bg-background/0 rounded-full pt-10 pb-20 px-16 flex items-center justify-center gap-16 w-full"
+            className="rounded-full pt-10 pb-20 px-16 flex items-center justify-center gap-16 w-full"
         >
             {/* Image */}
             <div

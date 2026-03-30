@@ -98,11 +98,11 @@ export default function App(): JSX.Element
         {
             case "Dashboard":
                 return (
-                    <div className="min-h-screen bg-background/90">
+                    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+                    <div className="min-h-screen bg-white dark:bg-black/60">
                         <Toaster position="top-right" />
-
                         {/* Header */}
-                        <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+                        <header className="border-b border-border bg-card backdrop-blur-sm sticky top-0 z-50">
                             <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
@@ -185,6 +185,7 @@ export default function App(): JSX.Element
                             entry={editingEntry}
                         />
                     </div>
+                    </ThemeProvider>
                 )
             case "Login":
                 return (
@@ -222,11 +223,9 @@ export default function App(): JSX.Element
         }
     }
     return(
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
                 <main className="min-h-screen text-white overflow-x-hidden smooth-scroll
                     bg-cover bg-center bg-no-repeat relative z-20 transform-gp">
                     {RenderCurrentSection()}
                 </main>
-        </ThemeProvider>
     )
 }

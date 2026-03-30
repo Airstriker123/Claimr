@@ -34,7 +34,7 @@ export function Dashboard({ stats, entries, onAddEntry, onExport }: DashboardPro
     const daysUntilTaxDue = Math.ceil((new Date(taxDueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
 
     return (
-        <div className="space-y-6">
+        <div className="h-64 space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>

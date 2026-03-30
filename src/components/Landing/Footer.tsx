@@ -36,7 +36,7 @@ export default function Footer(): JSX.Element {
     return (
         <footer
             ref={footerRef}
-            className="bg-background/0 overflow-hidden flex flex-col items-start gap-12 px-6 md:px-16 py-16 w-full"
+            className="overflow-hidden flex flex-col items-start gap-12 px-6 md:px-16 py-16 w-full"
         >
             <div className="flex flex-col md:flex-row gap-12 w-full">
                 {[

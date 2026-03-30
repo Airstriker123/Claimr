@@ -27,16 +27,18 @@ export default function Landing({onNavigateToSignUp, onNavigateToLogin}: Landing
                     className="bg-[linear-gradient(180deg,rgba(0,40,60,0.35)_50%,rgba(0,40,60,0.7)_65%,rgba(0,0,0,1)_83%,rgba(0,255,255,0.1)_100%)]
 " data-model-id="1:6"
                     >
+
                     {/* Render content */}
                     <main className="bg-cover bg-center bg-no-repeat">
                         <Hero OnNavigateToLogin={onNavigateToLogin}
                         OnNavigateToSignUp={onNavigateToSignUp}/>
+                        <Logos />
+                        <About/>
+                        <Cards/>
+                        <ProjectKeyFeatures/>
+                        <Footer />
                     </main>
-                    <Logos />
-                    <About/>
-                    <Cards/>
-                    <ProjectKeyFeatures/>
-                    <Footer />
+
                 </div>
 
     );
