@@ -6,10 +6,12 @@ import { FileText, Shield, Download } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Cards() {
+export default function Cards()
+{
     const containerRef = useRef(null);
 
-    useGSAP(() => {
+    useGSAP(() =>
+    {
         // Targets all direct div children of the grid
         gsap.from(containerRef.current.children, {
             y: 50,
