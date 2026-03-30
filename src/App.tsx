@@ -17,7 +17,7 @@ import { AddEditEntryDialog } from '@/components/App/AddEditEntryDialog';
 
 export default function App(): JSX.Element
 {
-    const [currentSection, setCurrentSection] = useState< "Dashboard" |"Landing" | "Login" | "SignUp" | "Home">("Landing");
+    const [currentSection, setCurrentSection] = useState< "Dashboard" |"Landing" | "Login" | "SignUp" | "Home">("Dashboard");
     const [entries, setEntries] = useState<TaxEntry[]>([]);
     const stats = calculateStats(entries);
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -98,7 +98,7 @@ export default function App(): JSX.Element
         {
             case "Dashboard":
                 return (
-                    <div className="min-h-screen bg-background">
+                    <div className="min-h-screen bg-background/10">
                         <Toaster position="top-right" />
 
                         {/* Header */}
@@ -106,11 +106,11 @@ export default function App(): JSX.Element
                             <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg p-2">
+                                        <div className="bg-linear-to-br from-cyan-500 to-blue-600 rounded-lg p-2">
                                             <FileText className="h-6 w-6 text-white" />
                                         </div>
                                         <div>
-                                            <h1 className="text-xl bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
+                                            <h1 className="text-xl bg-linear-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
                                                 Claimr
                                             </h1>
                                             <p className="text-xs text-muted-foreground">Tax Return Tracker</p>
@@ -221,7 +221,7 @@ export default function App(): JSX.Element
         }
     }
     return(
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
                 <main className="min-h-screen text-white overflow-x-hidden smooth-scroll
                     bg-cover bg-center bg-no-repeat relative z-20 transform-gp">
                     {RenderCurrentSection()}

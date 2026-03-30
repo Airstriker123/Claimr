@@ -37,7 +37,7 @@ export function Dashboard({ stats, entries, onAddEntry, onExport }: DashboardPro
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
+                    <h1 className="text-3xl bg-linear-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
                         Dashboard
                     </h1>
                     <p className="text-sm text-muted-foreground mt-1">
