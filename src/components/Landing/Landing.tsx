@@ -4,10 +4,12 @@ import Logos from "./Logos";
 import About from "./About";
 import ProjectKeyFeatures from "./ProjectKeyFeatures";
 import Footer from "./Footer";
+import Cards from "./Cards";
 //animations
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import ScrollSmoother from "gsap/ScrollSmoother";
+
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
@@ -32,6 +34,7 @@ export default function Landing({onNavigateToSignUp, onNavigateToLogin}: Landing
                     </main>
                     <Logos />
                     <About/>
+                    <Cards/>
                     <ProjectKeyFeatures/>
                     <Footer />
                 </div>
