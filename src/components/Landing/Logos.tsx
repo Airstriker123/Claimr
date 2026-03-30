@@ -100,7 +100,7 @@ export default function Logos(): JSX.Element {
     return (
         <div
             ref={sectionRef}
-            className="flex flex-col items-center gap-8 px-16 py-20 w-full"
+            className="bg-background/0 flex flex-col items-center gap-8 px-16 py-20 w-full"
         >
             <p
                 ref={titleRef}
