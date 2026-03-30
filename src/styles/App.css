@@ -1,25 +1,9 @@
-/*
- * The Typekit service used to deliver this font or fonts for use on websites
- * is provided by Adobe and is subject to these Terms of Use
- * http://www.adobe.com/products/eulas/tou_typekit. For font license
- * information, see the list below.
- *
- * nasalization:
- *   - http://typekit.com/eulas/00000000000000007735e470
- *
- * © 2009-2026 Adobe Systems Incorporated. All Rights Reserved.
- */
-/*{"last_published":"2026-01-16 12:15:06 UTC"}*/
 
-@import url("https://p.typekit.net/p.css?s=1&k=jvy5maz&ht=tk&f=240&a=140900750&app=typekit&e=css");
-@import url("https://use.typekit.net/jvy5maz.css");
-@font-face {
-  font-family:"nasalization";
-  src:url("https://use.typekit.net/af/27a482/00000000000000007735e470/31/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff2"),url("https://use.typekit.net/af/27a482/00000000000000007735e470/31/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff"),url("https://use.typekit.net/af/27a482/00000000000000007735e470/31/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("opentype");
-  font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+:root
+{
+  background-image: url("./background.png");
+  overscroll-behavior: none;
 }
-
-.tk-nasalization { font-family: "nasalization",sans-serif; }
 
 body
 {
@@ -28,11 +12,6 @@ body
   background-image: url("./background.png");
 }
 
-:root
-{
-    /* prevent overscroll on app */
-    overscroll-behavior: none;
-}
 /* -- logos */
 @keyframes marqueeRight
 {
@@ -74,10 +53,3 @@ body
   scrollbar-color: #00ffda #0f172a;
 }
 /*--------------</custom css here>-------------- */
-
-
-canvas {
-  touch-action: none; /* Prevents the browser from handling touch events, giving control to OrbitControls */
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-}

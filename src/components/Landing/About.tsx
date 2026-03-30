@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {Button} from "@/ui/button"
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -124,26 +125,6 @@ export default function AnimatedAbout() {
         return () => ctx.revert();
     }, []);
 
-
-    // Button hover + click
-    const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) => {
-        gsap.to(e.currentTarget, {
-            scale: 1.05,
-            boxShadow: '0 10px 30px rgba(0, 243, 255, 0.467)',
-            duration: 0.3,
-            ease: 'power2.out',
-        });
-    };
-
-    const handleButtonLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-        gsap.to(e.currentTarget, {
-            scale: 1,
-            boxShadow: '0 0 0px rgba(144,0,255,0)',
-            duration: 0.3,
-            ease: 'power2.out',
-        });
-    };
-
     const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         gsap.to(e.currentTarget, {
             scale: 0.95,
@@ -183,20 +164,24 @@ export default function AnimatedAbout() {
                     that’s secure, transparent, and community‑driven.
                 </p>
 
-                <button
+                <Button
                     ref={buttonRef}
                     onClick={handleButtonClick}
-                    onMouseEnter={handleButtonHover}
-                    onMouseLeave={handleButtonLeave}
                     className="all-[unset] box-border inline-flex items-center
-                    justify-center gap-2 px-4 py-3 rounded-xl
+                    justify-center gap-2
                     bg-linear-to-r from-cyan-200 via-cyan-400 to-cyan-800
+                    w-full sm:w-auto min-w-45 px-8 py-4 rounded-full
+               bg-cyan-500 text-black font-bold
+               transition-all duration-200 ease-out
+               hover:scale-105 hover:-translate-y-1 hover:bg-cyan-400
+               hover:shadow-[0_10px_30px_rgba(6,182,212,0.5)]
+               active:scale-95 transform-gpu
                     "
                 >
-                    <div className="relative flex items-center justify-center w-fit mt-[-1px] font-medium text-white text-lg text-center tracking-[-0.09px] leading-[26.1px] whitespace-nowrap">
-                        Get in Contact with us!
+                    <div className="relative flex items-center justify-center w-fit -mt-px font-medium  text-lg text-center tracking-[-0.09px] leading-[26.1px] whitespace-nowrap">
+                        <b>Get in Contact with us!</b>
                     </div>
-                </button>
+                </Button>
             </div>
 
             {/* Right image */}

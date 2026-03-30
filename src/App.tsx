@@ -17,7 +17,7 @@ import { AddEditEntryDialog } from '@/components/App/AddEditEntryDialog';
 
 export default function App(): JSX.Element
 {
-    const [currentSection, setCurrentSection] = useState< "Dashboard" |"Landing" | "Login" | "SignUp" | "Home">("Dashboard");
+    const [currentSection, setCurrentSection] = useState< "Dashboard" |"Landing" | "Login" | "SignUp" | "Home">("Landing");
     const [entries, setEntries] = useState<TaxEntry[]>([]);
     const stats = calculateStats(entries);
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -98,7 +98,7 @@ export default function App(): JSX.Element
         {
             case "Dashboard":
                 return (
-                    <div className="min-h-screen bg-background/10">
+                    <div className="min-h-screen bg-background/90">
                         <Toaster position="top-right" />
 
                         {/* Header */}
@@ -118,6 +118,7 @@ export default function App(): JSX.Element
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Button
+                                            className="text-black dark:text-white "
                                             variant="ghost"
                                             size="sm"
                                             onClick={handleNavigateToLanding}
@@ -221,7 +222,7 @@ export default function App(): JSX.Element
         }
     }
     return(
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
                 <main className="min-h-screen text-white overflow-x-hidden smooth-scroll
                     bg-cover bg-center bg-no-repeat relative z-20 transform-gp">
                     {RenderCurrentSection()}

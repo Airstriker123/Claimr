@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/ui/card';
 import { Button } from '@/ui/button';
 import type {TaxEntry, DashboardStats} from './types';
 import { formatCurrency, formatDate, getCurrentFinancialYear, getTaxDueDate } from './utils';
+import "@/styles/theme.css"
 import {
     DollarSign,
     FileText,

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
+import {Button} from "@/ui/button"
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 }
@@ -76,19 +76,54 @@ export default function ProjectKeyFeatures(): JSX.Element
                 });
             }
 
-            // Button animation
-            gsap.from(buttonRef.current, {
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: 'top 75%',
-                    toggleActions: 'play none none reverse',
-                },
-                opacity: 0,
-                y: 20,
-                scale: 0.9,
-                duration: 0.8,
-                ease: 'back.out(1.4)',
-            });
+             // 1. Entrance Animation
+             gsap.from(buttonRef.current, {
+                 scrollTrigger: {
+                     trigger: containerRef.current,
+                     start: 'top 75%',
+                     toggleActions: 'play none none reverse',
+                 },
+                 opacity: 0,
+                 y: 30,
+                 scale: 0.8,
+                 duration: 1,
+                 ease: 'elastic.out(1, 0.5)', // Adds a slight "bounce" to the entrance
+             });
+
+// 2. Idle "Pulse" Animation (Starts after entrance)
+             gsap.to(buttonRef.current, {
+                 boxShadow: "0 0 20px rgba(34, 211, 238, 0.6)",
+                 repeat: -1,
+                 yoyo: true,
+                 duration: 2,
+                 ease: "sine.inOut"
+             });
+
+
+             const btn = buttonRef.current;
+             if (btn) {
+                 btn.addEventListener("mousemove", (e) => {
+                     const rect = btn.getBoundingClientRect();
+                     const x = e.clientX - rect.left - rect.width / 2;
+                     const y = e.clientY - rect.top - rect.height / 2;
+
+                     gsap.to(btn, {
+                         x: x * 0.2,
+                         y: y * 0.2,
+                         duration: 0.3,
+                         ease: "power2.out"
+                     });
+                 });
+
+                 btn.addEventListener("mouseleave", () => {
+                     gsap.to(btn, {
+                         x: 0,
+                         y: 0,
+                         duration: 0.5,
+                         ease: "elastic.out(1, 0.3)"
+                     });
+                 });
+             }
 
             // Image parallax
             gsap.fromTo(
@@ -123,37 +158,20 @@ export default function ProjectKeyFeatures(): JSX.Element
     }, []);
 
 
-    // Button hover + click
-    const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) => {
-        gsap.to(e.currentTarget, {
-            scale: 1.05,
-            boxShadow: '0 10px 30px rgba(0, 243, 255, 0.467)',
-            duration: 0.3,
-            ease: 'power2.out',
-        });
-    };
 
-    const handleButtonLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-        gsap.to(e.currentTarget, {
-            scale: 1,
-            boxShadow: '0 0 0px rgba(144,0,255,0)',
-            duration: 0.3,
-            ease: 'power2.out',
-        });
-    };
 
 
 
     return (
         <div
             ref={containerRef}
-            className="pt-10 pb-20 px-16 flex items-center justify-center gap-16 w-full"
+            className="rounded-full pt-10 pb-20 px-16 flex items-center justify-center gap-16 w-full"
         >
             {/* Image */}
             <div
                 ref={imageRef}
-                className="flex flex-col h-[432px] flex-1 grow border-[3px] border-solid border-transparent
-[border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1] bg-[url(/3d.webp)] bg-cover bg-center rounded-2xl transform-gpu
+                className="flex flex-col h-108 flex-1 grow border-[3px] border-solid border-transparent
+[border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1] bg-[url(/3d.webp)] bg-cover bg-center rounded-4xl transform-gpu
 
 "
             >
@@ -193,19 +211,28 @@ export default function ProjectKeyFeatures(): JSX.Element
                 </ul>
 
 
-                <button
+                <Button
                     ref={buttonRef}
                     onClick={
                     ()=> window.open("https://github.com/Airstriker123/Claimr.git")
                 }
-                    onMouseEnter={handleButtonHover}
-                    onMouseLeave={handleButtonLeave}
-                    className="all-[unset] box-border inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-linear-to-r from-cyan-200 via-cyan-400 to-cyan-800 cursor-pointer transform-gpu"
+
+                    className="all-[unset] box-border inline-flex items-center
+                     justify-center gap-2  bg-linear-to-r
+                     from-cyan-200 via-cyan-400 to-cyan-800 cursor-pointer
+                     w-full sm:w-auto min-w-45 px-8 py-4 rounded-full
+               bg-cyan-500 text-black font-bold
+               transition-all duration-200 ease-out
+               hover:scale-105 hover:-translate-y-1 hover:bg-cyan-400
+               hover:shadow-[0_10px_30px_rgba(6,182,212,0.5)]
+               active:scale-95 transform-gpu
+                     "
                 >
-                    <div className="relative flex items-center justify-center w-fit mt-[-1px] font-medium text-white text-lg text-center tracking-[-0.09px] leading-[26.1px] whitespace-nowrap">
-                        View Claimr source code
+                    <div className="relative flex items-center justify-center bg-blend-color text-balance w-fit -mt-px
+                    font-medium  text-lg text-center tracking-[-0.09px] leading-[26.1px] whitespace-nowrap">
+                       View Claimr source code
                     </div>
-                </button>
+                </Button>
             </div>
         </div>
     );
