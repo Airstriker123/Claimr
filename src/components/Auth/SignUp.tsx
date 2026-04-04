@@ -55,7 +55,7 @@ export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProp
                             <div className="mb-8">
                                 {/* logo */}
                                 <img
-                                    src="/logo.png"
+                                    src="/Auth/claimr_logo.svg"
                                     alt="Software Readvanced"
                                     className="w-40"
                                 />
@@ -110,9 +110,10 @@ export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProp
 
                         {/* Image Section */}
                         <div className="w-full h-full">
-                            <div className="aspect-square bg-gray-50 relative before:absolute before:inset-0 before:bg-black/40 rounded-md overflow-hidden w-full h-full border-cyan-400 border-[2px]">
+                            <div className="aspect-square relative before:absolute before:inset-0
+                            before:bg-black/70 rounded-md overflow-hidden w-full h-full border-cyan-400 border-2">
                                 <img
-                                    src="/login.jpg"
+                                    src="/Landing/ClaimrFeatures.webp"
                                     className="w-full h-full object-cover"
                                     alt="signup img"
                                 />

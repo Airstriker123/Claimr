@@ -1,12 +1,11 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import {Button} from "@/ui/button"
+import { Button } from "@/ui/button"
+
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 }
-
-
 
 export default function ProjectKeyFeatures(): JSX.Element
 {
@@ -17,27 +16,23 @@ export default function ProjectKeyFeatures(): JSX.Element
     const imageRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-         const ctx = gsap.context(() => {
-            // Split title letters for gradient animation
+        const ctx = gsap.context(() => {
+            // Split title letters logic remains same
             if (titleRef.current) {
                 const titleText = titleRef.current.textContent || '';
                 titleRef.current.innerHTML = titleText
                     .split('')
-                    .map(
-                        (char) =>
-                            `<span class="inline-block bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]
-  [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
-  text-transparent  tracking-[0] leading-[normal] 
-                         will-change-transform will-change-opacity"
-              >${char === ' ' ? '&nbsp;' : char}</span>`
-                    )
-                    .join('');
+                    .map((char) =>
+                        `<span class="inline-block bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]
+                        [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
+                        text-transparent tracking-[0] leading-[normal] will-change-transform will-change-opacity"
+                        >${char === ' ' ? '&nbsp;' : char}</span>`
+                    ).join('');
 
-                // Animate letters in sequence
                 gsap.from(titleRef.current.children, {
                     scrollTrigger: {
                         trigger: containerRef.current,
-                        start: 'top 80%',
+                        start: 'top 85%',
                         toggleActions: 'play none none reverse',
                     },
                     opacity: 0,
@@ -47,194 +42,107 @@ export default function ProjectKeyFeatures(): JSX.Element
                     duration: 0.8,
                     ease: 'back.out(1.7)',
                 });
-
-                // Floating + subtle glow
-                gsap.to(titleRef.current.children, {
-                    y: '+=5',
-                    textShadow: '0 0 10px rgba(0,123,255,1)',
-                    duration: 2,
-                    repeat: -1,
-                    yoyo: true,
-                    ease: 'sine.inOut',
-                    stagger: 0.03,
-                });
             }
 
-            // Animate list items
+            // List and Button animations triggered slightly earlier for mobile flow
             if (listRef.current) {
                 gsap.from(listRef.current.children, {
                     scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: 'top 75%',
+                        trigger: listRef.current,
+                        start: 'top 90%',
                         toggleActions: 'play none none reverse',
                     },
                     opacity: 0,
-                    x: -50,
+                    x: -20,
                     stagger: 0.1,
                     duration: 0.8,
                     ease: 'power3.out',
                 });
             }
 
-             // 1. Entrance Animation
-             gsap.from(buttonRef.current, {
-                 scrollTrigger: {
-                     trigger: containerRef.current,
-                     start: 'top 75%',
-                     toggleActions: 'play none none reverse',
-                 },
-                 opacity: 0,
-                 y: 30,
-                 scale: 0.8,
-                 duration: 1,
-                 ease: 'elastic.out(1, 0.5)', // Adds a slight "bounce" to the entrance
-             });
+            gsap.from(buttonRef.current, {
+                scrollTrigger: {
+                    trigger: buttonRef.current,
+                    start: 'top 95%',
+                    toggleActions: 'play none none reverse',
+                },
+                opacity: 0,
+                y: 20,
+                scale: 0.9,
+                duration: 0.8,
+                ease: 'back.out(1.4)',
+            });
 
-// 2. Idle "Pulse" Animation (Starts after entrance)
-             gsap.to(buttonRef.current, {
-                 boxShadow: "0 0 20px rgba(34, 211, 238, 0.6)",
-                 repeat: -1,
-                 yoyo: true,
-                 duration: 2,
-                 ease: "sine.inOut"
-             });
-
-
-             const btn = buttonRef.current;
-             if (btn) {
-                 btn.addEventListener("mousemove", (e) => {
-                     const rect = btn.getBoundingClientRect();
-                     const x = e.clientX - rect.left - rect.width / 2;
-                     const y = e.clientY - rect.top - rect.height / 2;
-
-                     gsap.to(btn, {
-                         x: x * 0.2,
-                         y: y * 0.2,
-                         duration: 0.3,
-                         ease: "power2.out"
-                     });
-                 });
-
-                 btn.addEventListener("mouseleave", () => {
-                     gsap.to(btn, {
-                         x: 0,
-                         y: 0,
-                         duration: 0.5,
-                         ease: "elastic.out(1, 0.3)"
-                     });
-                 });
-             }
-
-            // Image parallax
-            gsap.fromTo(
-                imageRef.current,
-                { opacity: 0, scale: 0.9, y: 0 },
+            // Parallax adjusted for vertical scroll
+            gsap.fromTo(imageRef.current,
+                { opacity: 0, scale: 0.9 },
                 {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 1.2,
-                    ease: 'power3.out',
+                    opacity: 1, scale: 1, duration: 1.2,
                     scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: 'top 80%',
+                        trigger: imageRef.current,
+                        start: 'top 90%',
                         end: 'top 50%',
                         scrub: true,
                     },
                 }
             );
-
-            gsap.to(imageRef.current, {
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: 1,
-                },
-                y: -40,
-            });
         }, containerRef);
 
         return () => ctx.revert();
     }, []);
 
-
-
-
-
-
     return (
         <div
             ref={containerRef}
-            className="rounded-full pt-10 pb-20 px-16 flex items-center justify-center gap-16 w-full"
+            className="flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-16 w-full py-12 px-6 sm:px-12 lg:px-16"
         >
-            {/* Image */}
             <div
                 ref={imageRef}
-                className="flex flex-col h-108 flex-1 grow border-[3px] border-solid border-transparent
-[border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1] bg-[url(/3d.webp)] bg-cover bg-center rounded-4xl transform-gpu
-
-"
+                className="relative w-full lg:flex-1 h-64 sm:h-80 lg:h-108 border-[3px] border-solid border-transparent
+    [border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1]
+    /* This forces the image to stretch to all four corners */
+    bg-[url(/Landing/ClaimrFeatures.webp)] bg-[length:100%_100%] bg-no-repeat
+    rounded-2xl transform-gpu overflow-hidden shadow-2xl shadow-cyan-500/20"
             >
-                <div className="w-full h-full rounded-2xl" />
+                <div className="absolute inset-0 bg-black/20" />
             </div>
-
-            {/* Text */}
-            <div className="flex flex-col items-start justify-center gap-12 flex-1 grow">
-                <div className="flex flex-col gap-6 w-full">
-                    <div
+            {/* Text Section */}
+            <div className="flex flex-col items-center lg:items-start justify-center gap-8 lg:gap-12 flex-1 w-full text-center lg:text-left">
+                <div className="w-full">
+                    <h2
                         ref={titleRef}
-                        className="relative flex items-center justify-center self-stretch mt-[-1px] font-bold text-4xl tracking-[-0.72px] leading-[43.2px]"
+                        className="font-bold text-3xl sm:text-4xl tracking-tight leading-tight text-white uppercase italic"
                     >
-                        Claimr is 100% open source!
-                    </div>
+                        Key Features Of our product Claimr
+                    </h2>
                 </div>
 
                 <ul
                     ref={listRef}
-                    className="list-none text-white text-lg font-normal tracking-[-0.09px] leading-[26.1px] space-y-3"
+                    className="list-none drop-shadow-[black_1px_1px_1px] text-slate-100 text-sm sm:text-base md:text-lg font-normal space-y-4 max-w-2xl"
                 >
-                    <li className="font-medium">
-                        100% Open Source: Claimr’s tax return tracker is fully transparent, allowing users to inspect the code, verify how data is handled, and trust that no hidden processes occur.
-                    </li>
-                    <li className="font-medium">
-                        Dynamic Animations: GSAP was used to animate elements such as transitions, text, and movement between sections.
-                    </li>
-                    <li className="font-medium">
-                        Responsive Interface: Styled using TailwindCSS for a futuristic, game-like aesthetic that adapts across devices.
-                    </li>
-                    <li className="font-medium">
-                        Secure: We took multiple measures to ensure the security of this app and your data.
-                    </li>
-                    <li className="font-medium">
-                        Progressive Web App: Downloadable on mobile and other devices with access to a web browser.
-                    </li>
+                    {[
+                        "Track everything in one place: Organise income, deductions, and receipts without the stress.",
+                        "Snap & extract receipts instantly: Upload images and automatically capture key details.",
+                        "Understand your tax at a glance: Clear summaries show exactly what you can claim.",
+                        "Never miss a warranty: Get reminders before your receipts expire.",
+                        "Built for real life: Works seamlessly on mobile and desktop wherever you are."
+                    ].map((text, i) => (
+                        <li key={i} className="font-medium flex gap-3 text-left">
+                            <span className="text-cyan-400">▹</span> {text}
+                        </li>
+                    ))}
                 </ul>
-
 
                 <Button
                     ref={buttonRef}
-                    onClick={
-                    ()=> window.open("https://github.com/Airstriker123/Claimr.git")
-                }
-
-                    className="all-[unset] box-border inline-flex items-center
-                     justify-center gap-2  bg-linear-to-r
-                     from-cyan-200 via-cyan-400 to-cyan-800 cursor-pointer
-                     w-full sm:w-auto min-w-45 px-8 py-4 rounded-full
-               bg-cyan-500 text-black font-bold
-               transition-all duration-200 ease-out
-               hover:scale-105 hover:-translate-y-1 hover:bg-cyan-400
-               hover:shadow-[0_10px_30px_rgba(6,182,212,0.5)]
-               active:scale-95 transform-gpu
-                     "
+                    onClick={() => window.open("https://github.com/Airstriker123/Claimr.git")}
+                    className="w-full sm:w-auto px-10 py-6 rounded-full bg-cyan-500 text-black font-black uppercase tracking-widest
+                    hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer"
                 >
-                    <div className="relative flex items-center justify-center bg-blend-color text-balance w-fit -mt-px
-                    font-medium  text-lg text-center tracking-[-0.09px] leading-[26.1px] whitespace-nowrap">
-                       View Claimr source code
-                    </div>
+                    View Source Code
                 </Button>
             </div>
         </div>
     );
 }
-

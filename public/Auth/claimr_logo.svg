@@ -1,0 +1,37 @@
+<svg width="1200" height="320" viewBox="0 0 1200 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="claimrGradient" x1="40" y1="40" x2="280" y2="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#67E8F9"/>
+      <stop offset="55%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#0F766E"/>
+    </linearGradient>
+    <linearGradient id="textGradient" x1="320" y1="60" x2="940" y2="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E2E8F0"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.2039  0 0 0 0 0.8275  0 0 0 0 0.6  0 0 0 0.28 0" result="glow"/>
+      <feBlend in="SourceGraphic" in2="glow" mode="screen"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softGlow)">
+    <circle cx="160" cy="160" r="118" fill="url(#claimrGradient)"/>
+    <circle cx="160" cy="160" r="76" fill="#0B1120" fill-opacity="0.18"/>
+    <path d="M222 103C206 88 184 80 160 80C115.817 80 80 115.817 80 160C80 204.183 115.817 240 160 240C184 240 205.878 231.655 220.044 217.728"
+          stroke="white" stroke-width="28" stroke-linecap="round"/>
+    <path d="M209 200L252 245"
+          stroke="#A7F3D0" stroke-width="20" stroke-linecap="round"/>
+    <circle cx="250" cy="247" r="14" fill="#A7F3D0"/>
+  </g>
+
+  <g aria-label="Claimr">
+    <path d="M350.011 222C324.011 222 304.511 203.5 304.511 160.5C304.511 117.5 324.511 99 350.011 99C368.511 99 382.511 106.5 391.511 117.5L372.011 135C366.511 128.5 359.511 124 350.011 124C334.511 124 323.511 137 323.511 160.5C323.511 184 334.511 197 350.011 197C360.511 197 368.011 191.5 374.511 184L394.011 201C383.511 214 369.011 222 350.011 222Z" fill="url(#textGradient)"/>
+    <path d="M434.429 218H407.929V90H434.429V218Z" fill="url(#textGradient)"/>
+    <path d="M515.921 218L513.921 208.75C505.921 216.25 496.921 221 484.421 221C463.421 221 449.171 208.75 449.171 189.75C449.171 168.75 465.171 158.5 488.171 158.5C498.171 158.5 505.421 160.25 512.921 162.75V160.75C512.921 148.5 505.421 141.75 490.921 141.75C479.921 141.75 472.171 143.75 463.671 147L456.921 126.25C467.171 121.75 477.171 118.75 494.921 118.75C511.171 118.75 522.921 123 530.421 130.5C538.171 138.25 541.671 149.75 541.671 164V218H515.921ZM512.921 178.5C507.421 176 500.171 174.25 492.171 174.25C479.671 174.25 472.171 179.25 472.171 188.5C472.171 196.5 478.671 201 488.171 201C502.671 201 512.921 193 512.921 181.75V178.5Z" fill="url(#textGradient)"/>
+    <path d="M691.831 218H665.331V162.75C665.331 149.5 659.081 142.75 648.331 142.75C637.581 142.75 630.581 149.5 630.581 162.75V218H604.081V162.75C604.081 149.5 597.831 142.75 587.081 142.75C576.331 142.75 569.331 149.5 569.331 162.75V218H542.831V121H569.331V134.75C575.581 126.5 583.831 119 597.581 119C610.081 119 619.331 124.5 624.831 134.5C632.831 124.75 642.331 119 655.831 119C677.081 119 691.831 131.75 691.831 156V218Z" fill="url(#textGradient)"/>
+    <path d="M734.357 108.5H706.357V84H734.357V108.5ZM733.607 218H707.107V121H733.607V218Z" fill="url(#textGradient)"/>
+    <path d="M775.923 218H749.423V121H775.923V140.5C781.423 127.25 790.173 118.75 806.923 119.5V147.25H805.423C786.673 147.25 775.923 158.5 775.923 182V218Z" fill="url(#textGradient)"/>
+  </g>
+</svg>

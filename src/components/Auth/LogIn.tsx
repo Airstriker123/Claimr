@@ -56,7 +56,7 @@ export default function LoginForm({ setUser, onNavigateToSignUp }: LoginFormProp
                             <div className="mb-8">
                                 {/* logo */}
                                 <img
-                                    src="/logo.png"
+                                    src="/Auth/claimr_logo.svg"
                                     alt="Claimr logo"
                                     className="w-40"
                                 />
@@ -72,7 +72,7 @@ export default function LoginForm({ setUser, onNavigateToSignUp }: LoginFormProp
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
                                 placeholder="Enter username"
-                                className="border-cyan-400 border-[1px] w-full text-sm text-slate-900 bg-slate-100 pl-4 pr-10 py-3 rounded-md mb-4"
+                                className="border-cyan-400 border w-full text-sm text-slate-900 bg-slate-100 pl-4 pr-10 py-3 rounded-md mb-4"
                             />
 
                             {/* password input */}
@@ -85,7 +85,7 @@ export default function LoginForm({ setUser, onNavigateToSignUp }: LoginFormProp
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 placeholder="Enter password"
-                                className="border-cyan-400 border-[1px] w-full text-sm text-slate-900 bg-slate-100 pl-4 pr-10 py-3 rounded-md"
+                                className="border-cyan-400 border w-full text-sm text-slate-900 bg-slate-100 pl-4 pr-10 py-3 rounded-md"
                             />
 
                             {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
@@ -94,7 +94,8 @@ export default function LoginForm({ setUser, onNavigateToSignUp }: LoginFormProp
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="border-cyan-400 border-[3px] w-full shadow-xl mt-6 py-2 text-[15px] font-medium rounded-md text-white bg-cyan-400 hover:bg-cyan-700"
+                                className="border-cyan-400 border-[3px] w-full shadow-xl mt-6 py-2 text-[15px]
+                                font-medium rounded-md text-white bg-cyan-400 hover:bg-cyan-700"
                             >
                                 {loading ? "Logging in..." : "Login"}
                             </button>
@@ -114,9 +115,10 @@ export default function LoginForm({ setUser, onNavigateToSignUp }: LoginFormProp
 
                         {/* login image  to side*/}
                         <div className="w-full h-full">
-                            <div className="aspect-square bg-gray-50 relative before:absolute before:inset-0 before:bg-black/40 rounded-md overflow-hidden w-full h-full border-cyan-400 border-[2px]">
+                            <div className="aspect-square relative before:absolute before:inset-0 before:bg-black/70
+                            rounded-md overflow-hidden w-full h-full border-cyan-400 border-2">
                                 <img
-                                    src="/login.jpg"
+                                    src="/Landing/ClaimrFeatures.webp"
                                     className="w-full h-full object-cover"
                                     alt="login img"
                                 />

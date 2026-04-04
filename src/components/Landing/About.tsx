@@ -1,23 +1,24 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import {Button} from "@/ui/button"
-
+import { Button } from "@/ui/button"
 
 gsap.registerPlugin(ScrollTrigger);
 
-
-export default function AnimatedAbout() {
+export default function AnimatedAbout()
+{
     const containerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLDivElement>(null);
     const paragraphRef = useRef<HTMLParagraphElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const imageRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // --- Split title letters for gradient + animation ---
-            if (titleRef.current) {
+    useEffect(() =>
+    {
+        const ctx = gsap.context(() =>
+        {
+            if (titleRef.current)
+            {
                 const titleText = titleRef.current.textContent || '';
                 titleRef.current.innerHTML = titleText
                     .split('')
@@ -26,14 +27,13 @@ export default function AnimatedAbout() {
                             `<span class="inline-block 
                           will-change-transform will-change-opacity
                           bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]
-  [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
-  text-transparent  tracking-[0] leading-[normal]
+                          [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
+                          text-transparent tracking-[0] leading-[normal]
                           "
               >${char === ' ' ? '&nbsp;' : char}</span>`
                     )
                     .join('');
 
-                // Scroll reveal
                 gsap.from(titleRef.current.children, {
                     scrollTrigger: {
                         trigger: containerRef.current,
@@ -48,7 +48,6 @@ export default function AnimatedAbout() {
                     ease: 'back.out(1.7)',
                 });
 
-                // Floating + glow effect
                 gsap.to(titleRef.current.children, {
                     y: '+=5',
                     textShadow: '0 0 10px rgba(0,123,255,1)',
@@ -60,8 +59,8 @@ export default function AnimatedAbout() {
                 });
             }
 
-            // Paragraph fade/slide
-            if (paragraphRef.current) {
+            if (paragraphRef.current)
+            {
                 gsap.from(paragraphRef.current, {
                     scrollTrigger: {
                         trigger: containerRef.current,
@@ -75,8 +74,8 @@ export default function AnimatedAbout() {
                 });
             }
 
-            // Button animation
-            if (buttonRef.current) {
+            if (buttonRef.current)
+            {
                 gsap.from(buttonRef.current, {
                     scrollTrigger: {
                         trigger: containerRef.current,
@@ -91,12 +90,10 @@ export default function AnimatedAbout() {
                 });
             }
 
-            // Image fade + parallax
-            if (imageRef.current) {
+            if (imageRef.current)
+            {
                 gsap.fromTo(
-                    imageRef.current,
-                    { opacity: 0, scale: 0.9, y: 0 },
-                    {
+                    imageRef.current, { opacity: 0, scale: 0.9, y: 0 }, {
                         opacity: 1,
                         scale: 1,
                         duration: 1.2,
@@ -110,8 +107,10 @@ export default function AnimatedAbout() {
                     }
                 );
 
-                gsap.to(imageRef.current, {
-                    scrollTrigger: {
+                gsap.to(imageRef.current,
+                {
+                    scrollTrigger:
+                    {
                         trigger: containerRef.current,
                         start: 'top bottom',
                         end: 'bottom top',
@@ -125,8 +124,10 @@ export default function AnimatedAbout() {
         return () => ctx.revert();
     }, []);
 
-    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        gsap.to(e.currentTarget, {
+    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) =>
+    {
+        gsap.to(e.currentTarget,
+        {
             scale: 0.95,
             duration: 0.1,
             yoyo: true,
@@ -135,27 +136,33 @@ export default function AnimatedAbout() {
         });
     };
 
-
     return (
-        <div
+        <section
             ref={containerRef}
-            className="pt-20 pb-10 px-16 flex items-center justify-center gap-16 w-full"
+            className="pt-10 md:pt-20 pb-10 px-6 sm:px-10 md:px-16 flex flex-col lg:flex-row items-center justify-center gap-10 md:gap-16 w-full"
         >
             {/* Left content */}
-            <div className="flex flex-col items-start justify-center gap-12 flex-1 grow">
-                <div className="flex flex-col gap-6 w-full">
+            <div className="flex flex-col items-center lg:items-start justify-center gap-8 md:gap-12 flex-1 grow w-full">
+                <h1 className="flex flex-col gap-6 w-full">
                     <div
                         ref={titleRef}
-                        className="relative flex items-center justify-center self-stretch mt-[-1px] font-bold text-4xl tracking-[-0.72px] leading-[43.2px]"
+                        className="
+            relative flex self-stretch mt-[-1px] font-bold
+            text-3xl md:text-4xl tracking-tight leading-tight md:leading-[43.2px]
+
+            items-center justify-center text-center
+            lg:items-start lg:justify-start lg:text-center
+        "
                     >
                         About Claimr
                     </div>
-                </div>
+                </h1>
 
                 <p
                     ref={paragraphRef}
-                    className="relative flex items-center justify-center self-stretch font-medium
-                     text-white text-lg tracking-[-0.09px] leading-[26.1px]"
+                    className="relative flex flex-col items-center lg:items-start justify-center self-stretch drop-shadow-[black_1px_1px_1px]
+                       tracking-tight leading-relaxed
+                       text-slate-100 text-sm sm:text-base md:text-lg font-normal space-y-4 max-w-2xl text-center lg:text-left"
                 >
                     Claimr is a tax return tracker built for
                     transparency and trust. It helps Australians organise income, deductions, and receipts
@@ -167,34 +174,28 @@ export default function AnimatedAbout() {
                 <Button
                     ref={buttonRef}
                     onClick={handleButtonClick}
-                    className="all-[unset] box-border inline-flex items-center
-                    justify-center gap-2
-                    bg-linear-to-r from-cyan-200 via-cyan-400 to-cyan-800
-                    w-full sm:w-auto min-w-45 px-8 py-4 rounded-full
-               bg-cyan-500 text-black font-bold
-               transition-all duration-200 ease-out
-               hover:scale-105 hover:-translate-y-1 hover:bg-cyan-400
-               hover:shadow-[0_10px_30px_rgba(6,182,212,0.5)]
-               active:scale-95 transform-gpu
+                    className="
+                    w-full sm:w-auto px-10 py-6 rounded-full bg-cyan-500 text-black font-black uppercase tracking-widest
+                    hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer
                     "
                 >
-                    <div className="relative flex items-center justify-center w-fit -mt-px font-medium  text-lg text-center tracking-[-0.09px] leading-[26.1px] whitespace-nowrap">
-                        <b>Get in Contact with us!</b>
+                    <div className="relative flex items-center justify-center w-fit -mt-px font-bold text-base md:text-lg text-center tracking-tight whitespace-nowrap">
+                        Get in Contact with us!
                     </div>
                 </Button>
             </div>
 
-            {/* Right image */}
+            {/* Right image configs */}
             <div
                 ref={imageRef}
                 className="
-                flex flex-col h-[432px] flex-1 grow border-[3px] border-solid border-transparent
+                flex flex-col h-64 sm:h-80 md:h-108 w-full lg:flex-1 grow border-[3px] border-solid border-transparent
                 [border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1]
-                bg-[url(/3d.webp)] bg-cover bg-center rounded-2xl transform-gpu
+                bg-[url(/Landing/about.webp)] bg-cover bg-center rounded-2xl transform-gpu
                 "
             >
                 <div className="w-full h-full rounded-2xl" />
             </div>
-        </div>
+        </section>
     );
 }
