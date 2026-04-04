@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { register } from "@/api/auth";
+import { Eye, EyeOff, ShieldCheck, UserPlus } from "lucide-react";
 
 interface SignUpFormProps
 {
@@ -9,33 +10,26 @@ interface SignUpFormProps
 
 export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProps)
 {
-    /*
-    component for the sign up form
-    - uses tailwind for styling
-    - uses useState for state management
-    - uses useEffect for side effects
-    - handles look of the sign up form
-    - stores the sign up form component
-     */
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
-    // logic to register user to database
-    const signUpUser: (e: React.FormEvent) => Promise<void> = async (e: React.FormEvent):Promise<void> =>
+    const signUpUser = async (e: React.FormEvent): Promise<void> =>
     {
         e.preventDefault();
         setLoading(true);
         setError(null);
+
         try
         {
-            const user = await register(username, password); // try to register api call
+            const user = await register(username, password);
             onRegister(user);
         }
-        catch (err: any) // if fail return error message
+        catch (err: any)
         {
-            setError(err.message);
+            setError(err?.message || "Unable to create account.");
         }
         finally
         {
@@ -43,100 +37,165 @@ export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProp
         }
     };
 
-    // return sign up form component
     return (
-        <>
-            {/* sign up form background look */}
-            <div className="bg-linear-to-br from-black/67 to-cyan-400/24 lg:h-screen flex items-center justify-center p-4">
-                <div className="border-cyan-400 border-[3px] max-w-6xl bg-white/8 shadow-xl p-6 rounded-md">
-                    <div className="grid md:grid-cols-2 items-center gap-y-8">
-                        {/* sign up form */}
-                        <form className="max-w-md mx-auto w-full" onSubmit={signUpUser}>
-                            <div className="mb-8">
-                                {/* logo */}
-                                <img
-                                    src="/Auth/claimr_logo.svg"
-                                    alt="Software Readvanced"
-                                    className="w-40"
-                                />
+        <div className="relative min-h-screen overflow-hidden
+          bg-linear-to-br from-black/67 to-cyan-400/24 lg:h-screen flex items-center justify-center p-4
+          px-4 py-8 sm:px-6 lg:px-8">
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute left-[-80px] top-16 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl" />
+                <div className="absolute bottom-10 right-[-60px] h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
+            </div>
+
+            <div className="relative mx-auto flex min-h-[calc(100vh-4rem)] max-w-6xl items-center justify-center">
+                <div className="grid w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:grid-cols-2">
+
+                    {/* Left content */}
+                    <div className="hidden lg:flex flex-col justify-between border-r border-white/10 bg-white/[0.03] p-10 xl:p-12">
+                        <div>
+                            <img
+                                src="/Auth/claimr_logo.svg"
+                                alt="Claimr logo"
+                                className="h-12 w-auto"
+                            />
+
+                            <div className="mt-14 max-w-xl">
+                                <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300/80">
+                                    Create your account
+                                </p>
+
+                                <h1 className="text-4xl font-bold tracking-tight text-white xl:text-5xl">
+                                    Start tracking tax the smarter way.
+                                </h1>
+
+                                <p className="mt-5 text-base leading-8 text-slate-300">
+                                    Join Claimr to organise receipts, monitor deductions, and keep your
+                                    tax information in one clean, easy-to-use dashboard.
+                                </p>
                             </div>
-                            {/* username field */}
-                            <label className="text-cyan-400 text-sm font-medium mb-2 block">
-                                Username
-                            </label>
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                required
-                                placeholder="Enter a username for your account"
-                                className="border-cyan-400 border-[1px] w-full text-sm text-slate-900 bg-slate-100 pl-4 pr-10 py-3 rounded-md mb-4"
-                            />
-                            {/* password field */}
-                            <label className="text-cyan-400 text-sm font-medium mb-2 block">
-                                Password
-                            </label>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                placeholder="Enter a password for your account"
-                                className="border-cyan-400 border-[1px] w-full text-sm text-slate-900 bg-slate-100 pl-4 pr-10 py-3 rounded-md"
-                            />
 
-                            {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
-                            {/* sign up button to submit to api */}
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="border-cyan-400 border-[3px] w-full shadow-xl mt-6 py-2 text-[15px] font-medium rounded-md text-white bg-cyan-400 hover:bg-cyan-700"
-                            >
-                                {loading ? "Signing up..." : "Sign Up"}
-                            </button>
-                            {/*  redirect login button */}
-                            <p className="text-cyan-400 text-sm mt-4 text-center">
-                                Already have an account?{" "}
-                                <button
-                                    type="button"
-                                    onClick={onNavigateToLogin}
-                                    className="underline hover:text-cyan-300"
-                                >
-                                    Login
-                                </button>
-                            </p>
-                        </form>
+                            <div className="mt-10 grid gap-4">
+                                <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+                                    <div className="flex items-start gap-3">
+                                        <div className="rounded-xl bg-cyan-400/10 p-2 text-cyan-300">
+                                            <UserPlus size={20} />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-white">Quick setup</h3>
+                                            <p className="mt-1 text-sm leading-6 text-slate-400">
+                                                Create your account and get into your dashboard in seconds.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
 
-
-                        {/* Image Section */}
-                        <div className="w-full h-full">
-                            <div className="aspect-square relative before:absolute before:inset-0
-                            before:bg-black/70 rounded-md overflow-hidden w-full h-full border-cyan-400 border-2">
-                                <img
-                                    src="/Landing/ClaimrFeatures.webp"
-                                    className="w-full h-full object-cover"
-                                    alt="signup img"
-                                />
-                                {/* image overlay */}
-                                <div className="drop-shadow-[black_1px_1px_1px] absolute inset-0 m-auto max-w-sm p-6 flex items-center justify-center">
-                                    <div>
-                                        {/* image overlay text */}
-                                        <h1 className="text-white text-4xl font-semibold"><b>Register Here</b></h1>
-                                        <p className=" text-white text-[15px] font-medium mt-6 leading-relaxed">
-                                            <b>Create your account to proceed</b> <br /><br />
-                                            Claimr is a tax return tracker built for
-                                            transparency and trust. It helps Australians organise income, deductions, and receipts
-                                            in one simple interface, with clear summaries that make tax time easier. Because the entire
-                                            codebase is public, users can verify exactly how their data is handled and rely on a tool
-                                            that’s secure, transparent, and community‑driven.
-                                        </p>
+                                <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+                                    <div className="flex items-start gap-3">
+                                        <div className="rounded-xl bg-emerald-400/10 p-2 text-emerald-300">
+                                            <ShieldCheck size={20} />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-white">Built for trust</h3>
+                                            <p className="mt-1 text-sm leading-6 text-slate-400">
+                                                Clear summaries and a polished interface that helps users feel confident.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    {/* Right form */}
+                    <div className="flex items-center justify-center p-6 sm:p-10 lg:p-12">
+                        <div className="w-full max-w-md">
+                            <div className="mb-8 lg:hidden">
+                                <img
+                                    src="/Auth/claimr_logo.svg"
+                                    alt="Claimr logo"
+                                    className="h-11 w-auto"
+                                />
+                            </div>
+
+                            <div className="mb-8">
+                                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300/80">
+                                    Welcome
+                                </p>
+                                <h2 className="mt-3 text-3xl font-bold tracking-tight text-white">
+                                    Create your Claimr account
+                                </h2>
+                                <p className="mt-3 text-sm leading-6 text-slate-400">
+                                    Sign up to start tracking receipts, deductions, and tax summaries in one place.
+                                </p>
+                            </div>
+
+                            <form onSubmit={signUpUser} className="space-y-5">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-slate-200">
+                                        Username
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        required
+                                        placeholder="Choose a username"
+                                        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400/60 focus:bg-white/10 focus:ring-4 focus:ring-cyan-400/10"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-slate-200">
+                                        Password
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
+                                            placeholder="Create a password"
+                                            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 pr-12 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400/60 focus:bg-white/10 focus:ring-4 focus:ring-cyan-400/10"
+                                        />
+
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword((prev) => !prev)}
+                                            className="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition hover:text-cyan-300"
+                                        >
+                                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {error && (
+                                    <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                                        {error}
+                                    </div>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full rounded-xl bg-cyan-400 px-4 py-3.5 text-sm font-semibold text-slate-950 shadow-[0_0_30px_rgba(34,211,238,0.25)] transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-70"
+                                >
+                                    {loading ? "Creating account..." : "Create Account"}
+                                </button>
+
+                                <div className="text-center text-sm text-slate-400">
+                                    Already have an account?{" "}
+                                    <button
+                                        type="button"
+                                        onClick={onNavigateToLogin}
+                                        className="font-semibold text-cyan-300 transition hover:text-cyan-200 hover:underline"
+                                    >
+                                        Sign in
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
