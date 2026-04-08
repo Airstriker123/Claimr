@@ -29,6 +29,20 @@ note: pwa feature: install only works on local host and not network
                     red = 255
         return faded
 
+def replace_in_file(path, old, new):
+    with open(path, "r") as f:
+        lines = f.readlines()
+
+    updated = []
+    for line in lines:
+        if old in line:
+            updated.append(new + "\n")
+        else:
+            updated.append(line)
+
+    with open(path, "w") as f:
+        f.writelines(updated)
+
 
 def client_setup(choice):
     os.system(r'cls')
@@ -42,7 +56,13 @@ def client_setup(choice):
 
     if choice == "1":
         print('Running client (development)...')
+        replace_in_file(
+            "vite.config.ts",
+            "const ApiUrl:string = 'api.claimr.dev'",
+            "const ApiUrl:string = 'http://127.0.0.1:9988'"
+        )
         os.system("npm run dev")
+
 
     elif choice == "2":
         print('Building and Previewing (production mode)...')
@@ -50,6 +70,11 @@ def client_setup(choice):
 
     elif choice == "3":
         print('--- DEPLOYING TO GITHUB PAGES ---')
+        replace_in_file(
+            "vite.config.ts",
+            "const ApiUrl:string = 'http://127.0.0.1:9988'",
+            "const ApiUrl:string = 'api.claimr.dev'"
+        )
         # 1. Build the project
         os.system("npm run build")
         # 2. Add .nojekyll for GitHub Pages

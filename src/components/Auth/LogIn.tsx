@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { login } from "@/api/auth";
+import {login, type User} from "@/api/auth";
 import { Eye, EyeOff, ShieldCheck, ReceiptText } from "lucide-react";
 
-interface LoginFormProps
+export interface LoginFormProps
 {
     setUser: (user: User) => void;
     onNavigateToSignUp: () => void;

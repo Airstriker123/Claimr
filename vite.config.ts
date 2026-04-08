@@ -5,6 +5,16 @@ import path from 'path';
 //import { VitePWA } from 'vite-plugin-pwa';
 //import manifest from './manifest.json';;
 
+const ApiUrl:string = 'http://127.0.0.1:9988'
+
+let shouldSecure:boolean = true;
+if (ApiUrl === "http://127.0.0.1:9988")
+{
+    shouldSecure = false;
+    console.log("mode == development");
+}
+
+
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -48,7 +58,15 @@ export default defineConfig({
         },
     },
     server: {
+        proxy: {
+            "/api": {
+                target: ApiUrl,
+                changeOrigin: true,
+                secure: shouldSecure,
+            },
+        },
         port: 9995,
         open: true,
+        host: true, //open port to network
     },
 })

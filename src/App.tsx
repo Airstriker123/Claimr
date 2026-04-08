@@ -14,6 +14,7 @@ import { ThemeProvider } from 'next-themes';
 import { Dashboard } from '@/components/App/DashBoard';
 import { EntryList } from '@/components/App/EntryList';
 import { AddEditEntryDialog } from '@/components/App/AddEditEntryDialog';
+import {pingServer} from "@/api/status";
 
 export default function App(): JSX.Element
 {
@@ -23,12 +24,21 @@ export default function App(): JSX.Element
     const [dialogOpen, setDialogOpen] = useState(false);
     const [editingEntry, setEditingEntry] = useState<TaxEntry | undefined>();
     const [activeTab, setActiveTab] = useState<'dashboard' | 'entries'>('dashboard');
+    const [serverStatus, setServerStatus] = useState("checking");
+
+    useEffect(() =>
+    {
+         pingServer().then((isUp) => {
+            setServerStatus(isUp ? "Server: online" : "Server: offline");
+            console.log(serverStatus);
+        });
+    },);
 
     // Called when login succeeds
     const handleLoginSuccess = (userData: never):void =>
     {
         localStorage.setItem('auth', JSON.stringify(userData)); // store data in localStorage
-        setCurrentSection('Home');
+        setCurrentSection('Dashboard');
         toast.success('Logged in!')
     };
 
@@ -89,6 +99,14 @@ export default function App(): JSX.Element
     const handleExport = () => {
         exportToCSV(entries);
         toast.success('CSV exported successfully');
+    };
+
+    // called when register succeeds
+    const handleRegisterSuccess = ():void =>
+    {
+        // redirect to home
+        setCurrentSection("Dashboard");
+        toast.success('Logged in!')
     };
 
 
@@ -211,7 +229,7 @@ export default function App(): JSX.Element
             case "SignUp":
                 return <Signup
                     onNavigateToLogin={handleNavigateToLogin}
-                    onRegister={() => console.log("soon")}
+                    onRegister={handleRegisterSuccess}
                 />
             case "Landing":
                 return <Landing
