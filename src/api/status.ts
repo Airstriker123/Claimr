@@ -1,4 +1,5 @@
-export async function pingServer() {
+export async function pingServer()
+{
     try {
         const res = await fetch("api/status");
 

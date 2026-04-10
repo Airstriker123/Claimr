@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import {login, type User} from "@/api/auth";
 import { Eye, EyeOff, ShieldCheck, ReceiptText } from "lucide-react";
+import useAuth from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export interface LoginFormProps
 {
-    setUser: (user: User) => void;
     onNavigateToSignUp: () => void;
 }
 
-export default function LoginForm({ setUser, onNavigateToSignUp }: LoginFormProps)
+export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
 {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent): Promise<void> =>
     {
@@ -24,8 +26,8 @@ export default function LoginForm({ setUser, onNavigateToSignUp }: LoginFormProp
 
         try
         {
-            const user = await login(username, password);
-            setUser(user);
+            await login(username, password);
+            navigate("/dashboard");
         }
         catch
         {

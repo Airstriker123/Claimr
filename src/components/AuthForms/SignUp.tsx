@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { register } from "@/api/auth";
+import useAuth from "@/hooks/useAuth";
 import { Eye, EyeOff, ShieldCheck, UserPlus } from "lucide-react";
 import {toast} from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface SignUpFormProps
 {
-    onRegister: (user: any) => void;
     onNavigateToLogin: () => void;
 }
 
-export function showPasswordRequirements() {
+function showPasswordRequirements() {
     toast.error(
         <div>
             <p>Password must meet these requirements:</p>
@@ -25,13 +26,16 @@ export function showPasswordRequirements() {
     );
 }
 
-export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProps)
+export default function SignUp({ onNavigateToLogin }: SignUpFormProps)
 {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const { setUser } = useAuth(); // if you expose it
+    const navigate = useNavigate();
+
 
     const signUpUser = async (e: React.FormEvent): Promise<void> =>
     {
@@ -42,9 +46,11 @@ export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProp
         try
         {
             const user = await register(username, password);
-            onRegister(user);
+            navigate("/dashboard");
+            setUser(user);
         }
-        catch (err: any) {
+        catch (err: any)
+        {
             if (err?.status === 401) showPasswordRequirements();
             setError(err?.error || "Unable to create account.");
         }
@@ -67,7 +73,7 @@ export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProp
                 <div className="grid w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:grid-cols-2">
 
                     {/* Left content */}
-                    <div className="hidden lg:flex flex-col justify-between border-r border-white/10 bg-white/[0.03] p-10 xl:p-12">
+                    <div className="hidden lg:flex flex-col justify-between border-r border-white/10 bg-white/3 p-10 xl:p-12">
                         <div>
                             <img
                                 src="/Auth/claimr_logo.svg"

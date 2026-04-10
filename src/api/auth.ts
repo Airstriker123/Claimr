@@ -35,15 +35,7 @@ export async function login(username: string, password: string): Promise<User>
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error || "Invalid username or password");
     }
-    // if ok, store user data in local storage
-    const data = await res.json();
-    // add  token to local storage (only way I could be bothered with account creation i don't care if it not secure not important for this project
-    localStorage.setItem("auth", JSON.stringify(
-        {
-            id: data.id,
-            username: data.username
-        }));
-    return data;
+    return await res.json();
 }
 
 export async function register(username: string, password: string):Promise<User>
@@ -69,13 +61,27 @@ export async function register(username: string, password: string):Promise<User>
             error: err.error
         };
     }
+    return await res.json();
+}
 
-    // otherwise do same logic as login process
-    const data = await res.json();
-    localStorage.setItem("auth", JSON.stringify(
-        {
-            id: data.id,
-            username: data.username
-        }));
-    return data;
+
+export async function getCurrentUser(): Promise<User | null>
+{
+    const res:Response = await fetch("/api/me", {
+        credentials: "include"
+    });
+
+    if (!res.ok) return null;
+
+    const data: any = await res.json();
+    return data.user; // matches backend fix
+}
+
+
+export async function logout(): Promise<void>
+{
+    await fetch("/api/logout", {
+        method: "POST",
+        credentials: "include"
+    });
 }
