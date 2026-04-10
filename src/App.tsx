@@ -227,10 +227,26 @@ export default function App(): JSX.Element
                     </div>
                 )
             case "SignUp":
-                return <Signup
+                return (
+                    <>
+                    <Signup
                     onNavigateToLogin={handleNavigateToLogin}
                     onRegister={handleRegisterSuccess}
                 />
+                {/* Toast Notifications */}
+                <Toaster
+                    theme="dark"
+                    position="bottom-right"
+                    toastOptions={{
+                        style: {
+                            background: '#151414',
+                            border: `1px solid ${'#560000'}`,
+                            color: '#ff0000',
+                        },
+                    }}
+                />
+                </>
+                )
             case "Landing":
                 return <Landing
                     onNavigateToLogin={handleNavigateToLogin}

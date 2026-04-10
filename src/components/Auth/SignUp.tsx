@@ -1,11 +1,28 @@
 import React, { useState } from "react";
 import { register } from "@/api/auth";
 import { Eye, EyeOff, ShieldCheck, UserPlus } from "lucide-react";
+import {toast} from "sonner";
 
 interface SignUpFormProps
 {
     onRegister: (user: any) => void;
     onNavigateToLogin: () => void;
+}
+
+export function showPasswordRequirements() {
+    toast.error(
+        <div>
+            <p>Password must meet these requirements:</p>
+            <ul style={{ marginLeft: "rem", listStyleType: "disc" }}>
+                <li>Minimum 10 characters</li>
+                <li>At least 1 lowercase letter</li>
+                <li>At least 1 uppercase letter</li>
+                <li>At least 1 digit</li>
+                <li>At least 1 special character</li>
+                <li>Maximum length 20 characters</li>
+            </ul>
+        </div>
+    );
 }
 
 export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProps)
@@ -27,9 +44,9 @@ export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProp
             const user = await register(username, password);
             onRegister(user);
         }
-        catch (err: any)
-        {
-            setError(err?.message || "Unable to create account.");
+        catch (err: any) {
+            if (err?.status === 401) showPasswordRequirements();
+            setError(err?.error || "Unable to create account.");
         }
         finally
         {
@@ -42,8 +59,8 @@ export default function SignUp({ onRegister, onNavigateToLogin }: SignUpFormProp
           bg-linear-to-br from-black/67 to-cyan-400/24 lg:h-screen flex items-center justify-center p-4
           px-4 py-8 sm:px-6 lg:px-8">
             <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute left-[-80px] top-16 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl" />
-                <div className="absolute bottom-10 right-[-60px] h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
+                <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl" />
+                <div className="absolute bottom-10 -right-15 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
             </div>
 
             <div className="relative mx-auto flex min-h-[calc(100vh-4rem)] max-w-6xl items-center justify-center">

@@ -32,11 +32,11 @@ export async function login(username: string, password: string): Promise<User>
 
     if (!res.ok)  // if not ok notify invalid user/password
     {
-        const err:any = await res.json().catch(() => ({}));
+        const err = await res.json().catch(() => ({}));
         throw new Error(err.error || "Invalid username or password");
     }
     // if ok, store user data in local storage
-    const data:any = await res.json();
+    const data = await res.json();
     // add  token to local storage (only way I could be bothered with account creation i don't care if it not secure not important for this project
     localStorage.setItem("auth", JSON.stringify(
         {
@@ -61,13 +61,17 @@ export async function register(username: string, password: string):Promise<User>
                 }),
         });
 
-    if (!res.ok) // if not ok notify registration failed (username taken)
-    {
-        const err:any = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Registration failed");
+
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw {
+            status: res.status,
+            error: err.error
+        };
     }
+
     // otherwise do same logic as login process
-    const data:any = await res.json();
+    const data = await res.json();
     localStorage.setItem("auth", JSON.stringify(
         {
             id: data.id,
