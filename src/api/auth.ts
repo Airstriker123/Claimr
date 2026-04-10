@@ -67,7 +67,7 @@ export async function register(username: string, password: string):Promise<User>
 
 export async function getCurrentUser(): Promise<User | null>
 {
-    const res:Response = await fetch("/api/me", {
+    const res:Response = await fetch("/api/@me", {
         credentials: "include"
     });
 

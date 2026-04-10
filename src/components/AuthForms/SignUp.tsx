@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { register } from "@/api/auth";
 import useAuth from "@/hooks/useAuth";
 import { Eye, EyeOff, ShieldCheck, UserPlus } from "lucide-react";
@@ -31,16 +31,22 @@ export default function SignUp({ onNavigateToLogin }: SignUpFormProps)
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const { setUser } = useAuth(); // if you expose it
     const navigate = useNavigate();
+    const { user, loading } = useAuth();
+
+    useEffect(() => {
+        if (!loading && user) {
+            navigate("/dashboard");
+        }
+    }, [user, loading, navigate]);
+
 
 
     const signUpUser = async (e: React.FormEvent): Promise<void> =>
     {
         e.preventDefault();
-        setLoading(true);
         setError(null);
 
         try
@@ -53,10 +59,6 @@ export default function SignUp({ onNavigateToLogin }: SignUpFormProps)
         {
             if (err?.status === 401) showPasswordRequirements();
             setError(err?.error || "Unable to create account.");
-        }
-        finally
-        {
-            setLoading(false);
         }
     };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Eye, EyeOff, ShieldCheck, ReceiptText } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -12,16 +12,21 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
 {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
     const { login } = useAuth();
+    const { user, loading } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loading && user) {
+            navigate("/dashboard");
+        }
+    }, [user, loading, navigate]);
 
     const handleLogin = async (e: React.FormEvent): Promise<void> =>
     {
         e.preventDefault();
-        setLoading(true);
         setError(null);
 
         try
@@ -32,10 +37,6 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
         catch
         {
             setError("Invalid username or password.");
-        }
-        finally
-        {
-            setLoading(false);
         }
     };
 
