@@ -22,6 +22,7 @@ export interface TaxEntry {
     warrantyMonths?: number;
     warrantyExpiryDate?: string;
     createdAt: string;
+    synced?: boolean;
 }
 
 export interface DashboardStats {

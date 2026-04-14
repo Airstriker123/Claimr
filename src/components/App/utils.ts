@@ -1,59 +1,177 @@
-import type {TaxEntry, ATOCategory, DashboardStats} from './types';
+import type { TaxEntry, ATOCategory, DashboardStats } from './types';
+import {
+    createEntry,
+    getEntries,
+    updateEntry as apiUpdateEntry,
+    deleteEntry as apiDeleteEntry
+} from "@/api/entries";
 
 const STORAGE_KEY = 'claimr_tax_entries';
 
+/* =========================
+   LOCAL STORAGE
+========================= */
+
+
+
+const getLocalEntries = (): TaxEntry[] => {
+    try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    } catch {
+        return [];
+    }
+};
+
+const saveLocalEntries = (entries: TaxEntry[]) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+};
+
+/* =========================
+   SYNC SYSTEM
+========================= */
+
+export const syncEntries = async () => {
+    const entries = getLocalEntries();
+
+    const unsynced = entries.filter(e => !e.synced);
+
+    for (const entry of unsynced) {
+        try {
+            const { id, synced, createdAt, ...payload } = entry;
+
+            await createEntry({
+                ...payload,
+                date: createdAt
+            });
+
+            entry.synced = true;
+        } catch {
+            console.log("Still offline");
+        }
+    }
+
+    saveLocalEntries(entries);
+};
+
+/* =========================
+   STORAGE API
+========================= */
+
 export const storage = {
-    getEntries: (): TaxEntry[] => {
+
+    //  LOAD
+    getEntries: async (): Promise<TaxEntry[]> => {
         try {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : [];
-        } catch (error) {
-            console.error('Error loading entries:', error);
-            return [];
+            const serverEntries = await getEntries();
+
+            const mapped: TaxEntry[] = serverEntries.map((e: any) => ({
+                ...e,
+                id: crypto.randomUUID(), // local id
+                createdAt: e.date,
+                synced: true
+            }));
+
+            saveLocalEntries(mapped);
+            return mapped;
+
+        } catch {
+            console.log("Offline - using local data");
+            return getLocalEntries();
         }
     },
 
-    saveEntries: (entries: TaxEntry[]): void => {
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-        } catch (error) {
-            console.error('Error saving entries:', error);
-        }
-    },
+    //  ADD
+    addEntry: async (entry: Omit<TaxEntry, 'id' | 'createdAt'>): Promise<TaxEntry> => {
+        const entries = getLocalEntries();
 
-    addEntry: (entry: Omit<TaxEntry, 'id' | 'createdAt'>): TaxEntry => {
-        const entries = storage.getEntries();
         const newEntry: TaxEntry = {
             ...entry,
             id: crypto.randomUUID(),
             createdAt: new Date().toISOString(),
+            synced: false
         };
+
         entries.push(newEntry);
-        storage.saveEntries(entries);
+        saveLocalEntries(entries);
+
+        try {
+            const { id, synced, createdAt, ...payload } = newEntry;
+
+            await createEntry({
+                ...payload,
+                date: createdAt
+            });
+
+            newEntry.synced = true;
+            saveLocalEntries(entries);
+
+        } catch {
+            console.log("Offline - saved locally only");
+        }
+
         return newEntry;
     },
 
-    updateEntry: (id: string, updates: Partial<TaxEntry>): void => {
-        const entries = storage.getEntries();
+    //  UPDATE
+    updateEntry: async (id: string, updates: Partial<TaxEntry>) => {
+        const entries = getLocalEntries();
+
         const index = entries.findIndex(e => e.id === id);
+
         if (index !== -1) {
-            entries[index] = { ...entries[index], ...updates };
-            storage.saveEntries(entries);
+            entries[index] = {
+                ...entries[index],
+                ...updates,
+                synced: false
+            };
+
+            saveLocalEntries(entries);
+
+            try {
+                const { id: _, synced, createdAt, ...payload } = updates;
+
+                await apiUpdateEntry(Number(id), {
+                    ...payload,
+                    date: createdAt
+                });
+
+                entries[index].synced = true;
+                saveLocalEntries(entries);
+
+            } catch {
+                console.log("Offline update");
+            }
         }
     },
 
-    deleteEntry: (id: string): void => {
-        const entries = storage.getEntries();
+    // DELETE
+    deleteEntry: async (id: string) => {
+        const entries = getLocalEntries();
+
         const filtered = entries.filter(e => e.id !== id);
-        storage.saveEntries(filtered);
+        saveLocalEntries(filtered);
+
+        try {
+            await apiDeleteEntry(Number(id));
+        } catch {
+            console.log("Offline delete");
+        }
     },
 };
 
+/* =========================
+   STATS
+========================= */
+
 export const calculateStats = (entries: TaxEntry[]): DashboardStats => {
     const totalDeductions = entries.reduce((sum, entry) => sum + entry.amount, 0);
+
     const entriesCount = entries.length;
+
     const lastAddedDate = entries.length > 0
-        ? entries.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0].createdAt
+        ? entries.sort((a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )[0].createdAt
         : null;
 
     const categoryBreakdown: Record<ATOCategory, number> = {
@@ -68,9 +186,15 @@ export const calculateStats = (entries: TaxEntry[]): DashboardStats => {
         'Other Deductible': 0,
         'Non-Deductible': 0,
     };
-
+    
     entries.forEach(entry => {
-        categoryBreakdown[entry.category] += entry.amount;
+        const category = entry.category as keyof typeof categoryBreakdown;
+
+        if (categoryBreakdown[category] !== undefined) {
+            categoryBreakdown[category] += entry.amount;
+        } else {
+            categoryBreakdown["Other Deductible"] += entry.amount;
+        }
     });
 
     return {
@@ -81,8 +205,14 @@ export const calculateStats = (entries: TaxEntry[]): DashboardStats => {
     };
 };
 
+
+/* =========================
+   CSV EXPORT
+========================= */
+
 export const exportToCSV = (entries: TaxEntry[]): void => {
     const headers = ['Date', 'Merchant', 'Category', 'Amount', 'Tax', 'Description', 'Warranty Expiry'];
+
     const rows = entries.map(entry => [
         entry.date,
         entry.merchant,
@@ -99,13 +229,20 @@ export const exportToCSV = (entries: TaxEntry[]): void => {
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv' });
+
     const url = URL.createObjectURL(blob);
+
     const link = document.createElement('a');
     link.href = url;
     link.download = `claimr-export-${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
+
     URL.revokeObjectURL(url);
 };
+
+/* =========================
+   UTILITIES
+========================= */
 
 // Mock OCR function - in production, this would call an OCR API
 export const mockOCRExtraction = (file: File): Promise<Partial<TaxEntry>> => {
@@ -122,11 +259,6 @@ export const mockOCRExtraction = (file: File): Promise<Partial<TaxEntry>> => {
     });
 };
 
-export const calculateWarrantyExpiry = (purchaseDate: string, warrantyMonths: number): string => {
-    const date = new Date(purchaseDate);
-    date.setMonth(date.getMonth() + warrantyMonths);
-    return date.toISOString().split('T')[0];
-};
 
 export const formatCurrency = (amount: number): string => {
     return new Intl.NumberFormat('en-AU', {
@@ -142,6 +274,13 @@ export const formatDate = (dateString: string): string => {
         day: 'numeric',
     });
 };
+
+export const calculateWarrantyExpiry = (purchaseDate: string, warrantyMonths: number): string => {
+    const date = new Date(purchaseDate);
+    date.setMonth(date.getMonth() + warrantyMonths);
+    return date.toISOString().split('T')[0];
+};
+
 
 // Australian financial year runs from July 1 to June 30
 export const getCurrentFinancialYear = (): string => {
