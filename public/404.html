@@ -3,56 +3,39 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Page not found</title>
-
+    <link rel="icon" type="image/png" sizes="16x16" href="icon.svg">
+   <link rel="stylesheet" href="404.css"/>
+    <title>404 - Page not found</title>
     <script>
         (function () {
             const path = window.location.pathname;
-
-            // Ignore real files like assets
             const isFile = path.includes(".");
 
             if (!isFile && path !== "/") {
                 sessionStorage.setItem("redirect", path);
             }
         })();
+
+        function goHome() {
+            window.location.href = "/";
+        }
     </script>
-
-    <style>
-        body {
-            margin: 0;
-            font-family: system-ui, Arial, sans-serif;
-            background: #0b0f19;
-            color: #fff;
-            display: flex;
-            height: 100vh;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .box {
-            max-width: 500px;
-            padding: 24px;
-        }
-
-        h1 {
-            font-size: 64px;
-            margin: 0;
-            color: #22d3ee;
-        }
-
-        p {
-            color: #94a3b8;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 
 <body>
-<div class="box">
-    <h1>404</h1>
-    <p>Redirecting you back to the app...</p>
+<div class="glow"></div>
+
+<div class="container">
+    <h1>Error 404</h1>
+    <h2>Page not found!</h2>
+    <p>
+        This page doesn’t exist or may have been moved.<br />
+        Return to Claimr to continue.
+    </p>
+
+    <button class="button" onclick="goHome()">
+        Return to Landing
+    </button>
 </div>
 </body>
 </html>

@@ -5,7 +5,7 @@ import path from 'path';
 //import { VitePWA } from 'vite-plugin-pwa';
 //import manifest from './manifest.json';;
 
-const ApiUrl:string = 'http://127.0.0.1:9988'
+const ApiUrl:string = 'api.claimr.dev'
 
 let shouldSecure:boolean = true;
 if (ApiUrl === "http://127.0.0.1:9988")
