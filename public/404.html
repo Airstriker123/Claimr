@@ -15,11 +15,15 @@
                 sessionStorage.setItem("redirect", path);
             }z
         })();
+
+        // Always redirect to root (React app entry)
+        window.location.replace("/");
+
     </script>
 <body>
 <div class="box">
     <h1>404</h1>
-    <p>Redirecting you back to the app...</p>
+    <p>Attempting to Redirect you back to the app...</p>
 </div>
 </body>
 </html>
