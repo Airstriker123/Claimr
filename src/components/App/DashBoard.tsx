@@ -55,12 +55,13 @@ export function Dashboard(): JSX.Element
 
     const navigate = useNavigate();
 
-    // ========================
-    // LOAD ENTRIES (FIXED)
-    // ========================
-    useEffect(() => {
-        const loadEntries = async () => {
-            try {
+    // Load entries
+    useEffect(() =>
+    {
+        const loadEntries = async () =>
+        {
+            try
+            {
                 const data = await getEntries();
 
                 const mapped: TaxEntry[] = data.map((e: any) => ({
@@ -70,7 +71,8 @@ export function Dashboard(): JSX.Element
                 }));
 
                 setEntries(mapped);
-            } catch {
+            } catch
+            {
                 console.log("Offline mode");
             }
         };
@@ -78,18 +80,20 @@ export function Dashboard(): JSX.Element
         loadEntries();
     }, []);
 
-    // ========================
-    // SYNC ONLINE EVENT
-    // ========================
-    useEffect(() => {
+
+    // sync online
+    useEffect(() =>
+    {
         window.addEventListener("online", syncEntries);
 
-        return () => {
+        return () =>
+        {
             window.removeEventListener("online", syncEntries);
         };
     }, []);
 
-    const chartData = useMemo(() => {
+    const chartData = useMemo(() =>
+    {
         return Object.entries(stats.categoryBreakdown)
             .filter(([_, value]) => value > 0)
             .map(([name, value]) => ({ name, value }));
@@ -98,27 +102,31 @@ export function Dashboard(): JSX.Element
     const taxDueDate = getTaxDueDate();
     const daysUntilTaxDue = Math.ceil((new Date(taxDueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
 
-    // ========================
-    // CRUD HANDLERS (FIXED)
-    // ========================
 
-    const handleAddEntry = () => {
+    // CRUD HANDLERS
+    const handleAddEntry = () =>
+    {
         setEditingEntry(undefined);
         setDialogOpen(true);
     };
 
-    const handleEditEntry = (entry: TaxEntry) => {
+    const handleEditEntry = (entry: TaxEntry) =>
+    {
         setEditingEntry(entry);
         setDialogOpen(true);
     };
 
     const handleSaveEntry = async (
         entryData: Omit<TaxEntry, 'id' | 'createdAt'>
-    ) => {
-        if (editingEntry) {
+    ) =>
+    {
+        if (editingEntry)
+        {
             await storage.updateEntry(editingEntry.id, entryData);
             toast.success('Entry updated successfully');
-        } else {
+        }
+        else
+        {
             await storage.addEntry(entryData);
             toast.success('Entry added successfully');
         }
@@ -129,7 +137,8 @@ export function Dashboard(): JSX.Element
         setDialogOpen(false);
     };
 
-    const handleDeleteEntry = async (id: string) => {
+    const handleDeleteEntry = async (id: string) =>
+    {
         if (!window.confirm('Are you sure you want to delete this entry?')) return;
 
         await storage.deleteEntry(id);
@@ -140,19 +149,19 @@ export function Dashboard(): JSX.Element
         toast.success('Entry deleted');
     };
 
-    const handleExport = () => {
+    const handleExport = () =>
+    {
         exportToCSV(entries);
         toast.success('CSV exported successfully');
     };
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         console.log("ENTRIES:", entries);
         console.log("STATS:", stats);
     }, [entries, stats]);
 
-    // ========================
     // UI
-    // ========================
     return (
         <div className="min-h-screen bg-white dark:bg-black/60">
             <Toaster position="top-right" />

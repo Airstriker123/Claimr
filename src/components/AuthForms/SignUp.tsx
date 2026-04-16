@@ -10,7 +10,8 @@ interface SignUpFormProps
     onNavigateToLogin: () => void;
 }
 
-function showPasswordRequirements() {
+function showPasswordRequirements()
+{
     toast.error(
         <div>
             <p>Password must meet these requirements:</p>
@@ -36,8 +37,10 @@ export default function SignUp({ onNavigateToLogin }: SignUpFormProps)
     const navigate = useNavigate();
     const { user, loading } = useAuth();
 
-    useEffect(() => {
-        if (!loading && user) {
+    useEffect(() =>
+    {
+        if (!loading && user)
+        {
             navigate("/dashboard");
         }
     }, [user, loading, navigate]);

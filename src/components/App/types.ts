@@ -10,7 +10,8 @@ export type ATOCategory =
     | 'Other Deductible'
     | 'Non-Deductible';
 
-export interface TaxEntry {
+export interface TaxEntry
+{
     id: string;
     merchant: string;
     date: string;
@@ -25,7 +26,8 @@ export interface TaxEntry {
     synced?: boolean;
 }
 
-export interface DashboardStats {
+export interface DashboardStats
+{
     totalDeductions: number;
     entriesCount: number;
     lastAddedDate: string | null;

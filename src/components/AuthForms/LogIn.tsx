@@ -18,8 +18,10 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
     const { user, loading } = useAuth();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!loading && user) {
+    useEffect(() =>
+    {
+        if (!loading && user)
+        {
             navigate("/dashboard");
         }
     }, [user, loading, navigate]);

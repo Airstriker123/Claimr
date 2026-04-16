@@ -10,13 +10,16 @@ import {pingServer} from "@/api/status";
 import { useNavigate , Routes, Route } from "react-router-dom";
 import ProtectedRoute from "@/auth/ProtectedRoute";
 
-function RedirectHandler() {
+function RedirectHandler()
+{
     const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         const redirect = sessionStorage.getItem("redirect");
 
-        if (redirect) {
+        if (redirect)
+        {
             sessionStorage.removeItem("redirect");
             navigate(redirect, { replace: true });
         }
@@ -98,7 +101,7 @@ export default function App(): JSX.Element
                                 </>
                             } />
 
-                            {/* protected route */}
+                            {/* protected route - account required */}
                             <Route
                                 path="/dashboard"
                                 element={

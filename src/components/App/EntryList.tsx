@@ -5,24 +5,28 @@ import { Button } from '@/ui/button';
 import { Badge } from '@/ui/badge';
 import { Trash2, Edit, AlertCircle } from 'lucide-react';
 
-interface EntryListProps {
+interface EntryListProps
+{
   entries: TaxEntry[];
   onEdit: (entry: TaxEntry) => void;
   onDelete: (id: string) => void;
 }
 
-export function EntryList({ entries, onEdit, onDelete }: EntryListProps) {
+export function EntryList({ entries, onEdit, onDelete }: EntryListProps)
+{
   const sortedEntries = [...entries].sort((a, b) => 
     new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
-  const isWarrantyExpiringSoon = (expiryDate?: string) => {
+  const isWarrantyExpiringSoon = (expiryDate?: string) =>
+  {
     if (!expiryDate) return false;
     const days = Math.ceil((new Date(expiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
     return days > 0 && days <= 30;
   };
 
-  if (entries.length === 0) {
+  if (entries.length === 0)
+  {
     return (
       <Card>
         <CardContent className="py-16 text-center">

@@ -1,6 +1,7 @@
 @custom-variant dark (&:is(.dark *));
 
-:root {
+:root
+{
     --color-text: #000;
     --font-size: 16px;
     --background: #ffffff;
@@ -80,7 +81,8 @@
     --sidebar-ring: #06b6d4;
 }
 
-@theme inline {
+@theme inline
+{
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-card: var(--card);
@@ -121,12 +123,15 @@
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@layer base {
-    * {
+@layer base
+{
+    *
+    {
         @apply border-border outline-ring/50;
     }
 
-    body {
+    body
+    {
         @apply bg-background text-foreground;
     }
 
@@ -135,47 +140,55 @@
     * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
     */
 
-    html {
+    html
+    {
         font-size: var(--font-size);
     }
 
-    h1 {
+    h1
+    {
         font-size: var(--text-2xl);
         font-weight: var(--font-weight-medium);
         line-height: 1.5;
     }
 
-    h2 {
+    h2
+    {
         font-size: var(--text-xl);
         font-weight: var(--font-weight-medium);
         line-height: 1.5;
     }
 
-    h3 {
+    h3
+    {
         font-size: var(--text-lg);
         font-weight: var(--font-weight-medium);
         line-height: 1.5;
     }
 
-    h4 {
+    h4
+    {
         font-size: var(--text-base);
         font-weight: var(--font-weight-medium);
         line-height: 1.5;
     }
 
-    label {
+    label
+    {
         font-size: var(--text-base);
         font-weight: var(--font-weight-medium);
         line-height: 1.5;
     }
 
-    button {
+    button
+    {
         font-size: var(--text-base);
         font-weight: var(--font-weight-medium);
         line-height: 1.5;
     }
 
-    input {
+    input
+    {
         font-size: var(--text-base);
         font-weight: var(--font-weight-normal);
         line-height: 1.5;

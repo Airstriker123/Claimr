@@ -9,7 +9,8 @@ import type {TaxEntry, ATOCategory} from './types';
 import { calculateWarrantyExpiry, mockOCRExtraction } from './utils';
 import { Loader2, Upload } from 'lucide-react';
 
-interface AddEditEntryDialogProps {
+interface AddEditEntryDialogProps
+{
   open: boolean;
   onClose: () => void;
   onSave: (entry: Omit<TaxEntry, 'id' | 'createdAt'>) => void;
@@ -29,7 +30,8 @@ const ATO_CATEGORIES: ATOCategory[] = [
   'Non-Deductible',
 ];
 
-export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntryDialogProps) {
+export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntryDialogProps)
+{
   const [loading, setLoading] = useState(false);
   const [ocrLoading, setOcrLoading] = useState(false);
   const [formData, setFormData] = useState<Omit<TaxEntry, 'id' | 'createdAt'>>({
@@ -45,12 +47,14 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
   const [amountInput, setAmountInput] = useState(entry?.amount ? entry.amount.toString() : '');
   const [taxInput, setTaxInput] = useState(entry?.tax ? entry.tax.toString() : '');
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) =>
+  {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setOcrLoading(true);
-    try {
+    try
+    {
       const extracted = await mockOCRExtraction(file);
       const newAmount = extracted.amount || formData.amount;
       const newTax = extracted.tax || formData.tax;
@@ -68,22 +72,30 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
       // Update input fields
       if (extracted.amount) setAmountInput(extracted.amount.toString());
       if (extracted.tax) setTaxInput(extracted.tax.toString());
-    } catch (error) {
+    }
+    catch (error)
+    {
       console.error('OCR extraction failed:', error);
-    } finally {
+    }
+    finally
+    {
       setOcrLoading(false);
     }
   };
 
-  const handleWarrantyChange = (months: string) => {
+  const handleWarrantyChange = (months: string) =>
+  {
     const monthsNum = parseInt(months);
-    if (isNaN(monthsNum) || monthsNum <= 0) {
+    if (isNaN(monthsNum) || monthsNum <= 0)
+    {
       setFormData(prev => ({
         ...prev,
         warrantyMonths: undefined,
         warrantyExpiryDate: undefined,
       }));
-    } else {
+    }
+    else
+    {
       setFormData(prev => ({
         ...prev,
         warrantyMonths: monthsNum,
@@ -92,15 +104,21 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) =>
+  {
     e.preventDefault();
     setLoading(true);
-    try {
+    try
+    {
       onSave(formData);
       onClose();
-    } catch (error) {
+    }
+    catch (error)
+    {
       console.error('Failed to save entry:', error);
-    } finally {
+    }
+    finally
+    {
       setLoading(false);
     }
   };
