@@ -59,13 +59,18 @@ def client_setup(choice):
         replace_in_file(
             "vite.config.ts",
             "const ApiUrl:string = 'api.claimr.dev'",
-            "const ApiUrl:string = 'http://127.0.0.1:9988'"
+            "const ApiUrl:string = 'http://192.168.68.112:9988'"
         )
         os.system("npm run dev")
 
 
     elif choice == "2":
         print('Building and Previewing (production mode)...')
+        replace_in_file(
+            "vite.config.ts",
+            "const ApiUrl:string = 'api.claimr.dev'",
+            "const ApiUrl:string = 'http://192.168.68.112:9988'"
+        )
         os.system("npm run build && npm run preview")
 
     elif choice == "3":

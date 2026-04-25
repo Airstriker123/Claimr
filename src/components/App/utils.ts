@@ -60,6 +60,16 @@ export const syncEntries = async () =>
 
 //   STORAGE API
 
+function GetUUIDRandom(): string {
+    if (crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+
 export const storage = {
     //  LOAD
     getEntries: async (): Promise<TaxEntry[]> =>
@@ -69,7 +79,7 @@ export const storage = {
             const serverEntries = await getEntries();
             const mapped: TaxEntry[] = serverEntries.map((e: any) => ({
                 ...e,
-                id: crypto.randomUUID(), // local id
+                id: GetUUIDRandom(), // local id
                 createdAt: e.date,
                 synced: true
             }));
@@ -90,7 +100,7 @@ export const storage = {
 
         const newEntry: TaxEntry = {
             ...entry,
-            id: crypto.randomUUID(),
+            id: GetUUIDRandom(),
             createdAt: new Date().toISOString(),
             synced: false
         };
