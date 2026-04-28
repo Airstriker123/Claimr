@@ -11,7 +11,8 @@ import {
     getTaxDueDate,
     storage,
     syncEntries,
-    exportToCSV
+    exportToCSV,
+    handleImportCSV,
 } from './utils';
 
 import "@/styles/theme.css";
@@ -20,6 +21,7 @@ import {
     FileText,
     Calendar,
     AlertCircle,
+    Upload,
     Plus,
     Download,
     LayoutDashboard,
@@ -33,6 +35,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
 import { EntryList } from "@/components/App/EntryList";
 import { AddEditEntryDialog } from "@/components/App/AddEditEntryDialog";
 import { useNavigate } from "react-router-dom";
+import useAuth from "@/hooks/useAuth";
 
 const COLORS = [
     '#06b6d4', '#0ea5e9', '#22d3ee', '#67e8f9',
@@ -45,7 +48,7 @@ export function Dashboard(): JSX.Element
 {
     const [entries, setEntries] = useState<TaxEntry[]>([]);
     const [activeTab, setActiveTab] = useState<'dashboard' | 'entries'>('dashboard');
-
+    const {logout} = useAuth();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [editingEntry, setEditingEntry] = useState<TaxEntry | undefined>();
     const stats: DashboardStats = useMemo(
@@ -76,8 +79,7 @@ export function Dashboard(): JSX.Element
                 console.log("Offline mode");
             }
         };
-
-        loadEntries();
+        loadEntries().then(r => console.log(`loading entries: ${r}`));
     }, []);
 
 
@@ -161,6 +163,29 @@ export function Dashboard(): JSX.Element
         console.log("STATS:", stats);
     }, [entries, stats]);
 
+    const handleLogout = async () =>
+    {
+        if (!confirm("Are you sure you want to logout? This will clear local data.")) return;
+        logout();
+        localStorage.clear();
+        sessionStorage.clear();
+
+        if ("caches" in window)
+        {
+            const keys = await caches.keys();
+            await Promise.all(keys.map(k => caches.delete(k)));
+        }
+        // Reset app state
+        setEntries([]);
+
+
+        setEntries([]);
+
+        toast.success("Logged out");
+
+        navigate("/");
+    };
+
     // UI
     return (
         <div className="min-h-screen bg-white dark:bg-black/60">
@@ -188,6 +213,21 @@ export function Dashboard(): JSX.Element
                                 onClick={() => navigate("/")}
                             >
                                 About
+                            </Button>
+                            <Button
+                                onClick={handleLogout}
+                                size="sm"
+                                className="
+            border border-red-500/40 text-red-400
+            bg-transparent
+            hover:bg-red-500/10 hover:border-red-400
+            hover:shadow-md hover:shadow-red-500/20
+            transition-all duration-200
+            hover:-translate-y-0.5
+            active:scale-95
+        "
+                            >
+                                Logout
                             </Button>
                             <ThemeToggle />
                         </div>
@@ -221,15 +261,83 @@ export function Dashboard(): JSX.Element
                                         Financial Year {getCurrentFinancialYear()}
                                     </p>
                                 </div>
-                                <div className="flex gap-2">
-                                    <Button onClick={handleExport} variant="outline" disabled={entries.length === 0}>
-                                        <Download className="h-4 w-4 mr-2" />
-                                        Export CSV
+                                <input
+                                    type="file"
+                                    accept=".csv"
+                                    id="csv-upload"
+                                    className="hidden"
+                                    onChange={(e) =>
+                                    {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleImportCSV(file);
+                                    }}
+                                />
+                                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+
+                                    {/* Import */}
+                                    <Button
+                                        variant="outline"
+                                        asChild
+                                        className="
+                    w-full sm:w-auto
+                    border-cyan-500/40
+                    dark:hover:text-cyan-500
+                    hover:text-cyan-500
+                    hover:border-cyan-400
+                    hover:bg-cyan-500/10
+                    hover:shadow-md hover:shadow-cyan-500/20
+                    transition-all duration-200
+                    hover:-translate-y-0.5
+                    active:scale-95
+                "
+                                    >
+                                        <label htmlFor="csv-upload" className="cursor-pointer flex items-center justify-center gap-2">
+                                            <Upload className="h-4 w-4" />
+                                            Import
+                                        </label>
                                     </Button>
-                                    <Button onClick={handleAddEntry} className="bg-cyan-600 hover:bg-cyan-700">
+
+                                    {/* Export */}
+                                    <Button
+                                        onClick={handleExport}
+                                        variant="outline"
+                                        disabled={entries.length === 0}
+                                        className="
+                    w-full sm:w-auto
+                    border-blue-500/40
+                    hover:border-blue-400
+                    dark:hover:text-cyan-500
+                    hover:text-cyan-500
+                    hover:bg-blue-500/10
+                    hover:shadow-md hover:shadow-blue-500/20
+                    transition-all duration-200
+                    hover:-translate-y-0.5
+                    active:scale-95
+                "
+                                    >
+                                        <Download className="h-4 w-4 mr-2" />
+                                        Export
+                                    </Button>
+
+                                    {/* Add Entry */}
+                                    <Button
+                                        onClick={handleAddEntry}
+                                        className="
+                                         w-full sm:w-auto
+                                        bg-cyan-600 hover:bg-cyan-700
+                                        hover:text-black
+                                        dark:hover:text-white
+                                        shadow-md shadow-cyan-500/20
+                                        hover:shadow-lg hover:shadow-cyan-500/30
+                                        transition-all duration-200
+                                        hover:-translate-y-0.5
+                                        active:scale-95
+                                         "
+                                    >
                                         <Plus className="h-4 w-4 mr-2" />
                                         Add Entry
                                     </Button>
+
                                 </div>
                             </div>
 

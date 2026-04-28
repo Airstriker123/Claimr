@@ -34,18 +34,35 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
 {
   const [loading, setLoading] = useState(false);
   const [ocrLoading, setOcrLoading] = useState(false);
-  const [formData, setFormData] = useState<Omit<TaxEntry, 'id' | 'createdAt'>>({
-    merchant: entry?.merchant || '',
-    date: entry?.date || new Date().toISOString().split('T')[0],
-    amount: entry?.amount || 0,
-    tax: entry?.tax || 0,
-    category: entry?.category || 'Work-Related',
-    description: entry?.description || '',
-    warrantyMonths: entry?.warrantyMonths,
-    warrantyExpiryDate: entry?.warrantyExpiryDate,
-  });
   const [amountInput, setAmountInput] = useState(entry?.amount ? entry.amount.toString() : '');
   const [taxInput, setTaxInput] = useState(entry?.tax ? entry.tax.toString() : '');
+
+
+  const getEmptyForm = (): Omit<TaxEntry, 'id' | 'createdAt'> => ({
+    merchant: '',
+    date: new Date().toISOString().split('T')[0],
+    amount: 0,
+    tax: 0,
+    category: 'Work-Related',
+    description: '',
+    warrantyMonths: undefined,
+    warrantyExpiryDate: undefined,
+  });
+
+
+  const [formData, setFormData] = useState<Omit<TaxEntry, 'id' | 'createdAt'>>(
+      entry ? {
+        merchant: entry.merchant,
+        date: entry.date,
+        amount: entry.amount,
+        tax: entry.tax,
+        category: entry.category,
+        description: entry.description,
+        warrantyMonths: entry.warrantyMonths,
+        warrantyExpiryDate: entry.warrantyExpiryDate,
+      } : getEmptyForm()
+  );
+
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) =>
   {
@@ -56,22 +73,22 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
     try
     {
       const extracted = await HandleOCR(file);
-      const newAmount = extracted.amount || formData.amount;
-      const newTax = extracted.tax || formData.tax;
+      const newAmount = extracted?.amount || formData.amount;
+      const newTax = extracted?.tax || formData.tax;
       
       setFormData(prev => ({
         ...prev,
         ...extracted,
-        merchant: extracted.merchant || prev.merchant,
-        date: extracted.date || prev.date,
+        merchant: extracted?.merchant || prev.merchant,
+        date: extracted?.date || prev.date,
         amount: newAmount,
         tax: newTax,
-        description: extracted.description || prev.description,
+        description: extracted?.description || prev.description,
       }));
       
       // Update input fields
-      if (extracted.amount) setAmountInput(extracted.amount.toString());
-      if (extracted.tax) setTaxInput(extracted.tax.toString());
+      if (extracted?.amount) setAmountInput(extracted.amount.toString());
+      if (extracted?.tax) setTaxInput(extracted.tax.toString());
     }
     catch (error)
     {
@@ -111,6 +128,12 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
     try
     {
       onSave(formData);
+      if (!entry)
+      {
+        setFormData(getEmptyForm());
+        setAmountInput('');
+        setTaxInput('');
+      }
       onClose();
     }
     catch (error)
@@ -286,10 +309,10 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button className="dark:hover:text-cyan-300 hover:text-white " type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" disabled={loading} className="bg-cyan-600 hover:bg-cyan-700">
+            <Button type="submit" disabled={loading} className="bg-cyan-600 hover:bg-cyan-700 dark:hover:text-white hover:text-black">
               {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
               {entry ? 'Update' : 'Add'} Entry
             </Button>
