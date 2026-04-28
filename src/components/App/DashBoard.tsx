@@ -12,7 +12,6 @@ import {
     storage,
     syncEntries,
     exportToCSV,
-    handleImportCSV,
 } from './utils';
 
 import "@/styles/theme.css";
@@ -184,6 +183,42 @@ export function Dashboard(): JSX.Element
         toast.success("Logged out");
 
         navigate("/");
+    };
+
+    const handleImportCSV = async (file: File) =>
+    {
+        const text = await file.text();
+        const rows = text.split('\n').slice(1); // skip header
+
+
+        const parsed: Omit<TaxEntry, 'id' | 'createdAt'>[] = rows
+            .map(row =>
+            {
+                const cols = row.split(',').map(c => c.replace(/"/g, ''));
+
+                if (cols.length < 6) return null;
+
+                return {
+                    date: cols[0],
+                    merchant: cols[1],
+                    category: cols[2] as any,
+                    amount: parseFloat(cols[3]),
+                    tax: parseFloat(cols[4]),
+                    description: cols[5],
+                    warrantyExpiryDate: cols[6] || undefined,
+                };
+            })
+            .filter(Boolean) as any[];
+
+        for (const entry of parsed)
+        {
+            await storage.addEntry(entry);
+        }
+
+        const updated = await storage.getEntries();
+        setEntries(updated);
+
+        toast.success('CSV imported successfully');
     };
 
     // UI
@@ -418,7 +453,7 @@ export function Dashboard(): JSX.Element
                                                         fill="#8884d8"
                                                         dataKey="value"
                                                     >
-                                                        {chartData.map((entry, index) => (
+                                                        {chartData.map((_entry, index) => (
                                                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                                         ))}
                                                     </Pie>
@@ -426,7 +461,7 @@ export function Dashboard(): JSX.Element
                                                 </PieChart>
                                             </ResponsiveContainer>
                                         ) : (
-                                            <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                                            <div className="h-75 flex items-center justify-center text-muted-foreground">
                                                 No entries yet. Add your first receipt to see breakdown.
                                             </div>
                                         )}

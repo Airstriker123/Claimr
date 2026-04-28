@@ -49,6 +49,7 @@ export const syncEntries = async () =>
             });
 
             entry.synced = true;
+
         }
         catch
         {
@@ -378,42 +379,6 @@ export const HandleOCR = async (file: File): Promise<Partial<TaxEntry> | void> =
         toast.error("Failed to use OCR...");
         return;
     }
-};
-
-export const handleImportCSV = async (file: File) =>
-{
-    const text = await file.text();
-
-    const rows = text.split('\n').slice(1); // skip header
-
-    const parsed: Omit<TaxEntry, 'id' | 'createdAt'>[] = rows
-        .map(row =>
-        {
-            const cols = row.split(',').map(c => c.replace(/"/g, ''));
-
-            if (cols.length < 6) return null;
-
-            return {
-                date: cols[0],
-                merchant: cols[1],
-                category: cols[2] as any,
-                amount: parseFloat(cols[3]),
-                tax: parseFloat(cols[4]),
-                description: cols[5],
-                warrantyExpiryDate: cols[6] || undefined,
-            };
-        })
-        .filter(Boolean) as any[];
-
-    for (const entry of parsed)
-    {
-        await storage.addEntry(entry);
-    }
-
-    const updated = await storage.getEntries();
-    setEntries(updated);
-
-    toast.success('CSV imported successfully');
 };
 
 export const formatCurrency = (amount: number): string =>
