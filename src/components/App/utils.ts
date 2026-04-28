@@ -1,11 +1,12 @@
 import type { TaxEntry, ATOCategory, DashboardStats } from './types';
+import Tesseract from "tesseract.js";
 import {
     createEntry,
     getEntries,
     updateEntry as apiUpdateEntry,
     deleteEntry as apiDeleteEntry
 } from "@/api/entries";
-
+import {toast} from "sonner";
 const STORAGE_KEY = 'claimr_tax_entries';
 
 
@@ -40,7 +41,7 @@ export const syncEntries = async () =>
     {
         try
         {
-            const { id, synced, createdAt, ...payload } = entry;
+            const { id: _id, synced: _synced, createdAt, ...payload } = entry;
 
             await createEntry({
                 ...payload,
@@ -256,23 +257,128 @@ export const exportToCSV = (entries: TaxEntry[]): void =>
 
 //   UTILITIES
 
-// Mock OCR function - in production, this would call an OCR API
-export const mockOCRExtraction = (file: File): Promise<Partial<TaxEntry>> =>
+// OCR function beta -
+const KNOWN_STORES = [
+    "Coles",
+    "Woolworths",
+    "Aldi",
+    "Bunnings",
+    "Kmart",
+    "Target",
+    "Officeworks",
+    "JB Hi-Fi",
+    "Chemist Warehouse",
+    "Priceline",
+    "IGA",
+    "7-Eleven",
+    "McDonald's",
+    "Hungry Jack's",
+    "Domino's",
+    "Subway"
+];
+
+function normalize(text: string): string
 {
-    return new Promise((resolve) =>
+    return text
+        .toLowerCase()
+        .replace(/[^a-z]/g, "");
+}
+
+function findMerchant(text: string): string
+{
+    const cleanedText = normalize(text);
+
+    for (const store of KNOWN_STORES)
     {
-        setTimeout(() =>
+        const normalizedStore = normalize(store);
+
+        if (cleanedText.includes(normalizedStore))
         {
-            resolve({
-                merchant: 'Sample Merchant',
-                date: new Date().toISOString().split('T')[0],
-                amount: Math.random() * 100 + 10,
-                tax: Math.random() * 10 + 1,
-                description: 'Extracted from receipt',
-            });
-        }, 1500);
-    });
+            return store;
+        }
+    }
+
+    return "Unknown";
+}
+
+function fallbackMerchant(lines: string[]): string
+{
+    return lines
+        .slice(0, 5)
+        .map(l => l.replace(/[^A-Za-z\s]/g, "").trim())
+        .find(l => l.length > 3) || "Unknown";
+}
+
+function extractGST(text: string, amount: number): number
+{
+    const match = text.match(/GST.*?(\d+\.\d{2})/i);
+
+    if (match) return Number(match[1]);
+
+    // fallback (not always accurate)
+    return amount / 11;
 };
+
+export const parseReceiptText = (text: string): Partial<TaxEntry> =>
+{
+    const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+
+    // Amount
+    const amounts = text.match(/\d+\.\d{2}/g)?.map(Number) || [];
+    const amount = amounts.length ? Math.max(...amounts) : 0;
+
+    // Merchant
+    const merchant =
+        findMerchant(text) ||
+        fallbackMerchant(lines);
+
+    // GST
+    const tax = extractGST(text, amount);
+
+    // Date
+    const dateMatch = text.match(/\d{2}\/\d{2}\/\d{4}/);
+    const date = dateMatch ? dateMatch[0] : new Date().toISOString();
+
+    return {
+        merchant,
+        amount,
+        tax,
+        date,
+        description: "OCR extracted"
+    };
+};
+
+export const extractReceiptData = async (file: File): Promise<Partial<TaxEntry>> =>
+{
+    try
+    {
+        const result = await Tesseract.recognize(file, "eng", {
+            logger: m => console.log(m) // progress logs
+        });
+
+        const text = result.data.text;
+
+        return parseReceiptText(text);
+    }
+    catch (err)
+    {
+        console.error("OCR failed:", err);
+        throw new Error("OCR processing failed");
+    }
+};
+
+export const HandleOCR = async (file: File): Promise<Partial<TaxEntry>> =>
+{
+    try
+    {
+        return await extractReceiptData(file);
+    }
+    catch
+    {
+        toast.error("Failed to use OCR...");
+    }
+};
+
 
 
 export const formatCurrency = (amount: number): string =>

@@ -6,7 +6,7 @@ import { Label } from '@/ui/label';
 import { Textarea } from '@/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/select';
 import type {TaxEntry, ATOCategory} from './types';
-import { calculateWarrantyExpiry, mockOCRExtraction } from './utils';
+import {calculateWarrantyExpiry, HandleOCR} from './utils';
 import { Loader2, Upload } from 'lucide-react';
 
 interface AddEditEntryDialogProps
@@ -55,7 +55,7 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
     setOcrLoading(true);
     try
     {
-      const extracted = await mockOCRExtraction(file);
+      const extracted = await HandleOCR(file);
       const newAmount = extracted.amount || formData.amount;
       const newTax = extracted.tax || formData.tax;
       
