@@ -56,30 +56,15 @@ def client_setup(choice):
 
     if choice == "1":
         print('Running client (development)...')
-        replace_in_file(
-            "vite.config.ts",
-            "const ApiUrl:string = 'api.claimr.dev'",
-            "const ApiUrl:string = 'http://127.0.0.1:9988'"
-        )
         os.system("npm run dev")
 
 
     elif choice == "2":
         print('Building and Previewing (production mode)...')
-        replace_in_file(
-            "vite.config.ts",
-            "const ApiUrl:string = 'api.claimr.dev'",
-            "const ApiUrl:string = 'http://127.0.0.1:9988'"
-        )
         os.system("npm run build && npm run preview")
 
     elif choice == "3":
         print('--- DEPLOYING TO GITHUB PAGES ---')
-        replace_in_file(
-            "vite.config.ts",
-            "const ApiUrl:string = 'http://127.0.0.1:9988'",
-            "const ApiUrl:string = 'api.claimr.dev'"
-        )
         # 1. Build the project
         os.system("npm run build")
         # 2. Add .nojekyll for GitHub Pages

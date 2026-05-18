@@ -26,19 +26,19 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
         }
     }, [user, loading, navigate]);
 
-    const handleLogin = async (e: React.FormEvent): Promise<void> =>
-    {
+    const handleLogin = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
         setError(null);
 
-        try
-        {
+        try {
             await login(username, password);
             navigate("/dashboard");
-        }
-        catch
-        {
-            setError("Invalid username or password.");
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Login failed");
+            }
         }
     };
 

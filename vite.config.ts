@@ -5,16 +5,7 @@ import path from 'path';
 //import { VitePWA } from 'vite-plugin-pwa';
 //import manifest from './manifest.json';;
 
-const ApiUrl:string = 'http://127.0.0.1:9988'
-
-let shouldSecure:boolean = true;
-if (ApiUrl === "http://127.0.0.1:9988")
-{
-    shouldSecure = false;
-    console.log("mode == development");
-}
-
-
+const ApiUrl: string = 'http://127.0.0.1:9988'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -62,7 +53,7 @@ export default defineConfig({
             "/api": {
                 target: ApiUrl,
                 changeOrigin: true,
-                secure: shouldSecure,
+                secure: false, //NOTE: change to true in prodctuin
             },
         },
         port: 9995,

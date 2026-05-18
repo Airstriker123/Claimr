@@ -14,27 +14,33 @@ export interface User
     username: string;
 }
 
-export async function login(username: string, password: string): Promise<User>
+export async function login(username: string, password: string): Promise<null>
 {
-    /* function to login user */
-    const res:Response = await fetch(`/api/login`, //api endpoint fetch method
-        {
-            // check if input username and password is valid
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(
-                {
-                    username,
-                    password
-                }),
-        });
+    const res: Response = await fetch(`/api/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ username, password }),
+    });
 
-    if (!res.ok)  // if not ok notify invalid user/password
-    {
+// 1. RATE LIMIT FIRST
+    if (res.status === 429) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Invalid username or password");
+        throw new Error(err.error || "Too many requests. Try again later.");
     }
+
+// 2. AUTH FAILURE
+    if (res.status === 401) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Invalid username or password!");
+    }
+
+// 3. OTHER ERRORS
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Login request denied!");
+    }
+
     return await res.json();
 }
 
