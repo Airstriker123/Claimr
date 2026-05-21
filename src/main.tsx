@@ -11,6 +11,8 @@ registerSW({
     immediate: true
 });
 */
+
+// Render Client Application to DOM
 createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <BrowserRouter>

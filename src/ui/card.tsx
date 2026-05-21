@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { cn } from "./utils";
 
+// Radix-ui generated config
 function Card({ className, ...props }: React.ComponentProps<"div">) {
     return (
         <div

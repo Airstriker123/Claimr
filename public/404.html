@@ -5,20 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Page not found</title>
     <script>
-        (function () {
-            const path = window.location.pathname;
-
-            // Ignore real files like assets
-            const isFile = path.includes(".");
-
-            if (!isFile && path !== "/") {
-                sessionStorage.setItem("redirect", path);
-            }
-        })();
-
         // Always redirect to root (React app entry)
         window.location.replace("/");
-
     </script>
 <body>
 <div class="box">

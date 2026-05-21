@@ -10,6 +10,7 @@ import {
 
 import { cn } from "./utils";
 
+// Radix-ui generated config
 function Select({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {

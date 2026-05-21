@@ -6,6 +6,7 @@ import { MinusIcon } from "lucide-react";
 
 import { cn } from "./utils";
 
+// Radix-ui generated config
 function InputOTP({
   className,
   containerClassName,

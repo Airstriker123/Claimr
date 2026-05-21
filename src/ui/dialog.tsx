@@ -6,6 +6,7 @@ import { XIcon } from "lucide-react";
 
 import { cn } from "./utils";
 
+// Radix-ui generated config
 function Dialog({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) {

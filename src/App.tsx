@@ -10,38 +10,19 @@ import {pingServer} from "@/api/status";
 import { useNavigate , Routes, Route } from "react-router-dom";
 import ProtectedRoute from "@/auth/ProtectedRoute";
 
-function RedirectHandler()
-{
-    const navigate = useNavigate();
-
-    useEffect(() =>
-    {
-        const redirect = sessionStorage.getItem("redirect");
-
-        if (redirect)
-        {
-            sessionStorage.removeItem("redirect");
-            navigate(redirect, { replace: true });
-        }
-    }, [navigate]);
-
-    return null;
-}
-
 export default function App(): JSX.Element
+/* Main Application component (outlines layout of application)
+ — Handles routing (redirects)
+ — Handles page layout
+ — Constructs application
+ */
 {
     const [serverStatus, setServerStatus] = useState("checking");
     const navigate = useNavigate();
-    const redirect = sessionStorage.getItem("redirect");
-
-    if (redirect)
-    {
-        sessionStorage.removeItem("redirect");
-        navigate(redirect);
-    }
 
     useEffect(() =>
     {
+        // ping server to check if Client has a connection
          pingServer().then((isUp) =>
          {
             setServerStatus(isUp ? "Server: online" : "Server: offline");
@@ -50,10 +31,10 @@ export default function App(): JSX.Element
     },[serverStatus]);
 
 
+    // render TSXML to client browser
     return(
                 <main className="min-h-screen text-white overflow-x-hidden smooth-scroll
                     bg-cover bg-center bg-no-repeat relative z-20 transform-gp">
-                    <RedirectHandler />
                     <Routes>
                             {/* public routes */}
                             <Route path="/" element={

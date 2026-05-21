@@ -5,6 +5,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "./utils";
 
+// Radix-ui generated config
 function Tabs({
                   className,
                   ...props

@@ -1,5 +1,6 @@
 :root
 {
+    /* global application css (all pages) */
   background-image: url("/background.png") !important;
   overscroll-behavior: none;
 }

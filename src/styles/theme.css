@@ -1,5 +1,8 @@
 @custom-variant dark (&:is(.dark *));
 
+/*NEXT THEMES — Dark/Light Theme toggle (generated)
+ FROM --> https://github.com/pacocoursey/next-themes.git
+ */
 :root
 {
     --color-text: #000;
