@@ -27,6 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(user);
     };
 
+
     const logout = async () =>
     {
         // logout trigger
@@ -36,8 +37,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // component to be mounted in app
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
-            {children}
+        <AuthContext.Provider value={{ user, setUser, login, logout, loading }}>
+        {children}
         </AuthContext.Provider>
     );
 }

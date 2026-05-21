@@ -55,8 +55,8 @@ export default function SignUp({ onNavigateToLogin }: SignUpFormProps)
         try
         {
             const user = await register(username, password);
-            navigate("/dashboard");
             setUser(user);
+            navigate("/dashboard");
         }
         catch (err: any)
         {
