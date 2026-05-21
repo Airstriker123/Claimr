@@ -7,6 +7,7 @@ import { getCurrentUser, login as apiLogin, logout as apiLogout, type User } fro
 export const AuthContext = createContext<any>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+    // mask api authenticstion in a auth class (utility)
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -21,16 +22,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const login = async (username: string, password: string) =>
     {
+        // login trigger
         const user = await apiLogin(username, password);
         setUser(user);
     };
 
     const logout = async () =>
     {
+        // logout trigger
         await apiLogout();
         setUser(null);
     };
 
+    // component to be mounted in app
     return (
         <AuthContext.Provider value={{ user, login, logout, loading }}>
             {children}
