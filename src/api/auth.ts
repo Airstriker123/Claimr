@@ -10,12 +10,14 @@ file contains various api calls related to user login (auth)
 
 export interface User
 {
+    // interface for user (used on auth related pages to check if logged in)
     id: number;
     username: string;
 }
 
 export async function login(username: string, password: string): Promise<null>
 {
+    // API method to login user
     const res: Response = await fetch(`/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -23,19 +25,19 @@ export async function login(username: string, password: string): Promise<null>
         body: JSON.stringify({ username, password }),
     });
 
-// 1. RATE LIMIT FIRST
+    // 1. RATE LIMIT CHECK
     if (res.status === 429) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error || "Too many requests. Try again later.");
     }
 
-// 2. AUTH FAILURE
+    // 2. AUTH FAILURE
     if (res.status === 401) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error || "Invalid username or password!");
     }
 
-// 3. OTHER ERRORS
+    // 3. OTHER ERRORS
     if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error || "Login request denied!");
@@ -49,6 +51,7 @@ export async function register(username: string, password: string):Promise<User>
     /*method to register new user in database  */
     const res:Response = await fetch(`/api/register`,
         {
+            //payload
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -59,7 +62,7 @@ export async function register(username: string, password: string):Promise<User>
                 }),
         });
 
-
+    // if error
     if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw {
@@ -73,12 +76,13 @@ export async function register(username: string, password: string):Promise<User>
 
 export async function getCurrentUser(): Promise<User | null>
 {
+    // Api request to get session
     const res:Response = await fetch("/api/@me", {
         credentials: "include"
     });
 
     if (!res.ok) return null;
-
+    // payload data
     const data: any = await res.json();
     return data.user; // matches backend fix
 }
@@ -86,7 +90,8 @@ export async function getCurrentUser(): Promise<User | null>
 
 export async function logout(): Promise<void>
 {
-    await fetch("/api/logout", {
+    // method to logout
+    await fetch("/api/logout", { // payload
         method: "POST",
         credentials: "include"
     });
