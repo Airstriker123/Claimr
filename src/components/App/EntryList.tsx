@@ -7,6 +7,7 @@ import { Trash2, Edit, AlertCircle } from 'lucide-react';
 
 interface EntryListProps
 {
+    // list of entries and types
   entries: TaxEntry[];
   onEdit: (entry: TaxEntry) => void;
   onDelete: (id: string) => void;
@@ -14,12 +15,15 @@ interface EntryListProps
 
 export function EntryList({ entries, onEdit, onDelete }: EntryListProps)
 {
-  const sortedEntries = [...entries].sort((a, b) => 
+    //  display list of entries on dashboard
+  const sortedEntries = [...entries].sort((a, b) =>
+      // sort entries and display
     new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
   const isWarrantyExpiringSoon = (expiryDate?: string) =>
   {
+      // check if expired
     if (!expiryDate) return false;
     const days = Math.ceil((new Date(expiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
     return days > 0 && days <= 30;
@@ -27,6 +31,7 @@ export function EntryList({ entries, onEdit, onDelete }: EntryListProps)
 
   if (entries.length === 0)
   {
+      // if no entries data
     return (
       <Card>
         <CardContent className="py-16 text-center">
@@ -38,7 +43,9 @@ export function EntryList({ entries, onEdit, onDelete }: EntryListProps)
 
   return (
     <div className="space-y-3">
-      {sortedEntries.map((entry) => (
+      {sortedEntries.map((entry) =>
+          (
+              // entry list panel layout
         <Card key={entry.id} className="hover:shadow-md transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-start justify-between gap-4">
@@ -55,7 +62,8 @@ export function EntryList({ entries, onEdit, onDelete }: EntryListProps)
                     </Badge>
                   )}
                 </div>
-                
+
+                  { /* instructions to display entry list panel to dashboard ui */ }
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-muted-foreground">
                   <div>
                     <span className="block text-xs">Date</span>
@@ -70,6 +78,7 @@ export function EntryList({ entries, onEdit, onDelete }: EntryListProps)
                     <span>{formatCurrency(entry.tax)}</span>
                   </div>
                   {entry.warrantyExpiryDate && (
+                      // list entry warranty date
                     <div>
                       <span className="block text-xs">Warranty Until</span>
                       <span>{formatDate(entry.warrantyExpiryDate)}</span>
@@ -78,6 +87,7 @@ export function EntryList({ entries, onEdit, onDelete }: EntryListProps)
                 </div>
                 
                 {entry.description && (
+                    // list description
                   <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
                     {entry.description}
                   </p>
@@ -85,6 +95,7 @@ export function EntryList({ entries, onEdit, onDelete }: EntryListProps)
               </div>
 
               <div className="flex gap-2">
+                  {/* buttons section */ }
                 <Button
                   variant="ghost"
                   size="sm"

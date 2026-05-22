@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import React from "react";
 //import { registerSW } from 'virtual:pwa-register'; //import pwa register
 
+// mount pwa features to application using vite bundler (generate pwa sw, workbox files on compile)
 /*
 registerSW({
     immediate: true

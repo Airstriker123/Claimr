@@ -4,8 +4,10 @@ import { useTheme } from 'next-themes';
 
 export function ThemeToggle()
 {
+    // function to toggle application between light and dark mode using next-themes
   const { theme, setTheme } = useTheme();
 
+  // make component
   return (
     <Button
       variant="ghost"

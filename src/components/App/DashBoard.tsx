@@ -45,6 +45,7 @@ const COLORS = [
 
 export function Dashboard(): JSX.Element
 {
+    // dashboard ui/logic join component (actual application)
     const [entries, setEntries] = useState<TaxEntry[]>([]);
     const [activeTab, setActiveTab] = useState<'dashboard' | 'entries'>('dashboard');
     const {logout} = useAuth();
@@ -55,7 +56,7 @@ export function Dashboard(): JSX.Element
         [entries]
     );
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // navigation
 
     // Load entries
     useEffect(() =>
@@ -140,60 +141,62 @@ export function Dashboard(): JSX.Element
 
     const handleDeleteEntry = async (id: string) =>
     {
-        if (!window.confirm('Are you sure you want to delete this entry?')) return;
+        if (!window.confirm('Are you sure you want to delete this entry?')) return; //confirm
 
-        await storage.deleteEntry(id);
+        await storage.deleteEntry(id); // get from local
 
         const updated = await storage.getEntries();
-        setEntries(updated);
+        setEntries(updated); // save entries
 
         toast.success('Entry deleted');
     };
 
     const handleExport = () =>
     {
+        // export function trigger
         exportToCSV(entries);
         toast.success('CSV exported successfully');
     };
 
     useEffect(() =>
     {
+        // console entries debug
         console.log("ENTRIES:", entries);
         console.log("STATS:", stats);
     }, [entries, stats]);
 
     const handleLogout = async () =>
     {
+        // logout of application
         if (!confirm("Are you sure you want to logout? This will clear local data.")) return;
         logout();
+        // remove local entries and wipe all user related data
         localStorage.clear();
         sessionStorage.clear();
 
         if ("caches" in window)
         {
+            // clear cache
             const keys = await caches.keys();
             await Promise.all(keys.map(k => caches.delete(k)));
         }
         // Reset app state
         setEntries([]);
-
-
-        setEntries([]);
-
         toast.success("Logged out");
-
-        navigate("/");
+        navigate("/"); // go to landing
     };
 
     const handleImportCSV = async (file: File) =>
     {
-        const text = await file.text();
+        // import csv data to application
+        const text = await file.text(); // get
         const rows = text.split('\n').slice(1); // skip header
 
 
         const parsed: Omit<TaxEntry, 'id' | 'createdAt'>[] = rows
             .map(row =>
             {
+                // format to application for display
                 const cols = row.split(',').map(c => c.replace(/"/g, ''));
 
                 if (cols.length < 6) return null;
@@ -212,10 +215,11 @@ export function Dashboard(): JSX.Element
 
         for (const entry of parsed)
         {
+            // get each record
             await storage.addEntry(entry);
         }
 
-        const updated = await storage.getEntries();
+        const updated = await storage.getEntries(); // update
         setEntries(updated);
 
         toast.success('CSV imported successfully');
