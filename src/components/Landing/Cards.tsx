@@ -8,6 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Cards()
 {
+    // card component (layout of cards sections)
     const containerRef = useRef(null);
 
     useGSAP(() =>
@@ -27,6 +28,7 @@ export default function Cards()
         });
     }, { scope: containerRef });
 
+    // return JSXML (component)
     return (
         <div
             ref={containerRef}

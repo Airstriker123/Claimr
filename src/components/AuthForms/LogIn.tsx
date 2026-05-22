@@ -10,6 +10,7 @@ export interface LoginFormProps
 
 export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
 {
+    // stores logic to login and page layout
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
@@ -18,6 +19,7 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
     const { user, loading } = useAuth();
     const navigate = useNavigate();
 
+    // check if user session exists
     useEffect(() =>
     {
         if (!loading && user)
@@ -26,31 +28,44 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
         }
     }, [user, loading, navigate]);
 
-    const handleLogin = async (e: React.FormEvent): Promise<void> => {
+    // call on form submit
+    const handleLogin = async (e: React.FormEvent): Promise<void> =>
+    {
+        // construct
         e.preventDefault();
         setError(null);
 
-        try {
+        try
+        {
+            // try to login
             await login(username, password);
             navigate("/dashboard");
-        } catch (err) {
-            if (err instanceof Error) {
+        }
+        catch (err)
+        {
+            if (err instanceof Error)
+            {
                 setError(err.message);
-            } else {
+            }
+            else
+            {
                 setError("Login failed");
             }
         }
     };
 
+    // page layout — return to DOM
     return (
         <div className="relative min-h-screen overflow-hidden
           bg-linear-to-br from-black/67 to-cyan-400/24 lg:h-screen flex items-center justify-center p-4
           px-4 py-8 sm:px-6 lg:px-8">
+            {/* background layout colours */ }
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl" />
                 <div className="absolute bottom-10 -right-15 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
             </div>
 
+            {/* grid container */}
             <div className="relative mx-auto flex min-h-[calc(100vh-4rem)] max-w-6xl items-center justify-center">
                 <div className="grid w-full overflow-hidden rounded-3xl border border-white/10
                 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:grid-cols-2">
@@ -79,6 +94,7 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
                                 </p>
                             </div>
 
+                            { /* text layout print */ }
                             <div className="mt-10 grid gap-4">
                                 <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
                                     <div className="flex items-start gap-3">
@@ -173,7 +189,8 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
                                     </div>
                                 </div>
 
-                                {error && (
+                                { // if error occurs during form submit
+                                    error && (
                                     <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
                                         {error}
                                     </div>

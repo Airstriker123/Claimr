@@ -12,6 +12,7 @@ interface SignUpFormProps
 
 function showPasswordRequirements()
 {
+    // displays an error on screen if password not meet requirements
     toast.error(
         <div>
             <p>Password must meet these requirements:</p>
@@ -29,14 +30,16 @@ function showPasswordRequirements()
 
 export default function SignUp({ onNavigateToLogin }: SignUpFormProps)
 {
+    // signup component (stores page layout and logic)
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
-    const { setUser } = useAuth(); // if you expose it
+    const { setUser } = useAuth(); // authentication hook
     const navigate = useNavigate();
     const { user, loading } = useAuth();
 
+    // check if user authenticate
     useEffect(() =>
     {
         if (!loading && user)
@@ -49,22 +52,26 @@ export default function SignUp({ onNavigateToLogin }: SignUpFormProps)
 
     const signUpUser = async (e: React.FormEvent): Promise<void> =>
     {
+        // call on form submit
         e.preventDefault();
         setError(null);
 
         try
         {
+            // register user
             const user = await register(username, password);
             setUser(user);
             navigate("/dashboard");
         }
         catch (err: any)
         {
+            // fall to authenticate
             if (err?.status === 401) showPasswordRequirements();
             setError(err?.error || "Unable to create account.");
         }
     };
 
+    // page layout (JSXML)
     return (
         <div className="relative min-h-screen overflow-hidden
           bg-linear-to-br from-black/67 to-cyan-400/24 lg:h-screen flex items-center justify-center p-4
@@ -195,12 +202,14 @@ export default function SignUp({ onNavigateToLogin }: SignUpFormProps)
                                     </div>
                                 </div>
 
-                                {error && (
+                                {// if error occurs during form submit
+                                    error && (
                                     <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
                                         {error}
                                     </div>
                                 )}
 
+                                { /* button form submit */}
                                 <button
                                     type="submit"
                                     disabled={loading}

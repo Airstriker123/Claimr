@@ -3,22 +3,29 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from "@/ui/button"
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined')
+{
+    // if not registered
     gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function ProjectKeyFeatures(): JSX.Element
 {
+    // references for animation hook triggers.
     const containerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const imageRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const ctx = gsap.context(() => {
+    useEffect(() =>
+    {
+        // animations logic and timelines
+        const ctx = gsap.context(() =>
+        {
             // Split title letters logic remains same
-            if (titleRef.current) {
+            if (titleRef.current)
+            {
                 const titleText = titleRef.current.textContent || '';
                 titleRef.current.innerHTML = titleText
                     .split('')
@@ -45,7 +52,8 @@ export default function ProjectKeyFeatures(): JSX.Element
             }
 
             // List and Button animations triggered slightly earlier for mobile flow
-            if (listRef.current) {
+            if (listRef.current)
+            {
                 gsap.from(listRef.current.children, {
                     scrollTrigger: {
                         trigger: listRef.current,
@@ -91,6 +99,7 @@ export default function ProjectKeyFeatures(): JSX.Element
         return () => ctx.revert();
     }, []);
 
+    // render component page layout instructions to DOM.
     return (
         <div
             ref={containerRef}

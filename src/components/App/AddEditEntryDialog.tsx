@@ -17,6 +17,7 @@ interface AddEditEntryDialogProps
   entry?: TaxEntry;
 }
 
+// allowed categories
 const ATO_CATEGORIES: ATOCategory[] = [
   'Work-Related',
   'Self-Education',
@@ -32,6 +33,7 @@ const ATO_CATEGORIES: ATOCategory[] = [
 
 export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntryDialogProps)
 {
+    // component to add/edit/update/delete entries
   const [loading, setLoading] = useState(false);
   const [ocrLoading, setOcrLoading] = useState(false);
   const [amountInput, setAmountInput] = useState(entry?.amount ? entry.amount.toString() : '');
@@ -50,6 +52,7 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
   });
 
 
+  // formdata entry blueprint
   const [formData, setFormData] = useState<Omit<TaxEntry, 'id' | 'createdAt'>>(
       entry ? {
         merchant: entry.merchant,
@@ -66,16 +69,19 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) =>
   {
+      // OCR HANDLE FILE UPLOAD
     const file = e.target.files?.[0];
     if (!file) return;
-
+    // if no files
     setOcrLoading(true);
     try
     {
+        // construct
       const extracted = await HandleOCR(file);
       const newAmount = extracted?.amount || formData.amount;
       const newTax = extracted?.tax || formData.tax;
-      
+
+      // write form data from OCR
       setFormData(prev => ({
         ...prev,
         ...extracted,
@@ -102,6 +108,7 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
 
   const handleWarrantyChange = (months: string) =>
   {
+      // change warranty of an entry
     const monthsNum = parseInt(months);
     if (isNaN(monthsNum) || monthsNum <= 0)
     {
@@ -123,13 +130,16 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
 
   const handleSubmit = async (e: React.FormEvent) =>
   {
+      //  form submit button
     e.preventDefault();
     setLoading(true);
     try
     {
+        // save
       onSave(formData);
       if (!entry)
       {
+          // inital values set
         setFormData(getEmptyForm());
         setAmountInput('');
         setTaxInput('');
@@ -147,6 +157,7 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
   };
 
   return (
+      //  form entries display
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
@@ -201,7 +212,6 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
                 required
               />
             </div>
-
             {/* Date */}
             <div>
               <Label htmlFor="date">Date *</Label>

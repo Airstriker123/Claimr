@@ -2,18 +2,27 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined')
+{
+    // if gsap not register scrolling
     gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function Footer(): JSX.Element {
+export default function Footer(): JSX.Element
+{
+    // footer component of landing page
     const footerRef = useRef<HTMLDivElement>(null);
     const columnsRef = useRef<HTMLDivElement[]>([]);
 
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            if (columnsRef.current.length) {
-                columnsRef.current.forEach((col, i) => {
+    useEffect(() =>
+    {
+        // footer animation ( appear on viewport animaiton)
+        const ctx = gsap.context(() =>
+        {
+            if (columnsRef.current.length)
+            {
+                columnsRef.current.forEach((col, i) =>
+                {
                     gsap.from(col, {
                         scrollTrigger: {
                             trigger: col,
@@ -33,13 +42,16 @@ export default function Footer(): JSX.Element {
         return () => ctx.revert();
     }, []);
 
+    // footer component layout
     return (
         <footer
             ref={footerRef}
             className="overflow-hidden flex flex-col items-start gap-12 px-6 md:px-16 py-16 w-full"
         >
             <div className="flex flex-col md:flex-row gap-12 w-full">
-                {[
+
+                {// text json objects to display in footer.
+                    [
                     {
                         title: 'Social',
                         links: [
@@ -64,6 +76,7 @@ export default function Footer(): JSX.Element {
                             { label: 'Terms', href: '/terms' },
                         ],
                     },
+                        // map text to grid footer and display rest of text in neat form.
                 ].map((col, idx) => (
                     <div
                         key={idx}
@@ -91,7 +104,9 @@ export default function Footer(): JSX.Element {
                             ))}
                         </ul>
                     </div>
-                ))}
+                ))
+                // ui end
+                }
             </div>
         </footer>
 

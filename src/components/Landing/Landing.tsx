@@ -13,7 +13,8 @@ import ScrollSmoother from "gsap/ScrollSmoother";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-export interface LandingProps {
+export interface LandingProps
+{
     onNavigateToSignUp: () => void;
     onNavigateToLogin: () => void;
 }
@@ -22,6 +23,7 @@ export interface LandingProps {
 
 export default function Landing({onNavigateToSignUp, onNavigateToLogin}: LandingProps): JSX.Element
 {
+    // holds all landing components and joins them into 1 page (when user first visits website and is not logged in)
     return (
                 <div
                     className="bg-[linear-gradient(180deg,rgba(0,40,60,0.35)_50%,rgba(0,40,60,0.7)_65%,rgba(0,0,0,1)_83%,rgba(0,255,255,0.1)_100%)]

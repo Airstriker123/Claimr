@@ -1,4 +1,6 @@
-export type ATOCategory =
+// file stores type entry blueprints for objects (required by typescript)
+
+export type ATOCategory = // categories allowed
     | 'Work-Related'
     | 'Self-Education'
     | 'Vehicle Expenses'
@@ -12,6 +14,7 @@ export type ATOCategory =
 
 export interface TaxEntry
 {
+    // entry blueprint
     id: string;
     merchant: string;
     date: string;
@@ -28,6 +31,7 @@ export interface TaxEntry
 
 export interface DashboardStats
 {
+    // dashboard blueprint display
     totalDeductions: number;
     entriesCount: number;
     lastAddedDate: string | null;

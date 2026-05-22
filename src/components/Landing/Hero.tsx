@@ -2,12 +2,15 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import {Button} from "@/ui/button"
 
-export interface HeroProps {
+export interface HeroProps
+{
     OnNavigateToLogin?: () => void;
     OnNavigateToSignUp?: () => void;
 }
 
-export default function Hero({ OnNavigateToLogin, OnNavigateToSignUp }: HeroProps): JSX.Element {
+export default function Hero({ OnNavigateToLogin, OnNavigateToSignUp }: HeroProps): JSX.Element
+{
+    //  references to page triggers
     const sectionRef = useRef<HTMLElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
     const buttonRef = useRef<HTMLDivElement>(null);
@@ -15,8 +18,11 @@ export default function Hero({ OnNavigateToLogin, OnNavigateToSignUp }: HeroProp
     const glowRef2 = useRef<HTMLDivElement>(null);
     const glowRef3 = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const ctx = gsap.context(() => {
+    useEffect(() =>
+    {
+        // animations hook
+        const ctx = gsap.context(() =>
+        {
             gsap.set([titleRef.current, buttonRef.current], { opacity: 0, y: 30 });
             gsap.set([glowRef1.current, glowRef2.current, glowRef3.current], { scale: 0.8, opacity: 0 });
 
@@ -50,6 +56,7 @@ export default function Hero({ OnNavigateToLogin, OnNavigateToSignUp }: HeroProp
         return () => ctx.revert();
     }, []);
 
+    // page layout
     return (
         <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
             {/* Background Image with Overlay */}
@@ -58,7 +65,7 @@ export default function Hero({ OnNavigateToLogin, OnNavigateToSignUp }: HeroProp
                 <div className="absolute inset-0 bg-linear-to-b from-black via-transparent to-black" />
             </div>
 
-            {/* Dynamic Glows */}
+            {/*  Glows area */}
             <div ref={glowRef1} className="absolute top-1/4 -left-10 w-64 h-64 md:w-96 md:h-96 bg-cyan-500/20 rounded-full blur-[120px]" />
             <div ref={glowRef2} className="absolute bottom-1/4 -right-10 w-64 h-64 md:w-96 md:h-96 bg-blue-600/10 rounded-full blur-[120px]" />
             <div ref={glowRef3} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-200 h-100 bg-cyan-400/5 rounded-full blur-[120px]" />

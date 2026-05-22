@@ -7,33 +7,32 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function AnimatedAbout()
 {
+    // aniamtion references variables
     const containerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLDivElement>(null);
     const paragraphRef = useRef<HTMLParagraphElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const imageRef = useRef<HTMLDivElement>(null);
 
+    // start animation
     useEffect(() =>
     {
         const ctx = gsap.context(() =>
         {
             if (titleRef.current)
             {
+                // title animaiton colour pulse
                 const titleText = titleRef.current.textContent || '';
-                titleRef.current.innerHTML = titleText
-                    .split('')
-                    .map(
-                        (char) =>
+                titleRef.current.innerHTML = titleText.split('').map((char) =>
                             `<span class="inline-block 
                           will-change-transform will-change-opacity
                           bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]
                           [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
                           text-transparent tracking-[0] leading-[normal]
-                          "
-              >${char === ' ' ? '&nbsp;' : char}</span>`
-                    )
-                    .join('');
+                          ">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
 
+
+                // gsap timeline positions
                 gsap.from(titleRef.current.children, {
                     scrollTrigger: {
                         trigger: containerRef.current,
@@ -47,7 +46,7 @@ export default function AnimatedAbout()
                     duration: 0.8,
                     ease: 'back.out(1.7)',
                 });
-
+                // gsap timeline positions
                 gsap.to(titleRef.current.children, {
                     y: '+=5',
                     textShadow: '0 0 10px rgba(0,123,255,1)',
@@ -58,7 +57,7 @@ export default function AnimatedAbout()
                     stagger: 0.03,
                 });
             }
-
+            // gsap timeline positions
             if (paragraphRef.current)
             {
                 gsap.from(paragraphRef.current, {
@@ -73,7 +72,7 @@ export default function AnimatedAbout()
                     ease: 'power3.out',
                 });
             }
-
+            // gsap timeline positions
             if (buttonRef.current)
             {
                 gsap.from(buttonRef.current, {
@@ -89,7 +88,7 @@ export default function AnimatedAbout()
                     ease: 'back.out(1.4)',
                 });
             }
-
+            // gsap timeline positions
             if (imageRef.current)
             {
                 gsap.fromTo(
@@ -106,7 +105,7 @@ export default function AnimatedAbout()
                         },
                     }
                 );
-
+                // gsap timeline positions
                 gsap.to(imageRef.current,
                 {
                     scrollTrigger:
@@ -122,10 +121,12 @@ export default function AnimatedAbout()
         }, containerRef);
 
         return () => ctx.revert();
-    }, []);
+    }, []); // gsap animaiton timelines end
+
 
     const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) =>
     {
+        // animation to handle button click using gsap
         gsap.to(e.currentTarget,
         {
             scale: 0.95,
@@ -136,6 +137,7 @@ export default function AnimatedAbout()
         });
     };
 
+    // return JXML to DOM (page section layout) of landing
     return (
         <section
             ref={containerRef}

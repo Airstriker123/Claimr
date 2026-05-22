@@ -14,6 +14,7 @@ const STORAGE_KEY = 'claimr_tax_entries';
 
 const getLocalEntries = (): TaxEntry[] =>
 {
+    // fetch entriss from storage.
     try
     {
         return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -26,6 +27,7 @@ const getLocalEntries = (): TaxEntry[] =>
 
 const saveLocalEntries = (entries: TaxEntry[]) =>
 {
+    // add local entries to application
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
 };
 
@@ -33,12 +35,14 @@ const saveLocalEntries = (entries: TaxEntry[]) =>
 //   SYNC SYSTEM
 export const syncEntries = async () =>
 {
+    // add and update entries from API
     const entries = getLocalEntries();
 
     const unsynced = entries.filter(e => !e.synced);
 
     for (const entry of unsynced)
     {
+        // update each entry
         try
         {
             const { id: _id, synced: _synced, createdAt, ...payload } = entry;
@@ -62,7 +66,9 @@ export const syncEntries = async () =>
 
 //   STORAGE API
 
-function GetUUIDRandom(): string {
+function GetUUIDRandom(): string
+{
+    // generate an entry uuid for object.
     if (crypto.randomUUID) return crypto.randomUUID();
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
         const r = Math.random() * 16 | 0;
@@ -76,6 +82,7 @@ export const storage = {
     //  LOAD
     getEntries: async (): Promise<TaxEntry[]> =>
     {
+        // storage component function
         try
         {
             const serverEntries = await getEntries();
@@ -85,6 +92,7 @@ export const storage = {
                 createdAt: e.date,
                 synced: true
             }));
+            // save entries to local
             saveLocalEntries(mapped);
             return mapped;
         }
@@ -98,6 +106,7 @@ export const storage = {
     //  ADD
     addEntry: async (entry: Omit<TaxEntry, 'id' | 'createdAt'>): Promise<TaxEntry> =>
     {
+        // add the entries to local
         const entries = getLocalEntries();
 
         const newEntry: TaxEntry = {
@@ -107,6 +116,7 @@ export const storage = {
             synced: false
         };
 
+        // push changes to local storage
         entries.push(newEntry);
         saveLocalEntries(entries);
 
@@ -134,11 +144,13 @@ export const storage = {
     //  UPDATE
     updateEntry: async (id: string, updates: Partial<TaxEntry>) =>
     {
+        // update entries to local application
         const entries = getLocalEntries();
         const index = entries.findIndex(e => e.id === id);
 
         if (index !== -1)
         {
+            // get position of entries
             entries[index] = {
                 ...entries[index],
                 ...updates,
@@ -167,12 +179,14 @@ export const storage = {
     // DELETE
     deleteEntry: async (id: string) =>
     {
+        // delete entries from local storage
         const entries = getLocalEntries();
         const filtered = entries.filter(e => e.id !== id);
         saveLocalEntries(filtered);
 
         try
         {
+            // delete entry from api also
             await apiDeleteEntry(Number(id));
         }
         catch
@@ -185,6 +199,7 @@ export const storage = {
 //   STATS
 export const calculateStats = (entries: TaxEntry[]): DashboardStats =>
 {
+    // get stats (dashboard) and display on dashboard
     const totalDeductions = entries.reduce((sum, entry) => sum + entry.amount, 0);
     const entriesCount = entries.length;
     const lastAddedDate = entries.length > 0
@@ -207,6 +222,7 @@ export const calculateStats = (entries: TaxEntry[]): DashboardStats =>
 
     entries.forEach(entry =>
     {
+        // get category of entries
         const category = entry.category as keyof typeof categoryBreakdown;
 
         if (categoryBreakdown[category] !== undefined)
@@ -232,7 +248,9 @@ export const calculateStats = (entries: TaxEntry[]): DashboardStats =>
 //  CSV EXPORT
 export const exportToCSV = (entries: TaxEntry[]): void =>
 {
+    // function to export local entries as CSV file
     const headers = ['Date', 'Merchant', 'Category', 'Amount', 'Tax', 'Description', 'Warranty Expiry'];
+    // get entries fields
     const rows = entries.map(entry => [
         entry.date,
         entry.merchant,
@@ -242,10 +260,12 @@ export const exportToCSV = (entries: TaxEntry[]): void =>
         entry.description,
         entry.warrantyExpiryDate || '',
     ]);
+    // add to csv
     const csvContent = [
         headers.join(','),
         ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
     ].join('\n');
+    // export
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -258,7 +278,7 @@ export const exportToCSV = (entries: TaxEntry[]): void =>
 
 //   UTILITIES
 
-// OCR function beta -
+// OCR functions EXPERIMENTAL -
 const KNOWN_STORES = [
     "Coles",
     "Woolworths",
@@ -280,6 +300,7 @@ const KNOWN_STORES = [
 
 function normalize(text: string): string
 {
+    // fix text display between API and client formats
     return text
         .toLowerCase()
         .replace(/[^a-z]/g, "");
@@ -287,6 +308,7 @@ function normalize(text: string): string
 
 function findMerchant(text: string): string
 {
+    // find merchants known OCR
     const cleanedText = normalize(text);
 
     for (const store of KNOWN_STORES)
@@ -304,6 +326,7 @@ function findMerchant(text: string): string
 
 function fallbackMerchant(lines: string[]): string
 {
+    // merhcant not found in OCR
     return lines
         .slice(0, 5)
         .map(l => l.replace(/[^A-Za-z\s]/g, "").trim())
@@ -312,6 +335,7 @@ function fallbackMerchant(lines: string[]): string
 
 function extractGST(text: string, amount: number): number
 {
+    // GET OCR GST (tesseract)
     const match = text.match(/GST.*?(\d+\.\d{2})/i);
 
     if (match) return Number(match[1]);
@@ -322,6 +346,7 @@ function extractGST(text: string, amount: number): number
 
 export const parseReceiptText = (text: string): Partial<TaxEntry> =>
 {
+    // GET TEXT DATA
     const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
 
     // Amount
@@ -351,6 +376,7 @@ export const parseReceiptText = (text: string): Partial<TaxEntry> =>
 
 export const extractReceiptData = async (file: File): Promise<Partial<TaxEntry>> =>
 {
+    // extract text data to form
     try
     {
         const result = await Tesseract.recognize(file, "eng", {
@@ -370,6 +396,7 @@ export const extractReceiptData = async (file: File): Promise<Partial<TaxEntry>>
 
 export const HandleOCR = async (file: File): Promise<Partial<TaxEntry> | void> =>
 {
+    // USE OCR
     try
     {
         return await extractReceiptData(file);
@@ -383,6 +410,7 @@ export const HandleOCR = async (file: File): Promise<Partial<TaxEntry> | void> =
 
 export const formatCurrency = (amount: number): string =>
 {
+    // format data
     return new Intl.NumberFormat('en-AU', {
         style: 'currency',
         currency: 'AUD',
@@ -391,6 +419,7 @@ export const formatCurrency = (amount: number): string =>
 
 export const formatDate = (dateString: string): string =>
 {
+    // format date
     return new Date(dateString).toLocaleDateString('en-AU', {
         year: 'numeric',
         month: 'short',
@@ -400,6 +429,7 @@ export const formatDate = (dateString: string): string =>
 
 export const calculateWarrantyExpiry = (purchaseDate: string, warrantyMonths: number): string =>
 {
+    // calcuate waranty expiry date using maths
     const date = new Date(purchaseDate);
     date.setMonth(date.getMonth() + warrantyMonths);
     return date.toISOString().split('T')[0];
@@ -427,6 +457,7 @@ export const getCurrentFinancialYear = (): string =>
 
 export const getTaxDueDate = (): string =>
 {
+    // get due date for entries using maths
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();

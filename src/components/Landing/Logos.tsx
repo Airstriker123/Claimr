@@ -12,6 +12,7 @@ import WebStorm from "../../assets/tech_used/webstorm.png"
 gsap.registerPlugin(ScrollTrigger)
 
 const logos = [
+    // logos to show
     ReactLogo,
     GSAPLogo,
     TailWind,
@@ -20,14 +21,18 @@ const logos = [
     WebStorm,
 ]
 
-export default function Logos(): JSX.Element {
+export default function Logos(): JSX.Element
+{
+    // logo component to show
     const sectionRef = useRef(null)
     const titleRef = useRef(null)
     const marqueeRef = useRef(null)
 
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-
+    useEffect(() =>
+    {
+        // animation effects
+        const ctx = gsap.context(() =>
+        {
             /* Fade + slide section in/out (scroll back supported) */
             gsap.fromTo(
                 sectionRef.current,
@@ -94,9 +99,9 @@ export default function Logos(): JSX.Element {
         }, sectionRef)
 
         return () => ctx.revert()
-    }, [])
+    }, []) // end of animation logic
 
-
+    // render object page layout
     return (
         <div
             ref={sectionRef}
