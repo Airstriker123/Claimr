@@ -33,8 +33,10 @@ export default function App(): JSX.Element
 
     // render TSXML to client browser
     return(
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
                 <main className="min-h-screen text-white overflow-x-hidden smooth-scroll
                     bg-cover bg-center bg-no-repeat relative z-20 transform-gp">
+
                     <Routes>
                             {/* public routes */}
                             <Route path="/" element={
@@ -87,15 +89,12 @@ export default function App(): JSX.Element
                                 path="/dashboard"
                                 element={
                                     <ProtectedRoute>
-                                        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-                                            <Dashboard
-
-                                            />
-                                        </ThemeProvider>
+                                            <Dashboard/>
                                     </ProtectedRoute>
                                 }
                             />
                         </Routes>
                 </main>
+        </ThemeProvider>
     )
 }
