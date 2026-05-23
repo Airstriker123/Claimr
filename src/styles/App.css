@@ -10,6 +10,7 @@ body
   /* image and scroll behaviour to main html content */
   scroll-behavior: smooth;
   background-image: url("/background.png") !important;
+  background-color: #000000;
 }
 
 /* -- logos */
