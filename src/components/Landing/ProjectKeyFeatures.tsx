@@ -110,7 +110,7 @@ export default function ProjectKeyFeatures(): JSX.Element
                 className="relative w-full lg:flex-1 h-64 sm:h-80 lg:h-108 border-[3px] border-solid border-transparent
     [border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1]
     /* This forces the image to stretch to all four corners */
-    bg-[url(/Landing/ClaimrFeatures.webp)] bg-[length:100%_100%] bg-no-repeat
+    bg-[url(/Landing/ClaimrFeatures.png)] bg-[length:100%_100%] bg-no-repeat
     rounded-2xl transform-gpu overflow-hidden shadow-2xl shadow-cyan-500/20"
             >
                 <div className="absolute inset-0 bg-black/20" />

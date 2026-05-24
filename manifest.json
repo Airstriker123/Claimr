@@ -1,11 +1,11 @@
 {
-  "name": "SPACE ATLAS",
-  "short_name": "SPACE ATLAS",
-  "description": "A 3D interactive web experience showing space.",
+  "name": "Claimr",
+  "short_name": "Claimr",
+  "description": "Claimr is a tax return tracker built for transparency and trust. It helps Australians organise income, deductions, and receipts in one simple interface.",
   "start_url": "/Claimr/",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#8a2be2",
+  "theme_color": "#00ffcf",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -19,12 +19,13 @@
       "type": "image/png"
     }
   ],
-  "categories": ["education", "developer", "productivity"],
+  "categories": ["tax", "financial", "money", "QOL"],
   "screenshots": [
     {
-      "src": "/screenshot1.png",
-      "sizes": "1280x720",
-      "type": "image/png"
+      "src": "/Landing/about.png",
+      "sizes": "790×409",
+      "type": "image/png",
+      "form_factor": "wide"
     }
   ]
 }

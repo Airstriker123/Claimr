@@ -2,8 +2,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path';
-//import { VitePWA } from 'vite-plugin-pwa';
-//import manifest from './manifest.json';;
+import { VitePWA } from 'vite-plugin-pwa';
+import manifest from './manifest.json';
 
 const ApiUrl: string = 'http://127.0.0.1:9988'
 
@@ -11,6 +11,18 @@ const ApiUrl: string = 'http://127.0.0.1:9988'
 export default defineConfig({
   base: '/',
   plugins: [
+      // pwa config
+      VitePWA({
+          registerType: 'autoUpdate', // auto update on new static files
+          strategies: 'generateSW',
+          devOptions: {
+              enabled: true, // enable pwa featues on dev mode?
+          },
+          manifest,
+          workbox: { // files to cache
+              globPatterns: ['**/*.{js,css,html,png,svg,jpg,webp,json}']
+          }
+      }),
       react(),
       tailwindcss(),
   ],
@@ -38,15 +50,6 @@ export default defineConfig({
     build: {
         target: 'esnext',
         outDir: 'build',
-        rollupOptions: {
-            output: {
-                manualChunks(id) {
-                    if (id.includes('node_modules')) {
-                        return 'vendor';
-                    }
-                },
-            },
-        },
     },
     server: {
         proxy: {

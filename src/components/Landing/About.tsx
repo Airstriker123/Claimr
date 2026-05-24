@@ -193,7 +193,7 @@ export default function AnimatedAbout()
                 className="
                 flex flex-col h-64 sm:h-80 md:h-108 w-full lg:flex-1 grow border-[3px] border-solid border-transparent
                 [border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1]
-                bg-[url(/Landing/about.webp)] bg-cover bg-center rounded-2xl transform-gpu
+                bg-[url(/Landing/about.png)] bg-cover bg-center rounded-2xl transform-gpu
                 "
             >
                 <div className="w-full h-full rounded-2xl" />
