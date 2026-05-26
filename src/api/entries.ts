@@ -1,15 +1,10 @@
-/*
-file contains various api calls related to user entries
-- add
-- remove
-- get
-- update
-- edit
+/**
+ * API service for tax deduction entries.
+ * Handles fetching, creating, updating, and deleting entries from the backend.
  */
 
 export interface Entry
 {
-    // export entries interface for other component use
     id: number;
     merchant: string;
     amount: number;
@@ -22,10 +17,11 @@ export interface Entry
     warrantyExpiryDate?: string;
 }
 
-
+/**
+ * Fetches all tax deduction entries for the current authenticated user.
+ */
 export async function getEntries(): Promise<Entry[]>
 {
-    // use payload to get entries from database api
     const res = await fetch("/api/entries", {
         credentials: "include",
     });
@@ -35,26 +31,28 @@ export async function getEntries(): Promise<Entry[]>
     return res.json();
 }
 
-
+/**
+ * Creates a new tax deduction entry.
+ */
 export async function createEntry(data: Partial<Entry>): Promise<Entry>
 {
-    // method to create entry
-    const res = await fetch("/api/entries", { // push payload with entry to api
+    const res = await fetch("/api/entries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(data),
     });
 
-    // error
     if (!res.ok) throw new Error("Failed to create entry");
 
-    return res.json(); // json payload
+    return res.json();
 }
 
+/**
+ * Creates multiple tax deduction entries in a single batch request.
+ */
 export async function createEntriesBatch(data: Partial<Entry>[]): Promise<Entry[]>
 {
-    // method to create multiple entries
     const res = await fetch("/api/entries/batch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,27 +65,29 @@ export async function createEntriesBatch(data: Partial<Entry>[]): Promise<Entry[
     return res.json();
 }
 
-
+/**
+ * Updates an existing tax deduction entry by ID.
+ */
 export async function updateEntry(id: number, data: Partial<Entry>)
 {
-    // method to update entry
-    const res = await fetch(`/api/entries/${id}`, { //push changes to api
+    const res = await fetch(`/api/entries/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(data),
     });
 
-    //error in request
     if (!res.ok) throw new Error("Failed to update entry");
-    // return json payload
+    
     return res.json();
 }
 
+/**
+ * Deletes a tax deduction entry by ID.
+ */
 export async function deleteEntry(id: number)
 {
-    // delete entry from api cloud
-    const res = await fetch(`/api/entries/${id}`, { //payload to delete entry (with id)
+    const res = await fetch(`/api/entries/${id}`, {
         method: "DELETE",
         credentials: "include",
     });

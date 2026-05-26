@@ -34,9 +34,14 @@ const ATO_CATEGORIES: ATOCategory[] = [
 
 export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntryDialogProps)
 {
-    // component to add/edit/update/delete entries
+    /**
+     * Dialog component for adding a new entry or editing an existing one.
+     * Includes OCR capabilities to automatically extract data from receipt images.
+     */
   const [loading, setLoading] = useState(false);
   const [ocrLoading, setOcrLoading] = useState(false);
+  
+  // Local state for numeric inputs to handle string-based input fields correctly
   const [amountInput, setAmountInput] = useState(entry?.amount ? entry.amount.toString() : '');
   const [taxInput, setTaxInput] = useState(entry?.tax ? entry.tax.toString() : '');
 
@@ -53,7 +58,7 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
   });
 
 
-  // formdata entry blueprint
+  // Synchronize form data with the provided entry (if editing) or empty form (if adding)
   const [formData, setFormData] = useState<Omit<TaxEntry, 'id' | 'createdAt'>>(
       entry ? {
         merchant: entry.merchant,
@@ -68,21 +73,23 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
   );
 
 
+  /**
+   * Handles receipt image upload and triggers OCR processing.
+   */
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) =>
   {
-      // OCR HANDLE FILE UPLOAD
     const file = e.target.files?.[0];
     if (!file) return;
-    // if no files
+
     setOcrLoading(true);
     try
     {
-        // construct
+      // Call experimental OCR utility
       const extracted = await HandleOCR(file);
       const newAmount = extracted?.amount || formData.amount;
       const newTax = extracted?.tax || formData.tax;
 
-      // write form data from OCR
+      // Update form with extracted data
       setFormData(prev => ({
         ...prev,
         ...extracted,
@@ -93,7 +100,7 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
         description: extracted?.description || prev.description,
       }));
       
-      // Update input fields
+      // Update string-based numeric inputs for the UI
       if (extracted?.amount) setAmountInput(extracted.amount.toString());
       if (extracted?.tax) setTaxInput(extracted.tax.toString());
     }
@@ -108,9 +115,11 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
     }
   };
 
+  /**
+   * Calculates warranty expiry date based on purchase date and months.
+   */
   const handleWarrantyChange = (months: string) =>
   {
-      // change warranty of an entry
     const monthsNum = parseInt(months);
     if (isNaN(monthsNum) || monthsNum <= 0)
     {
@@ -130,18 +139,19 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
     }
   };
 
+  /**
+   * Submits the form and calls the onSave callback.
+   */
   const handleSubmit = async (e: React.FormEvent) =>
   {
-      //  form submit button
     e.preventDefault();
     setLoading(true);
     try
     {
-        // save
       onSave(formData);
       if (!entry)
       {
-          // inital values set
+        // Reset form for next entry if we were adding a new one
         setFormData(getEmptyForm());
         setAmountInput('');
         setTaxInput('');

@@ -44,20 +44,26 @@ const COLORS = [
 
 export function Dashboard(): JSX.Element
 {
-    // dashboard ui/logic join component (actual application)
+    /**
+     * Main Dashboard component.
+     * Manages the global state of tax entries, handles CRUD operations, 
+     * and provides data visualization via charts and stats.
+     */
     const [entries, setEntries] = useState<TaxEntry[]>([]);
     const [activeTab, setActiveTab] = useState<'dashboard' | 'entries'>('dashboard');
     const {logout} = useAuth();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [editingEntry, setEditingEntry] = useState<TaxEntry | undefined>();
+    
+    // Memoized statistics to prevent unnecessary recalculations on every render
     const stats: DashboardStats = useMemo(
         () => calculateStats(entries),
         [entries]
     );
 
-    const navigate = useNavigate(); // navigation
+    const navigate = useNavigate();
 
-    // Load entries
+    // Effect: Initial load of entries from storage (server-sync + local)
     useEffect(() =>
     {
         const loadEntries = async () =>
@@ -67,7 +73,7 @@ export function Dashboard(): JSX.Element
                 const data = await storage.getEntries();
                 setEntries(data);
                 
-                // Trigger sync if there are unsynced entries
+                // If there are unsynced entries, attempt to sync them now
                 if (data.some(e => !e.synced)) {
                     await syncEntries();
                     const syncedData = await storage.getEntries();
@@ -84,7 +90,7 @@ export function Dashboard(): JSX.Element
     }, []);
 
 
-    // sync online
+    // Effect: Listen for 'online' status to trigger background synchronization
     useEffect(() =>
     {
         const handleOnline = async () => {
@@ -101,6 +107,7 @@ export function Dashboard(): JSX.Element
         };
     }, []);
 
+    // Prepare data for the Pie Chart visualization
     const chartData = useMemo(() =>
     {
         return Object.entries(stats.categoryBreakdown)
@@ -112,7 +119,8 @@ export function Dashboard(): JSX.Element
     const daysUntilTaxDue = Math.ceil((new Date(taxDueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
 
 
-    // CRUD HANDLERS
+    // --- CRUD HANDLERS ---
+
     const handleAddEntry = () =>
     {
         setEditingEntry(undefined);
@@ -125,6 +133,9 @@ export function Dashboard(): JSX.Element
         setDialogOpen(true);
     };
 
+    /**
+     * Saves a new entry or updates an existing one via the storage wrapper.
+     */
     const handleSaveEntry = async (
         entryData: Omit<TaxEntry, 'id' | 'createdAt'>
     ) =>
@@ -146,17 +157,20 @@ export function Dashboard(): JSX.Element
         setDialogOpen(false);
     };
 
+    /**
+     * Deletes an entry with a confirmation prompt.
+     */
     const handleDeleteEntry = async (id: string) =>
     {
-        if (!window.confirm('Are you sure you want to delete this entry?')) return; //confirm
+        if (!window.confirm('Are you sure you want to delete this entry?')) return;
 
-        // Optimistic update
+        // Optimistic UI update: Remove from state immediately
         setEntries(prev => prev.filter(e => e.id !== id));
 
-        await storage.deleteEntry(id); // get from local
+        await storage.deleteEntry(id);
 
         const updated = await storage.getEntries();
-        setEntries(updated); // save entries
+        setEntries(updated);
 
 
         toast.success('Entry deleted');
@@ -164,22 +178,16 @@ export function Dashboard(): JSX.Element
 
     const handleExport = () =>
     {
-        // export function trigger
         exportToCSV(entries);
         toast.success('CSV exported successfully');
     };
 
-    useEffect(() =>
-    {
-        // console entries debug
-        console.log("ENTRIES:", entries);
-        console.log("STATS:", stats);
-    }, [entries, stats]);
-
+    /**
+     * Handles user logout, clearing sensitive local and session data.
+     * Warns user if there are unsynced entries.
+     */
     const handleLogout = async () =>
     {
-        // logout of application
-        // Ensure we have the absolute latest state from storage before checking sync status
         const currentEntries = await storage.getEntries();
         const unsyncedCount = currentEntries.filter(e => !e.synced).length;
         
@@ -193,35 +201,35 @@ export function Dashboard(): JSX.Element
         if (!confirm(message)) return;
         
         logout();
-        // remove local entries and wipe all user related data
+        // Clear all persistent local data
         localStorage.clear();
         sessionStorage.clear();
 
         if ("caches" in window)
         {
-            // clear cache
             const keys = await caches.keys();
             await Promise.all(keys.map(k => caches.delete(k)));
         }
-        // Reset app state
+
         setEntries([]);
         toast.success("Logged out");
-        navigate("/"); // go to landing
+        navigate("/");
     };
 
+    /**
+     * Parses a CSV file and batch adds the entries.
+     */
     const handleImportCSV = async (file: File) =>
     {
         try
         {
-            // import csv data to application
-            const text = await file.text(); // get
-            const rows = text.split('\n').slice(1); // skip header
+            const text = await file.text();
+            const rows = text.split('\n').slice(1); // Exclude header row
 
 
             const parsed: Omit<TaxEntry, 'id' | 'createdAt'>[] = rows
                 .map(row =>
                 {
-                    // format to application for display
                     const cols = row.split(',').map(c => c.replace(/"/g, ''));
 
                     if (cols.length < 6) return null;
@@ -258,7 +266,17 @@ export function Dashboard(): JSX.Element
     // UI
     return (
         <div className="min-h-screen bg-white dark:bg-black/60">
-            <Toaster position="top-right" />
+            <Toaster
+                theme="dark"
+                position="top-left"
+                toastOptions={{
+                    style: {
+                        background: '#1f2937',
+                        border: `1px solid ${'#00ffff'}`,
+                        color: '#f9fafb',
+                    },
+                }}
+            />
             {/* Header */}
             <header className="border-b border-border bg-card backdrop-blur-sm sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
