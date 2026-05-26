@@ -13,10 +13,13 @@ export interface Entry
     id: number;
     merchant: string;
     amount: number;
-    tax?: number;
-    category?: string;
-    description?: string;
+    tax: number;
+    category: string;
+    description: string;
     date: string;
+    createdAt: string;
+    warrantyMonths?: number;
+    warrantyExpiryDate?: string;
 }
 
 
@@ -47,6 +50,21 @@ export async function createEntry(data: Partial<Entry>): Promise<Entry>
     if (!res.ok) throw new Error("Failed to create entry");
 
     return res.json(); // json payload
+}
+
+export async function createEntriesBatch(data: Partial<Entry>[]): Promise<Entry[]>
+{
+    // method to create multiple entries
+    const res = await fetch("/api/entries/batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(data),
+    });
+
+    if (!res.ok) throw new Error("Failed to create batch entries");
+
+    return res.json();
 }
 
 

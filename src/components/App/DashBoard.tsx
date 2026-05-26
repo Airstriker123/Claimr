@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/ui/card';
 import { Button } from '@/ui/button';
 import type { TaxEntry, DashboardStats } from './types';
-import { getEntries } from "@/api/entries";
 import {
     calculateStats,
     formatCurrency,
@@ -65,32 +64,40 @@ export function Dashboard(): JSX.Element
         {
             try
             {
-                const data = await getEntries();
-
-                const mapped: TaxEntry[] = data.map((e: any) => ({
-                    ...e,
-                    createdAt: e.date,
-                    synced: true
-                }));
-
-                setEntries(mapped);
+                const data = await storage.getEntries();
+                setEntries(data);
+                
+                // Trigger sync if there are unsynced entries
+                if (data.some(e => !e.synced)) {
+                    await syncEntries();
+                    const syncedData = await storage.getEntries();
+                    setEntries(syncedData);
+                }
             } catch
             {
                 console.log("Offline mode");
+                toast.error("using Offline Mode (no connection to server)")
             }
         };
-        loadEntries().then(r => console.log(`loading entries: ${r}`));
+        loadEntries();
+
     }, []);
 
 
     // sync online
     useEffect(() =>
     {
-        window.addEventListener("online", syncEntries);
+        const handleOnline = async () => {
+            await syncEntries();
+            const updated = await storage.getEntries();
+            setEntries(updated);
+        };
+
+        window.addEventListener("online", handleOnline);
 
         return () =>
         {
-            window.removeEventListener("online", syncEntries);
+            window.removeEventListener("online", handleOnline);
         };
     }, []);
 
@@ -143,10 +150,14 @@ export function Dashboard(): JSX.Element
     {
         if (!window.confirm('Are you sure you want to delete this entry?')) return; //confirm
 
+        // Optimistic update
+        setEntries(prev => prev.filter(e => e.id !== id));
+
         await storage.deleteEntry(id); // get from local
 
         const updated = await storage.getEntries();
         setEntries(updated); // save entries
+
 
         toast.success('Entry deleted');
     };
@@ -168,7 +179,19 @@ export function Dashboard(): JSX.Element
     const handleLogout = async () =>
     {
         // logout of application
-        if (!confirm("Are you sure you want to logout? This will clear local data.")) return;
+        // Ensure we have the absolute latest state from storage before checking sync status
+        const currentEntries = await storage.getEntries();
+        const unsyncedCount = currentEntries.filter(e => !e.synced).length;
+        
+        let message = "Are you sure you want to logout?";
+        if (unsyncedCount > 0) {
+            message += `\n\nWarning: You have ${unsyncedCount} unsynced entries that will be lost.`;
+        } else {
+            message += " This will clear local data.";
+        }
+
+        if (!confirm(message)) return;
+        
         logout();
         // remove local entries and wipe all user related data
         localStorage.clear();
@@ -188,41 +211,48 @@ export function Dashboard(): JSX.Element
 
     const handleImportCSV = async (file: File) =>
     {
-        // import csv data to application
-        const text = await file.text(); // get
-        const rows = text.split('\n').slice(1); // skip header
-
-
-        const parsed: Omit<TaxEntry, 'id' | 'createdAt'>[] = rows
-            .map(row =>
-            {
-                // format to application for display
-                const cols = row.split(',').map(c => c.replace(/"/g, ''));
-
-                if (cols.length < 6) return null;
-
-                return {
-                    date: cols[0],
-                    merchant: cols[1],
-                    category: cols[2] as any,
-                    amount: parseFloat(cols[3]),
-                    tax: parseFloat(cols[4]),
-                    description: cols[5],
-                    warrantyExpiryDate: cols[6] || undefined,
-                };
-            })
-            .filter(Boolean) as any[];
-
-        for (const entry of parsed)
+        try
         {
-            // get each record
-            await storage.addEntry(entry);
+            // import csv data to application
+            const text = await file.text(); // get
+            const rows = text.split('\n').slice(1); // skip header
+
+
+            const parsed: Omit<TaxEntry, 'id' | 'createdAt'>[] = rows
+                .map(row =>
+                {
+                    // format to application for display
+                    const cols = row.split(',').map(c => c.replace(/"/g, ''));
+
+                    if (cols.length < 6) return null;
+
+                    return {
+                        date: cols[0],
+                        merchant: cols[1],
+                        category: cols[2] as any,
+                        amount: parseFloat(cols[3]),
+                        tax: parseFloat(cols[4]),
+                        description: cols[5],
+                        warrantyExpiryDate: cols[6] || undefined,
+                    };
+                })
+                .filter(Boolean) as any[];
+
+            if (parsed.length === 0) {
+                toast.error('No valid entries found in CSV');
+                return;
+            }
+
+            const updated = await storage.addEntries(parsed);
+            setEntries(updated);
+
+            toast.success('CSV imported successfully');
         }
-
-        const updated = await storage.getEntries(); // update
-        setEntries(updated);
-
-        toast.success('CSV imported successfully');
+        catch (error)
+        {
+            toast.error('Failed to import CSV!');
+            console.log(`client error: ${error}`);
+        }
     };
 
     // UI

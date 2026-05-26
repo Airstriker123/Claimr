@@ -29,6 +29,12 @@ note: pwa feature: install only works on local host and not network
                     red = 255
         return faded
 
+def clear():
+    if os.name == 'nt':
+        os.system('cls')
+        return
+    os.system('clear')
+
 def replace_in_file(path, old, new):
     with open(path, "r") as f:
         lines = f.readlines()
@@ -52,7 +58,7 @@ def client_setup(choice):
     # Check for npm dependencies
     if not os.path.exists("node_modules"):
         print("Installing client dependencies (this may take a minute)...")
-        os.system("npm i")
+        os.system("npm i --no-fund")
 
     if choice == "1":
         print('Running client (development)...')
@@ -77,13 +83,15 @@ def client_setup(choice):
 
 if __name__ == "__main__":
     try:
+        clear()
         os.system("color 6")
-        print("Claimr DEPLOYMENT TOOL")
-        print("---------------------------")
-        print("[1] Run Development (Real-time editing)")
-        print("[2] Run Production (Build and test locally)")
-        print("[3] Run Deploy  (ghp)")
-
+        print\
+("""Claimr DEPLOYMENT TOOL
+---------------------------  
+[1] Run Development (Real-time editing)  
+[2] Run Production (Build and test locally with PWA features)  
+[3] Run Deploy (GHP)  
+""")
         user_choice = input("\nEnter option: ")
         client_setup(user_choice)
     except Exception as e:

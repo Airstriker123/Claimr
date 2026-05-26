@@ -2,6 +2,7 @@ import type { TaxEntry, ATOCategory, DashboardStats } from './types';
 import Tesseract from "tesseract.js";
 import {
     createEntry,
+    createEntriesBatch,
     getEntries,
     updateEntry as apiUpdateEntry,
     deleteEntry as apiDeleteEntry
@@ -32,35 +33,39 @@ const saveLocalEntries = (entries: TaxEntry[]) =>
 };
 
 
+let syncInProgress = false;
+
 //   SYNC SYSTEM
 export const syncEntries = async () =>
 {
+    if (syncInProgress) return;
+    
     // add and update entries from API
     const entries = getLocalEntries();
-
     const unsynced = entries.filter(e => !e.synced);
 
-    for (const entry of unsynced)
-    {
-        // update each entry
-        try
-        {
-            const { id: _id, synced: _synced, createdAt, ...payload } = entry;
+    if (unsynced.length === 0) return;
 
-            await createEntry({
-                ...payload,
-                date: createdAt
-            });
+    syncInProgress = true;
+    try {
+        const payloads = unsynced.map(({ id: _id, synced: _s, ...p }) => p);
+        const results = await createEntriesBatch(payloads);
 
-            entry.synced = true;
-
-        }
-        catch
-        {
-            console.log("Still offline");
-        }
+        unsynced.forEach((entry, idx) => {
+            const res = results[idx];
+            if (res && res.synced) {
+                entry.id = res.id.toString();
+                entry.synced = true;
+            } else if (res && res.error) {
+                console.error("Sync failed for entry:", res.error);
+            }
+        });
+        saveLocalEntries(entries);
+    } catch (err) {
+        console.log("Batch sync failed:", err);
+    } finally {
+        syncInProgress = false;
     }
-    saveLocalEntries(entries);
 };
 
 
@@ -83,23 +88,32 @@ export const storage = {
     getEntries: async (): Promise<TaxEntry[]> =>
     {
         // storage component function
+        const localEntries = getLocalEntries();
+
         try
         {
             const serverEntries = await getEntries();
-            const mapped: TaxEntry[] = serverEntries.map((e: any) => ({
+            const serverMapped: TaxEntry[] = serverEntries.map((e: any) => ({
                 ...e,
-                id: GetUUIDRandom(), // local id
-                createdAt: e.date,
+                id: e.id.toString(), // Use server ID as string
                 synced: true
             }));
-            // save entries to local
-            saveLocalEntries(mapped);
-            return mapped;
+            
+            const serverIds = new Set(serverMapped.map(e => e.id));
+
+            // Merge logic:
+            // 1. Keep all entries from server (source of truth for synced data)
+            // 2. Keep local entries that are NOT on the server yet (unsynced or just synced but missing from this fetch)
+            const localOnly = localEntries.filter(e => !e.synced || !serverIds.has(e.id));
+            
+            const allEntries = [...serverMapped, ...localOnly];
+            saveLocalEntries(allEntries);
+            return allEntries;
         }
         catch
         {
             console.log("Offline - using local data");
-            return getLocalEntries();
+            return localEntries;
         }
     },
 
@@ -108,6 +122,24 @@ export const storage = {
     {
         // add the entries to local
         const entries = getLocalEntries();
+
+        // Simple deduplication
+        const isDuplicate = entries.some(e => 
+            e.merchant === entry.merchant && 
+            e.amount === entry.amount && 
+            e.date === entry.date &&
+            e.description === entry.description
+        );
+
+        if (isDuplicate) {
+            const existing = entries.find(e => 
+                e.merchant === entry.merchant && 
+                e.amount === entry.amount && 
+                e.date === entry.date &&
+                e.description === entry.description
+            )!;
+            return existing;
+        }
 
         const newEntry: TaxEntry = {
             ...entry,
@@ -122,16 +154,20 @@ export const storage = {
 
         try
         {
-            const { id, synced, createdAt, ...payload } = newEntry;
+            const { id: localId, synced, ...payload } = newEntry;
 
-            await createEntry({
-                ...payload,
-                date: createdAt
-            });
+            const created = await createEntry(payload);
 
-            newEntry.synced = true;
-            saveLocalEntries(entries);
-
+            // Update entry with server ID
+            const currentEntries = getLocalEntries();
+            const index = currentEntries.findIndex(e => e.id === localId);
+            if (index !== -1) {
+                currentEntries[index].id = created.id.toString();
+                currentEntries[index].synced = true;
+                saveLocalEntries(currentEntries);
+                newEntry.id = created.id.toString();
+                newEntry.synced = true;
+            }
         }
         catch
         {
@@ -139,6 +175,59 @@ export const storage = {
         }
 
         return newEntry;
+    },
+
+    // BATCH ADD (for CSV import)
+    addEntries: async (newEntriesData: Omit<TaxEntry, 'id' | 'createdAt'>[]): Promise<TaxEntry[]> =>
+    {
+        const localEntries = getLocalEntries();
+        
+        // Filter out duplicates from the input data itself and against local entries
+        const uniqueNewData = newEntriesData.filter((data, index, self) => 
+            index === self.findIndex(t => (
+                t.merchant === data.merchant && 
+                t.amount === data.amount && 
+                t.date === data.date &&
+                t.description === data.description
+            )) && 
+            !localEntries.some(existing => (
+                existing.merchant === data.merchant && 
+                existing.amount === data.amount && 
+                existing.date === data.date &&
+                existing.description === data.description
+            ))
+        );
+
+        if (uniqueNewData.length === 0) return localEntries;
+
+        const newEntries: TaxEntry[] = uniqueNewData.map(data => ({
+            ...data,
+            id: GetUUIDRandom(),
+            createdAt: new Date().toISOString(),
+            synced: false
+        }));
+
+        const updatedEntries = [...localEntries, ...newEntries];
+        saveLocalEntries(updatedEntries);
+
+        try {
+            const payloads = newEntries.map(({ id: _i, synced: _s, ...p }) => p);
+            const results = await createEntriesBatch(payloads);
+            
+            // Map back server IDs
+            newEntries.forEach((entry, idx) => {
+                const res = results[idx];
+                if (res && res.synced) {
+                    entry.id = res.id.toString();
+                    entry.synced = true;
+                }
+            });
+            saveLocalEntries(updatedEntries);
+        } catch (err) {
+            console.log("Batch add sync failed", err);
+        }
+
+        return updatedEntries;
     },
 
     //  UPDATE
@@ -161,13 +250,13 @@ export const storage = {
 
             try
             {
-                const { id: _, synced, createdAt, ...payload } = updates;
-                await apiUpdateEntry(Number(id), {
-                    ...payload,
-                    date: createdAt
-                });
-                entries[index].synced = true;
-                saveLocalEntries(entries);
+                const numericId = parseInt(id);
+                if (!isNaN(numericId)) {
+                    const { id: _, synced, ...payload } = updates;
+                    await apiUpdateEntry(numericId, payload);
+                    entries[index].synced = true;
+                    saveLocalEntries(entries);
+                }
             }
             catch
             {
@@ -187,7 +276,10 @@ export const storage = {
         try
         {
             // delete entry from api also
-            await apiDeleteEntry(Number(id));
+            const numericId = parseInt(id);
+            if (!isNaN(numericId)) {
+                await apiDeleteEntry(numericId);
+            }
         }
         catch
         {

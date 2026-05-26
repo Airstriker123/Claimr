@@ -4,6 +4,7 @@ import { Button } from '@/ui/button';
 import { Input } from '@/ui/input';
 import { Label } from '@/ui/label';
 import { Textarea } from '@/ui/textarea';
+import {toast} from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/select';
 import type {TaxEntry, ATOCategory} from './types';
 import {calculateWarrantyExpiry, HandleOCR} from './utils';
@@ -99,6 +100,7 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
     catch (error)
     {
       console.error('OCR extraction failed:', error);
+      toast.error("Failed to extract Text from image");
     }
     finally
     {
