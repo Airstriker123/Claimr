@@ -74,7 +74,7 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
                     <div className="hidden lg:flex flex-col justify-between border-r border-white/10 bg-white/3 p-10 xl:p-12">
                         <div>
                             <img
-                                src="/Auth/claimr_logo.svg"
+                                src="/Auth/logo.png"
                                 alt="Claimr logo"
                                 className="h-12 w-auto"
                             />
