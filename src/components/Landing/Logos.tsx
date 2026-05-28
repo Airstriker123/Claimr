@@ -25,7 +25,6 @@ export default function Logos(): JSX.Element
 {
     // logo component to show
     const sectionRef = useRef(null)
-    const titleRef = useRef(null)
     const marqueeRef = useRef(null)
 
     useEffect(() =>
@@ -33,35 +32,6 @@ export default function Logos(): JSX.Element
         // animation effects
         const ctx = gsap.context(() =>
         {
-            /* Fade + slide section in/out (scroll back supported) */
-            gsap.fromTo(
-                sectionRef.current,
-                { opacity: 0, y: 60 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top 85%",
-                        end: "top 40%",
-                        scrub: true,
-                    },
-                }
-            )
-
-            /* Title subtle pop */
-            gsap.from(titleRef.current, {
-                y: 30,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top 80%",
-                },
-            })
-
             /* Marquee entrance */
             gsap.from(marqueeRef.current, {
                 y: 40,
@@ -81,21 +51,6 @@ export default function Logos(): JSX.Element
                 ease: "none",
                 repeat: -1,
             })
-
-            /* Scroll velocity affects marquee speed */
-            ScrollTrigger.create({
-                trigger: sectionRef.current,
-                start: "top bottom",
-                end: "bottom top",
-                onUpdate: () => {
-                    gsap.to(marqueeRef.current, {
-                        timeScale: gsap.utils.clamp(0.8, 2, 1 + 0.002),
-                        duration: 0.25,
-                        ease: "power2.out",
-                    })
-                },
-            })
-
         }, sectionRef)
 
         return () => ctx.revert()
@@ -108,7 +63,6 @@ export default function Logos(): JSX.Element
             className="flex flex-col items-center gap-8 px-16 py-20 w-full"
         >
             <h1
-                ref={titleRef}
                 className="bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]
   [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
   text-transparent  tracking-[0] leading-[normal]  text-[32px] text-center font-medium"

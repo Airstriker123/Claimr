@@ -1,15 +1,8 @@
-import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from "@/ui/button"
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function AnimatedAbout()
 {
-    // aniamtion references variables
-    const buttonRef = useRef<HTMLButtonElement>(null);
-
 
     const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) =>
     {
@@ -53,7 +46,6 @@ export default function AnimatedAbout()
                 </p>
 
                 <Button
-                    ref={buttonRef}
                     onClick={handleButtonClick}
                     className="
                     w-full sm:w-auto px-10 py-6 rounded-full bg-cyan-500 text-black font-black uppercase tracking-widest

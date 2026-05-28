@@ -1,37 +1,10 @@
-import { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import { FileText, Shield, Download } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Cards()
 {
-    // card component (layout of cards sections)
-    const containerRef = useRef(null);
-
-    useGSAP(() =>
-    {
-        // Targets all direct div children of the grid
-        gsap.from(containerRef.current.children, {
-            y: 50,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.2, // This creates the "one-by-one" effect
-            ease: "power3.out",
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: "top 85%", // Starts when the top of the container hits 85% of viewport height
-                toggleActions: "play reverse play reverse", // Plays once and stays
-            }
-        });
-    }, { scope: containerRef });
-
-    // return JSXML (component)
+    // return TSXML (component)
     return (
         <div
-            ref={containerRef}
             className="grid md:grid-cols-3 gap-10 mb-16 justify-items-center max-w-8/12xl mx-auto px-6"
         >
             {/* Card 1 */}

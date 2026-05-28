@@ -1,13 +1,4 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from "@/ui/button"
-
-if (typeof window !== 'undefined')
-{
-    // if not registered
-    gsap.registerPlugin(ScrollTrigger);
-}
 
 export default function ProjectKeyFeatures(): JSX.Element
 {
