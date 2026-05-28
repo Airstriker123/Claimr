@@ -8,120 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function AnimatedAbout()
 {
     // aniamtion references variables
-    const containerRef = useRef<HTMLDivElement>(null);
-    const titleRef = useRef<HTMLDivElement>(null);
-    const paragraphRef = useRef<HTMLParagraphElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
-    const imageRef = useRef<HTMLDivElement>(null);
-
-    // start animation
-    useEffect(() =>
-    {
-        const ctx = gsap.context(() =>
-        {
-            if (titleRef.current)
-            {
-                // title animaiton colour pulse
-                const titleText = titleRef.current.textContent || '';
-                titleRef.current.innerHTML = titleText.split('').map((char) =>
-                            `<span class="inline-block 
-                          will-change-transform will-change-opacity
-                          bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]
-                          [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
-                          text-transparent tracking-[0] leading-[normal]
-                          ">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
-
-
-                // gsap timeline positions
-                gsap.from(titleRef.current.children, {
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: 'top 80%',
-                        toggleActions: 'play none none reverse',
-                    },
-                    opacity: 0,
-                    y: 20,
-                    rotationX: -90,
-                    stagger: 0.03,
-                    duration: 0.8,
-                    ease: 'back.out(1.7)',
-                });
-                // gsap timeline positions
-                gsap.to(titleRef.current.children, {
-                    y: '+=5',
-                    textShadow: '0 0 10px rgba(0,123,255,1)',
-                    duration: 2,
-                    repeat: -1,
-                    yoyo: true,
-                    ease: 'sine.inOut',
-                    stagger: 0.03,
-                });
-            }
-            // gsap timeline positions
-            if (paragraphRef.current)
-            {
-                gsap.from(paragraphRef.current, {
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: 'top 75%',
-                        toggleActions: 'play none none reverse',
-                    },
-                    opacity: 0,
-                    y: 30,
-                    duration: 1,
-                    ease: 'power3.out',
-                });
-            }
-            // gsap timeline positions
-            if (buttonRef.current)
-            {
-                gsap.from(buttonRef.current, {
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: 'top 75%',
-                        toggleActions: 'play none none reverse',
-                    },
-                    opacity: 0,
-                    y: 20,
-                    scale: 0.9,
-                    duration: 0.8,
-                    ease: 'back.out(1.4)',
-                });
-            }
-            // gsap timeline positions
-            if (imageRef.current)
-            {
-                gsap.fromTo(
-                    imageRef.current, { opacity: 0, scale: 0.9, y: 0 }, {
-                        opacity: 1,
-                        scale: 1,
-                        duration: 1.2,
-                        ease: 'power3.out',
-                        scrollTrigger: {
-                            trigger: containerRef.current,
-                            start: 'top 80%',
-                            end: 'top 50%',
-                            scrub: true,
-                        },
-                    }
-                );
-                // gsap timeline positions
-                gsap.to(imageRef.current,
-                {
-                    scrollTrigger:
-                    {
-                        trigger: containerRef.current,
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: 1,
-                    },
-                    y: -40,
-                });
-            }
-        }, containerRef);
-
-        return () => ctx.revert();
-    }, []); // gsap animaiton timelines end
 
 
     const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) =>
@@ -140,37 +27,29 @@ export default function AnimatedAbout()
     // return JXML to DOM (page section layout) of landing
     return (
         <section
-            ref={containerRef}
             className="pt-10 md:pt-20 pb-10 px-6 sm:px-10 md:px-16 flex flex-col lg:flex-row items-center justify-center gap-10 md:gap-16 w-full"
         >
             {/* Left content */}
             <div className="flex flex-col items-center lg:items-start justify-center gap-8 md:gap-12 flex-1 grow w-full">
-                <h1 className="flex flex-col gap-6 w-full">
-                    <div
-                        ref={titleRef}
-                        className="
-            relative flex self-stretch mt-[-1px] font-bold
-            text-3xl md:text-4xl tracking-tight leading-tight md:leading-[43.2px]
-
-            items-center justify-center text-center
-            lg:items-start lg:justify-start lg:text-center
-        "
-                    >
-                        About Claimr
-                    </div>
+                <h1
+                    className="bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]
+  [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
+  text-transparent  tracking-normal leading-[normal]  text-[32px] text-center font-medium"
+                >
+                  <b>About Claimr</b>
                 </h1>
-
                 <p
-                    ref={paragraphRef}
                     className="relative flex flex-col items-center lg:items-start justify-center self-stretch drop-shadow-[black_1px_1px_1px]
                        tracking-tight leading-relaxed
                        text-slate-100 text-sm sm:text-base md:text-lg font-normal space-y-4 max-w-2xl text-center lg:text-left"
                 >
-                    Claimr is a tax return tracker built for
-                    transparency and trust. It helps Australians organise income, deductions, and receipts
-                    in one simple interface, with clear summaries that make tax time easier. Because the entire
-                    codebase is public, users can verify exactly how their data is handled and rely on a tool
-                    that’s secure, transparent, and community‑driven.
+                   <b></b> Claimr is an open-source receipt and expense management application designed to help Australians organise financial records for tax preparation. It provides OCR receipt scanning, expense categorisation, warranty tracking, and CSV export tools in a simple and accessible interface.
+                </p>
+                <p
+                className="relative flex flex-col items-center lg:items-start justify-center self-stretch drop-shadow-[black_1px_1px_1px]
+                       tracking-tight leading-relaxed
+                       text-slate-100 text-sm sm:text-base md:text-lg font-normal space-y-4 max-w-2xl text-center lg:text-left">
+                    The project focuses on transparency by making the source code publicly available, allowing users to understand how data is processed and stored. Claimr is intended to support record organisation and manual tax preparation workflows and does not provide financial advice or automated tax lodgement.
                 </p>
 
                 <Button
@@ -189,7 +68,6 @@ export default function AnimatedAbout()
 
             {/* Right image configs */}
             <div
-                ref={imageRef}
                 className="
                 flex flex-col h-64 sm:h-80 md:h-108 w-full lg:flex-1 grow border-[3px] border-solid border-transparent
                 [border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1]

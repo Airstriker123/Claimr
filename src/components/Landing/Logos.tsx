@@ -107,14 +107,14 @@ export default function Logos(): JSX.Element
             ref={sectionRef}
             className="flex flex-col items-center gap-8 px-16 py-20 w-full"
         >
-            <p
+            <h1
                 ref={titleRef}
                 className="bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(0,123,255,1)_100%)]
   [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]
   text-transparent  tracking-[0] leading-[normal]  text-[32px] text-center font-medium"
             >
                  Claimr was made possible through the tools listed below
-            </p>
+            </h1>
 
             {/* Marquee container */}
             <div className="relative self-stretch overflow-hidden

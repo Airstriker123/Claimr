@@ -289,7 +289,7 @@ export function Dashboard(): JSX.Element
                                 <h1 className="text-xl bg-linear-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
                                     Claimr
                                 </h1>
-                                <p className="text-xs text-muted-foreground">Tax Return Tracker</p>
+                                <p className="text-xs text-muted-foreground">Receipt Tracker</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-2">

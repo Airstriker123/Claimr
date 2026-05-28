@@ -19,7 +19,7 @@ interface AddEditEntryDialogProps
 }
 
 // allowed categories
-const ATO_CATEGORIES: ATOCategory[] = [
+const RECEIPT_CATEGORIES: ATOCategory[] = [
   'Work-Related',
   'Self-Education',
   'Vehicle Expenses',
@@ -175,7 +175,7 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
         <DialogHeader>
           <DialogTitle>{entry ? 'Edit Entry' : 'Add New Entry'}</DialogTitle>
           <DialogDescription>
-            {entry ? 'Update the details of your tax entry.' : 'Add a new tax deduction entry. Upload a receipt or enter details manually.'}
+            {entry ? 'Update the details of your receipt entry.' : 'Add a new receipt entry. Upload a receipt or enter details manually.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -290,7 +290,7 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {ATO_CATEGORIES.map((cat) => (
+                  {RECEIPT_CATEGORIES.map((cat) => (
                     <SelectItem key={cat} value={cat}>
                       {cat}
                     </SelectItem>

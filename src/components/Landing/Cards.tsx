@@ -61,9 +61,9 @@ export default function Cards()
                 <div className="bg-cyan-100 dark:bg-cyan-900/30 rounded-lg p-3 w-fit mb-4">
                     <Download className="h-6 w-6 text-cyan-600 dark:text-cyan-400" />
                 </div>
-                <h3 className="font-semibold mb-2">ATO Compliance & Export</h3>
+                <h3 className="font-semibold mb-2">Categorise expenses and export data as CSV</h3>
                 <p className="text-sm text-white">
-                    Categorize expenses according to ATO guidelines and export everything as CSV for easy tax filing.
+                    Categorise expenses and export CSV files for use in spreadsheets and external tools to analyse spending trends.
                 </p>
             </div>
         </div>

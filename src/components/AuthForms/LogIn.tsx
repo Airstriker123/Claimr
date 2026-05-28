@@ -81,16 +81,16 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
 
                             <div className="mt-14 max-w-xl">
                                 <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300/80">
-                                    Australian tax tracker
+                                    Australian Receipt tracker
                                 </p>
 
                                 <h1 className="text-4xl font-bold tracking-tight text-white xl:text-5xl">
-                                    Tax time, without the chaos.
+                                    Receipts, organised into a neat dashboard
                                 </h1>
 
                                 <p className="mt-5 text-base leading-8 text-slate-300">
-                                    Organise receipts, track deductions, and understand your tax position
-                                    in one clean dashboard built for clarity and trust.
+                                    Organise receipts, track purchases, and store your financial records in one clean dashboard.
+                                    Built to help you find, manage, and understand your spending with clarity.
                                 </p>
                             </div>
 
@@ -104,7 +104,7 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
                                         <div>
                                             <h3 className="font-semibold text-white">Everything in one place</h3>
                                             <p className="mt-1 text-sm leading-6 text-slate-400">
-                                                Income, receipts, and deductions organised in a clear workflow.
+                                                Receipts, purchases, and records organised in a clear, visual workflow.
                                             </p>
                                         </div>
                                     </div>
@@ -118,7 +118,7 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
                                         <div>
                                             <h3 className="font-semibold text-white">Built for trust</h3>
                                             <p className="mt-1 text-sm leading-6 text-slate-400">
-                                                Clear summaries and a polished interface that helps users feel confident.
+                                                Clear summaries and a simple interface designed to keep your records easy to understand.
                                             </p>
                                         </div>
                                     </div>
@@ -146,7 +146,7 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
                                     Sign in to Claimr
                                 </h2>
                                 <p className="mt-3 text-sm leading-6 text-slate-400">
-                                    Access your tax dashboard, receipt tracking, and claim summaries.
+                                    Access your receipt tracker
                                 </p>
                             </div>
 

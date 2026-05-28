@@ -99,12 +99,12 @@ export default function SignUp({ onNavigateToLogin }: SignUpFormProps)
                                 </p>
 
                                 <h1 className="text-4xl font-bold tracking-tight text-white xl:text-5xl">
-                                    Start tracking tax the smarter way.
+                                    Start tracking receipt's the smart way.
                                 </h1>
 
                                 <p className="mt-5 text-base leading-8 text-slate-300">
                                     Join Claimr to organise receipts, monitor deductions, and keep your
-                                    tax information in one clean, easy-to-use dashboard.
+                                    financial information in one clean, easy-to-use dashboard.
                                 </p>
                             </div>
 
@@ -159,7 +159,7 @@ export default function SignUp({ onNavigateToLogin }: SignUpFormProps)
                                     Create your Claimr account
                                 </h2>
                                 <p className="mt-3 text-sm leading-6 text-slate-400">
-                                    Sign up to start tracking receipts, deductions, and tax summaries in one place.
+                                    Sign up to start tracking receipts,and understand your spending's better!
                                 </p>
                             </div>
 
