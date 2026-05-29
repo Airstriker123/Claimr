@@ -22,7 +22,7 @@ export interface Entry
  */
 export async function getEntries(): Promise<Entry[]>
 {
-    const res = await fetch("/api/entries", {
+    const res = await fetch("https://api.claimr.dev/api/entries", {
         credentials: "include",
     });
 
@@ -36,7 +36,7 @@ export async function getEntries(): Promise<Entry[]>
  */
 export async function createEntry(data: Partial<Entry>): Promise<Entry>
 {
-    const res = await fetch("/api/entries", {
+    const res = await fetch("https://api.claimr.dev/api/entries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -53,7 +53,7 @@ export async function createEntry(data: Partial<Entry>): Promise<Entry>
  */
 export async function createEntriesBatch(data: Partial<Entry>[]): Promise<Entry[]>
 {
-    const res = await fetch("/api/entries/batch", {
+    const res = await fetch("https://api.claimr.dev/api/entries/batch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -70,7 +70,7 @@ export async function createEntriesBatch(data: Partial<Entry>[]): Promise<Entry[
  */
 export async function updateEntry(id: number, data: Partial<Entry>)
 {
-    const res = await fetch(`/api/entries/${id}`, {
+    const res = await fetch(`https://api.claimr.dev/api/entries/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -87,7 +87,7 @@ export async function updateEntry(id: number, data: Partial<Entry>)
  */
 export async function deleteEntry(id: number)
 {
-    const res = await fetch(`/api/entries/${id}`, {
+    const res = await fetch(`https://api.claimr.dev/api/entries/${id}`, {
         method: "DELETE",
         credentials: "include",
     });

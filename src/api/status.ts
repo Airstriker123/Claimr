@@ -2,7 +2,7 @@ export async function pingServer()
 {
     // LOGIC to ping server and determine if request is successful
     try {
-        const res = await fetch("api/status"); //get from endpoint
+        const res = await fetch("https://api.claimr.dev/api/status"); //get from endpoint
 
         if (!res.ok)  // if request fail
         {

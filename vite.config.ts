@@ -5,9 +5,6 @@ import path from 'path';
 import { VitePWA } from 'vite-plugin-pwa';
 import manifest from './manifest.json';
 
-const ApiUrl: string = 'http://127.0.0.1:9988'
-
-// https://vite.dev/config/
 export default defineConfig({
   base: '/',
   plugins: [
@@ -50,17 +47,5 @@ export default defineConfig({
     build: {
         target: 'esnext',
         outDir: 'build',
-    },
-    server: {
-        proxy: {
-            "/api": {
-                target: ApiUrl,
-                changeOrigin: true,
-                secure: false, //NOTE: change to true in prodctuin
-            },
-        },
-        port: 9995,
-        open: true,
-        host: true, //open port to network
     },
 })

@@ -18,7 +18,7 @@ export interface User
 export async function login(username: string, password: string): Promise<null>
 {
     // API method to login user
-    const res: Response = await fetch(`/api/login`, {
+    const res: Response = await fetch(`https://api.claimr.dev/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -49,7 +49,7 @@ export async function login(username: string, password: string): Promise<null>
 export async function register(username: string, password: string):Promise<User>
 {
     /*method to register new user in database  */
-    const res:Response = await fetch(`/api/register`,
+    const res:Response = await fetch(`https://api.claimr.dev/api/register`,
         {
             //payload
             method: "POST",
@@ -77,7 +77,7 @@ export async function register(username: string, password: string):Promise<User>
 export async function getCurrentUser(): Promise<User | null>
 {
     // Api request to get session
-    const res:Response = await fetch("/api/@me", {
+    const res:Response = await fetch("https://api.claimr.dev/api/@me", {
         credentials: "include"
     });
 
@@ -91,7 +91,7 @@ export async function getCurrentUser(): Promise<User | null>
 export async function logout(): Promise<void>
 {
     // method to logout
-    await fetch("/api/logout", { // payload
+    await fetch("https://api.claimr.dev/api/logout", { // payload
         method: "POST",
         credentials: "include"
     });
