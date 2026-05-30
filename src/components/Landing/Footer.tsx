@@ -56,7 +56,7 @@ export default function Footer(): JSX.Element
                         title: 'Social',
                         links: [
                             { label: 'GitHub', href: 'https://github.com/airstriker123' },
-                            { label: 'Email', href: 'https://mail.google.com/mail/u/2/#inbox?compose=CllgCJqVNpcrBNrVZlrNdXBCkRPfnSFBlPPQmcwsqbrVknbglnRsbfbfdjdfddxpCtRhZjmMzvB' },
+                            { label: 'Email', href: 'mailto:claimrsupport@gmail.com' },
                         ],
                     },
                     {
