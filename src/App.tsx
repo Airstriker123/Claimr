@@ -20,11 +20,15 @@ export default function App(): JSX.Element
 {
     const [serverStatus, setServerStatus] = useState("checking");
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
 
     useEffect(() =>
     {
-        if (user) navigate("/dashboard");
+        if (!loading && user) navigate("/dashboard");
+    },[user, loading]);
+    
+    useEffect(() =>
+    {
         // ping server to check if Client has a connection
          pingServer().then((isUp) =>
          {
