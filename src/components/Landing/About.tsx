@@ -15,6 +15,7 @@ export default function AnimatedAbout()
             repeat: 1,
             ease: 'power2.inOut',
         });
+        window.open("http://localhost:9995/docs");
     };
 
     // return JXML to DOM (page section layout) of landing
@@ -48,25 +49,25 @@ export default function AnimatedAbout()
                 <Button
                     onClick={handleButtonClick}
                     className="
-                    w-full sm:w-auto px-10 py-6 rounded-full bg-cyan-500 text-black font-black uppercase tracking-widest
+                    w-full sm:w-auto px-10 py-6 rounded-full bg-cyan-500 text-black font-black  tracking-widest
                     hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer
                     "
                 >
                     <div className="relative flex items-center justify-center w-fit -mt-px font-bold text-base md:text-lg text-center tracking-tight whitespace-nowrap">
-                        Get in Contact with us!
+                        Learn how to use Claimr!
                     </div>
                 </Button>
             </div>
 
             {/* Right image configs */}
             <div
-                className="
-                flex flex-col h-64 sm:h-80 md:h-108 w-full lg:flex-1 grow border-[3px] border-solid border-transparent
-                [border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1]
-                bg-[url(/Landing/about.png)] bg-cover bg-center rounded-2xl transform-gpu
-                "
+                className="relative w-full lg:flex-1 h-64 sm:h-80 lg:h-108 border-[3px] border-solid border-transparent
+    [border-image:linear-gradient(180deg,rgba(0,180,255,1)_0%,rgba(0,255,255,1)_100%)_1]
+    /* This forces the image to stretch to all four corners */
+    bg-[url(/Landing/about.png)] bg-[length:100%_100%] bg-no-repeat
+    rounded-2xl transform-gpu overflow-hidden shadow-2xl shadow-cyan-500/20"
             >
-                <div className="w-full h-full rounded-2xl" />
+                <div className="absolute inset-0 bg-black/20" />
             </div>
         </section>
     );

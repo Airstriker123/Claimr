@@ -56,7 +56,6 @@ export default function Footer(): JSX.Element
                         title: 'Social',
                         links: [
                             { label: 'GitHub', href: 'https://github.com/airstriker123' },
-                            { label: 'LinkedIn', href: 'null' },
                             { label: 'Email', href: 'https://mail.google.com/mail/u/2/#inbox?compose=CllgCJqVNpcrBNrVZlrNdXBCkRPfnSFBlPPQmcwsqbrVknbglnRsbfbfdjdfddxpCtRhZjmMzvB' },
                         ],
                     },
@@ -64,16 +63,14 @@ export default function Footer(): JSX.Element
                         title: 'Support',
                         links: [
                             { label: 'Report an Issue', href: 'https://github.com/airstriker123/Claimr/issues' },
-                            { label: 'Documentation', href: '/docs' },
-                            { label: 'FAQ', href: '/faq' },
+                            { label: 'Documentation', href: 'https://github.com/Airstriker123/Claimr/blob/docs/doc.md' },
                         ],
                     },
                     {
                         title: 'Claimr',
                         links: [
                             { label: 'Open Source', href: 'https://github.com/airstriker123/Claimr' },
-                            { label: 'Privacy', href: '/privacy' },
-                            { label: 'Terms', href: '/terms' },
+                            { label: 'Privacy and terms', href: 'https://github.com/Airstriker123/Claimr/blob/docs/Readme.md' },
                         ],
                     },
                         // map text to grid footer and display rest of text in neat form.
