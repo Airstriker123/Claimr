@@ -44,9 +44,9 @@ export default defineConfig({
                 "@style": path.resolve(__dirname, "./src/components/style"),
             },
         },
+    publicDir: 'public',
     build: {
         target: 'esnext',
         outDir: 'build',
-        publicDir: 'public',
     },
 })
