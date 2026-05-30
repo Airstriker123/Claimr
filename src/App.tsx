@@ -44,7 +44,7 @@ export default function App(): JSX.Element
                             <Route path="/" element={
                                 <Landing
                                     onNavigateToLogin={() => navigate("/login")}
-                                    onNavigateToSignUp={() => ("/signup")}
+                                    onNavigateToSignUp={() => navigate("/signup")}
                                 />
                             } />
                             <Route path="/login" element={
