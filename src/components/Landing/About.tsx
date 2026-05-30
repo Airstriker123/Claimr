@@ -15,7 +15,7 @@ export default function AnimatedAbout()
             repeat: 1,
             ease: 'power2.inOut',
         });
-        window.open("http://localhost:9995/docs");
+        window.open("https://github.com/Airstriker123/Claimr/blob/docs/doc.md");
     };
 
     // return JXML to DOM (page section layout) of landing
