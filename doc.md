@@ -174,7 +174,7 @@ Yes. All receipt data can be edited at any time.
 
 ### Why is there no search feature?
 
-Claimr focuses on structured browsing through categories and filters rather than keyword search.
+Claimr focuses on structured browsing through categories rather than keyword search.
 
 ---
 
