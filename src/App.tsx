@@ -26,7 +26,7 @@ export default function App(): JSX.Element
     {
         if (!loading && user) navigate("/dashboard");
     },[user, loading]);
-    
+
     useEffect(() =>
     {
         // ping server to check if Client has a connection
