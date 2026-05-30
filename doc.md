@@ -87,9 +87,6 @@ The dashboard provides an overview of user spending activity.
 - Recent receipts overview
 - Category breakdowns
 - Spending insights
-
-Note: The dashboard does not include a search feature. Users navigate receipts through filters and categorisation tools.
-
 ---
 
 ## Organising Receipts
