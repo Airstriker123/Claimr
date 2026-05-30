@@ -10,7 +10,6 @@ Claimr collects and processes user data to provide core application functionalit
 
 ## Data Collected
 - Account information (e.g. username)
-- Receipt images uploaded by users
 - Extracted receipt data (merchant, date, amount, category)
 - Application usage data for system functionality
 
