@@ -22,9 +22,9 @@ export default function App(): JSX.Element
     const navigate = useNavigate();
     const { user } = useAuth();
 
-    if (user) navigate("/dashboard");
     useEffect(() =>
     {
+        if (user) navigate("/dashboard");
         // ping server to check if Client has a connection
          pingServer().then((isUp) =>
          {
