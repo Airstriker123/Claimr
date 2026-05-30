@@ -9,6 +9,7 @@ import { Dashboard } from '@/components/App/DashBoard';
 import {pingServer} from "@/api/status";
 import { useNavigate , Routes, Route } from "react-router-dom";
 import ProtectedRoute from "@/auth/ProtectedRoute";
+import useAuth from "@/hooks/useAuth";
 
 export default function App(): JSX.Element
 /* Main Application component (outlines layout of application)
@@ -19,7 +20,9 @@ export default function App(): JSX.Element
 {
     const [serverStatus, setServerStatus] = useState("checking");
     const navigate = useNavigate();
+    const { user } = useAuth();
 
+    if (user) navigate("/dashboard");
     useEffect(() =>
     {
         // ping server to check if Client has a connection
@@ -29,7 +32,6 @@ export default function App(): JSX.Element
             console.log(serverStatus);
         });
     },[serverStatus]);
-
 
     // render TSXML to client browser
     return(
@@ -42,7 +44,7 @@ export default function App(): JSX.Element
                             <Route path="/" element={
                                 <Landing
                                     onNavigateToLogin={() => navigate("/login")}
-                                    onNavigateToSignUp={() => navigate("/signup")}
+                                    onNavigateToSignUp={() => ("/signup")}
                                 />
                             } />
                             <Route path="/login" element={
