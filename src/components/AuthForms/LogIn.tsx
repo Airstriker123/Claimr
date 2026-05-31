@@ -132,7 +132,7 @@ export default function LoginForm({onNavigateToSignUp }: LoginFormProps)
                         <div className="w-full max-w-md">
                             <div className="mb-8 lg:hidden">
                                 <img
-                                    src="/Auth/claimr_logo.svg"
+                                    src="/Auth/logo.png"
                                     alt="Claimr logo"
                                     className="h-11 w-auto"
                                 />
