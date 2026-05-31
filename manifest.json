@@ -2,7 +2,7 @@
   "name": "Claimr",
   "short_name": "Claimr",
   "description": "Claimr is a tax return tracker built for transparency and trust. It helps Australians organise income, deductions, and receipts in one simple interface.",
-  "start_url": "/Claimr/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#00ffcf",
