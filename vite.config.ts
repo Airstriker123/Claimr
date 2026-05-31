@@ -17,6 +17,8 @@ export default defineConfig({
           },
           manifest,
           workbox: { // files to cache
+              navigateFallback: '/index.html',
+              navigateFallbackDenylist: [/^\/api/],   // exclude API paths if you have any
               globPatterns: ['**/*.{js,css,html,png,svg,jpg,webp,json}']
           }
       }),
