@@ -78,7 +78,6 @@ if __name__ == "__main__":
 ---------------------------  
 [1] Run Development (Real-time editing)  
 [2] Run Production (Build and test locally with PWA features)  
-[3] Run Deploy (GHP)  
 """)
         user_choice = input("\nEnter option: ")
         client_setup(user_choice)
