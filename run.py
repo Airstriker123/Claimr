@@ -63,12 +63,18 @@ def client_setup(choice):
     if choice == "1":
         print('Running client (development)...')
         os.system("npm run dev")
+        return
 
 
-    elif choice == "2":
+    if choice == "2":
         print('Building and Previewing (production mode)...')
         os.system("npm run build && npm run preview")
-
+        return
+    else:
+        input("invaid input")
+        return
+        
+    
 if __name__ == "__main__":
     try:
         clear()
