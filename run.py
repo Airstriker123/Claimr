@@ -69,18 +69,6 @@ def client_setup(choice):
         print('Building and Previewing (production mode)...')
         os.system("npm run build && npm run preview")
 
-    elif choice == "3":
-        print('--- DEPLOYING TO GITHUB PAGES ---')
-        # 1. Build the project
-        os.system("npm run build")
-        # 2. Add .nojekyll for GitHub Pages
-        with open("build/.nojekyll", "w") as f: f.write("")
-        # 3. Push to GitHub Pages branch
-        # This requires: npm install -g gh-pages
-        print("Pushing build folder to GitHub...")
-        os.system("npx gh-pages -d build --add")
-        print("\nSuccess! Check site at: http://claimr.dev/")
-
 if __name__ == "__main__":
     try:
         clear()
