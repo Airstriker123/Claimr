@@ -28,6 +28,7 @@ export default defineConfig({
   ],
   resolve:
         {
+          // plugins
             extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
             alias: {
                 'vaul@1.1.2': 'vaul',
@@ -48,11 +49,13 @@ export default defineConfig({
             },
         },
     build: {
+      // build options
         target: 'esnext',
         outDir: 'build',
     },
     server: {
         proxy: {
+          // setup a reverse proxy on the vite dev server
             "/api": {
                 target: ApiUrl,
                 changeOrigin: true,
