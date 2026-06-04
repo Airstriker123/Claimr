@@ -15,6 +15,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 export interface LandingProps
 {
+    // interface to communicate between pages and trigger events
     onNavigateToSignUp: () => void;
     onNavigateToLogin: () => void;
 }
@@ -40,8 +41,6 @@ export default function Landing({onNavigateToSignUp, onNavigateToLogin}: Landing
                         <ProjectKeyFeatures/>
                         <Footer />
                     </main>
-
                 </div>
-
     );
 }
