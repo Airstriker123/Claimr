@@ -5,9 +5,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import ReactLogo from "../../assets/tech_used/react.png"
 import GSAPLogo from "../../assets/tech_used/gsap.png"
 import TailWind from "../../assets/tech_used/tailwind.png"
-import Three from "../../assets/tech_used/three.png"
+import Flask from "../../assets/tech_used/flask.png"
 import TypeScript from "../../assets/tech_used/typescript.png"
 import WebStorm from "../../assets/tech_used/webstorm.png"
+import Sqlite from "../../assets/tech_used/sqlite.png"
+import Tesseract from "../../assets/tech_used/tesseract.png"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -16,9 +18,13 @@ const logos = [
     ReactLogo,
     GSAPLogo,
     TailWind,
-    Three,
+    Flask,
     TypeScript,
     WebStorm,
+    Sqlite,
+    Tesseract
+
+
 ]
 
 export default function Logos(): JSX.Element
