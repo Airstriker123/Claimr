@@ -35,7 +35,8 @@ import { AddEditEntryDialog } from "@/components/App/AddEditEntryDialog";
 import { useNavigate } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 
-const COLORS = [
+// bar colours to display
+const COLORS: string[] = [
     '#06b6d4', '#0ea5e9', '#22d3ee', '#67e8f9',
     '#a5f3fc', '#cffafe', '#0e7490', '#155e75',
     '#164e63', '#083344'
@@ -64,7 +65,7 @@ export function Dashboard(): JSX.Element
     const navigate = useNavigate();
 
     // Effect: Initial load of entries from storage (server-sync + local)
-    useEffect(() =>
+    useEffect((): void =>
     {
         const loadEntries = async () =>
         {
@@ -85,8 +86,7 @@ export function Dashboard(): JSX.Element
                 toast.error("using Offline Mode (no connection to server)")
             }
         };
-        loadEntries();
-
+        loadEntries().then(r => console.log(r));
     }, []);
 
 
@@ -121,7 +121,7 @@ export function Dashboard(): JSX.Element
 
     // --- CRUD HANDLERS ---
 
-    const handleAddEntry = () =>
+    const handleAddEntry = (): void =>
     {
         setEditingEntry(undefined);
         setDialogOpen(true);

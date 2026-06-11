@@ -1,15 +1,16 @@
-import type { TaxEntry, ATOCategory, DashboardStats } from './types';
+import type {ATOCategory, DashboardStats, TaxEntry} from './types';
 import Tesseract from "tesseract.js";
 import {
-    createEntry,
     createEntriesBatch,
+    createEntry,
+    deleteEntry as apiDeleteEntry,
     getEntries,
-    updateEntry as apiUpdateEntry,
-    deleteEntry as apiDeleteEntry
+    updateEntry as apiUpdateEntry
 } from "@/api/entries";
 import {toast} from "sonner";
-const STORAGE_KEY = 'claimr_tax_entries';
 
+const STORAGE_KEY = 'claimr_tax_entries';
+// holds utility to process entries, etc
 
 // --- LOCAL STORAGE UTILITIES ---
 
@@ -85,7 +86,9 @@ function GetUUIDRandom(): string
 {
     // Generate a temporary unique ID for local-only entries
     if (crypto.randomUUID) return crypto.randomUUID();
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c =>
+    {
+        // make entryID uuid —> converts to int id on backend
         const r = Math.random() * 16 | 0;
         const v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
@@ -143,35 +146,41 @@ export const storage = {
             e.description === entry.description
         );
 
-        if (isDuplicate) {
-            const existing = entries.find(e => 
-                e.merchant === entry.merchant && 
-                e.amount === entry.amount && 
+        if (isDuplicate)
+        {
+            // check if entry already exists
+            return entries.find(e =>
+                e.merchant === entry.merchant &&
+                e.amount === entry.amount &&
                 e.date === entry.date &&
                 e.description === entry.description
             )!;
-            return existing;
         }
 
         const newEntry: TaxEntry = {
+            // construct a new entry
             ...entry,
             id: GetUUIDRandom(),
             createdAt: new Date().toISOString(),
             synced: false
         };
 
+        // add entries to local storage
         entries.push(newEntry);
         saveLocalEntries(entries);
 
         try
         {
+            // get entries
             const { id: localId, synced, ...payload } = newEntry;
             const created = await createEntry(payload);
 
             // Update local entry with server-generated ID
             const currentEntries = getLocalEntries();
             const index = currentEntries.findIndex(e => e.id === localId);
-            if (index !== -1) {
+            if (index !== -1)
+            {
+                // get position of entries using indexes to save on server
                 currentEntries[index].id = created.id.toString();
                 currentEntries[index].synced = true;
                 saveLocalEntries(currentEntries);
@@ -183,7 +192,6 @@ export const storage = {
         {
             console.log("Offline - saved locally only");
         }
-
         return newEntry;
     },
 
@@ -210,8 +218,9 @@ export const storage = {
             ))
         );
 
-        if (uniqueNewData.length === 0) return localEntries;
+        if (uniqueNewData.length === 0) return localEntries; // if no data given
 
+        // construct new entry
         const newEntries: TaxEntry[] = uniqueNewData.map(data => ({
             ...data,
             id: GetUUIDRandom(),
@@ -219,26 +228,31 @@ export const storage = {
             synced: false
         }));
 
+        // update entries
         const updatedEntries = [...localEntries, ...newEntries];
         saveLocalEntries(updatedEntries);
 
-        try {
+        try
+        {
+            // try to sync entry with server upon update
             const payloads = newEntries.map(({ id: _i, synced: _s, ...p }) => p);
             const results = await createEntriesBatch(payloads);
 
             // Map server IDs back to local storage
             newEntries.forEach((entry, idx) => {
                 const res = results[idx];
-                if (res && res.synced) {
+                if (res && res.synced)
+                {
                     entry.id = res.id.toString();
                     entry.synced = true;
                 }
             });
             saveLocalEntries(updatedEntries);
-        } catch (err) {
+        }
+        catch (err)
+        {
             console.log("Batch add sync failed", err);
         }
-
         return updatedEntries;
     },
 
@@ -247,11 +261,13 @@ export const storage = {
      */
     updateEntry: async (id: string, updates: Partial<TaxEntry>) =>
     {
+        //  get entry info
         const entries = getLocalEntries();
         const index = entries.findIndex(e => e.id === id);
 
         if (index !== -1)
         {
+            // if no update / error
             entries[index] = {
                 ...entries[index],
                 ...updates,
@@ -262,8 +278,11 @@ export const storage = {
 
             try
             {
+                // push changes to api backend and store on database
                 const numericId = parseInt(id);
-                if (!isNaN(numericId)) {
+                if (!isNaN(numericId))
+                {
+                    // do this if server online
                     const { id: _, synced, ...payload } = updates;
                     await apiUpdateEntry(numericId, payload);
                     entries[index].synced = true;
@@ -272,7 +291,7 @@ export const storage = {
             }
             catch
             {
-                console.log("Offline update");
+                console.log("Offline update!"); // log if client is updating entries offline instead
             }
         }
     },
@@ -288,13 +307,16 @@ export const storage = {
 
         try
         {
+            // call delete on server end
             const numericId = parseInt(id);
-            if (!isNaN(numericId)) {
+            if (!isNaN(numericId))
+            {
                 await apiDeleteEntry(numericId);
             }
         }
         catch
         {
+            // if offline
             console.log("Offline delete");
         }
     },
@@ -314,6 +336,7 @@ export const calculateStats = (entries: TaxEntry[]): DashboardStats =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         )[0].createdAt
         : null;
+    // initial value of dashboard
     const categoryBreakdown: Record<ATOCategory, number> = {
         'Work-Related': 0,
         'Self-Education': 0,
@@ -327,10 +350,13 @@ export const calculateStats = (entries: TaxEntry[]): DashboardStats =>
         'Non-Deductible': 0,
     };
 
+    // use local entries to display visual information
     entries.forEach(entry =>
     {
+        // get each entry
         const category = entry.category as keyof typeof categoryBreakdown;
 
+        // if category type not defined
         if (categoryBreakdown[category] !== undefined)
         {
             categoryBreakdown[category] += entry.amount;
@@ -358,6 +384,7 @@ export const calculateStats = (entries: TaxEntry[]): DashboardStats =>
  */
 export const exportToCSV = (entries: TaxEntry[]): void =>
 {
+    // outline rows and blueprint structure to export as csv
     const headers = ['Date', 'Merchant', 'Category', 'Amount', 'Tax', 'Description', 'Warranty Expiry'];
     const rows = entries.map(entry => [
         entry.date,
@@ -369,11 +396,13 @@ export const exportToCSV = (entries: TaxEntry[]): void =>
         entry.warrantyExpiryDate || '',
     ]);
 
+    // join all fields and data
     const csvContent = [
         headers.join(','),
         ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
     ].join('\n');
 
+    // write to csv and push
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -386,6 +415,7 @@ export const exportToCSV = (entries: TaxEntry[]): void =>
 
 // --- OCR UTILITIES (EXPERIMENTAL) ---
 
+// ocr merchants to look for in text (lists common)
 const KNOWN_STORES = [
     "Coles",
     "Woolworths",

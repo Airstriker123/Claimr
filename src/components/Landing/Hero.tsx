@@ -28,6 +28,7 @@ export default function Hero({ OnNavigateToLogin, OnNavigateToSignUp }: HeroProp
 
             const tl = gsap.timeline({ delay: 0.2 });
 
+            // GSAP — highlights the hero page animation timeline —> Glowbackground —> animate title —> animate button
             tl.to([glowRef1.current, glowRef2.current, glowRef3.current], {
                 scale: 1,
                 opacity: 1,
