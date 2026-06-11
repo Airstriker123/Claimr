@@ -30,6 +30,12 @@ To begin using Claimr:
 4. Add receipts using either upload or manual entry
 
 ---
+## how to install and run Claimr on local device:
+> [!RECOMMEND OPERATING SYSTEM IS WINDOWS]
+> 1. clone and run the run.py script located on the claimr-api repo: view Claimrs backend (api) at: https://github.com/Airstriker123/Claimr-API
+> 2. clone and run the run.py script located on this repo
+> 3. ensure backend is running on port 9988 and frontend server is running on port 9995
+> 4. the application should be useable now
 
 ## Uploading Receipts (OCR Processing)
 
