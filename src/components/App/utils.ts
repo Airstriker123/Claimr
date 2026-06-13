@@ -387,13 +387,13 @@ export const exportToCSV = (entries: TaxEntry[]): void =>
     // outline rows and blueprint structure to export as csv
     const headers = ['Date', 'Merchant', 'Category', 'Amount', 'Tax', 'Description', 'Warranty Expiry'];
     const rows = entries.map(entry => [
-        entry.date,
+        formatDate(entry.date),
         entry.merchant,
         entry.category,
         entry.amount.toFixed(2),
         entry.tax.toFixed(2),
         entry.description,
-        entry.warrantyExpiryDate || '',
+        entry.warrantyExpiryDate ? formatDate(entry.warrantyExpiryDate) : '',
     ]);
 
     // join all fields and data
@@ -505,9 +505,16 @@ export const parseReceiptText = (text: string): Partial<TaxEntry> =>
 
     const tax = extractGST(text, amount);
 
-    // Identify standard date formats
-    const dateMatch = text.match(/\d{2}\/\d{2}\/\d{4}/);
-    const date = dateMatch ? dateMatch[0] : new Date().toISOString();
+    // Identify standard date formats (DD/MM/YYYY)
+    const dateMatch = text.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    let date = new Date().toISOString().split('T')[0];
+
+    if (dateMatch)
+    {
+        // Convert DD/MM/YYYY to YYYY-MM-DD
+        const [_, day, month, year] = dateMatch;
+        date = `${year}-${month}-${day}`;
+    }
 
     return {
         merchant,
@@ -570,15 +577,18 @@ export const formatCurrency = (amount: number): string =>
 };
 
 /**
- * Formats a date string for Australian locale.
+ * Formats a date string for Australian locale (DD/MM/YYYY).
  */
 export const formatDate = (dateString: string): string =>
 {
-    return new Date(dateString).toLocaleDateString('en-AU', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-    });
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    
+    return `${day}/${month}/${year}`;
 };
 
 /**
@@ -586,9 +596,45 @@ export const formatDate = (dateString: string): string =>
  */
 export const calculateWarrantyExpiry = (purchaseDate: string, warrantyMonths: number): string =>
 {
-    const date = new Date(purchaseDate);
-    date.setMonth(date.getMonth() + warrantyMonths);
-    return date.toISOString().split('T')[0];
+    try
+    {
+        // Handle DD/MM/YYYY
+        let normalizedDate = purchaseDate;
+        if (purchaseDate.includes('/'))
+        {
+            const [d, m, y] = purchaseDate.split('/');
+            normalizedDate = `${y}-${m}-${d}`;
+        }
+
+        const date = new Date(normalizedDate);
+        if (isNaN(date.getTime()))
+        {
+            return '';
+        }
+
+        // Cap warranty months to a reasonable limit (e.g., 100 years = 1200 months) - prevents the app from crashing ;/
+        // to prevent extreme date values that could cause issues
+        const safeWarrantyMonths = Math.min(Math.max(0, warrantyMonths), 1200);
+
+        date.setMonth(date.getMonth() + safeWarrantyMonths);
+        
+        if (isNaN(date.getTime()))
+        {
+            return '';
+        }
+
+        // Return in DD/MM/YYYY format
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        
+        return `${day}/${month}/${year}`;
+    }
+    catch (e)
+    {
+        console.error("Error calculating warranty expiry:", e);
+        return '';
+    }
 };
 
 

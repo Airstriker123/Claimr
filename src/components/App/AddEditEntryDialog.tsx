@@ -7,7 +7,7 @@ import { Textarea } from '@/ui/textarea';
 import {toast} from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/select';
 import type {TaxEntry, ATOCategory} from './types';
-import {calculateWarrantyExpiry, HandleOCR} from './utils';
+import {calculateWarrantyExpiry, formatDate, HandleOCR} from './utils';
 import { Loader2, Upload } from 'lucide-react';
 
 interface AddEditEntryDialogProps
@@ -306,13 +306,22 @@ export function AddEditEntryDialog({ open, onClose, onSave, entry }: AddEditEntr
                 id="warranty"
                 type="number"
                 min="0"
+                max="1200"
                 placeholder="Optional"
                 value={formData.warrantyMonths || ''}
-                onChange={(e) => handleWarrantyChange(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const num = parseInt(val);
+                  if (num > 1200) {
+                    handleWarrantyChange("1200");
+                  } else {
+                    handleWarrantyChange(val);
+                  }
+                }}
               />
               {formData.warrantyExpiryDate && (
                 <p className="text-xs text-muted-foreground mt-1">
-                  Expires: {new Date(formData.warrantyExpiryDate).toLocaleDateString('en-AU')}
+                  Expires: {formatDate(formData.warrantyExpiryDate)}
                 </p>
               )}
             </div>
